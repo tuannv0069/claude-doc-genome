@@ -1,0 +1,21 @@
+{
+  "name": "claude-doc-genome",
+  "version": "1.3.0",
+  "description": "claude-doc-genome — agent documentation tooling for Claude Code, by Tuấn Nguyễn.",
+  "owner": {
+    "name": "Tuấn Nguyễn"
+  },
+  "plugins": [
+    {
+      "name": "init-project",
+      "source": ".",
+      "description": "Deploy the agent documentation standard (CLAUDE.md + rules + agent-guide) plus the skill-authoring toolkit into a project, in one shot.",
+      "version": "1.3.0",
+      "category": "productivity",
+      "author": {
+        "name": "Tuấn Nguyễn"
+      },
+      "tags": ["documentation", "agent-rules", "scaffolding", "skills", "standards"]
+    }
+  ]
+}
