@@ -1,0 +1,15 @@
+#!/bin/sh
+# Block commits that leave the version fields out of sync.
+# Enable once per clone:  git config core.hooksPath .githooks
+# Bypass a single commit:  git commit --no-verify
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found — skipping version check (CI still enforces)" >&2
+  exit 0
+fi
+
+if ! node scripts/sync-version.mjs check; then
+  echo "" >&2
+  echo "pre-commit: version drift — run 'node scripts/sync-version.mjs sync' and re-stage." >&2
+  exit 1
+fi

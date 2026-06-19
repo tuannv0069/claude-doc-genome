@@ -1,0 +1,20 @@
+name: version-sync
+
+# Fails the build when the canonical version (skills/init-project/VERSION) is
+# out of sync with the plugin manifests or the README badge.
+# Fix locally with: node scripts/sync-version.mjs sync
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/sync-version.mjs check

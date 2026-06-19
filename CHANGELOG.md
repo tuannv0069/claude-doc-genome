@@ -4,6 +4,21 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+## [1.4.0] - 2026-06-19
+
+### Added
+
+- `update` mode — pull newer portable files into an initialized project via a safe 3-way merge (`manifest ↔ live ↔ bundle`) that never overwrites local edits (`scripts/update.mjs`).
+- `scripts/sync-version.mjs` — single-source version sync across `VERSION`, the plugin manifests, and the README badge, with a `check` mode (exits non-zero on drift).
+- Drift guards: a `version-sync` CI workflow and a `.githooks/pre-commit` hook.
+- `Releasing` guide in `CONTRIBUTING.md` with a SemVer-for-the-bundle policy.
+
+### Changed
+
+- `doc-organization.md`: an on-demand file defaults to a router entry only; an always-loaded trigger is earned via an interception test plus user confirmation in both outcomes.
+
 ## [1.3.0] - 2026-06-18
 
 ### Added
@@ -14,4 +29,6 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.4.0
 [1.3.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.3.0

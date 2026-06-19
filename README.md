@@ -3,13 +3,13 @@
 > One-shot **Claude Code plugin** that bootstraps an AI-agent documentation system — `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` — then lets the project self-maintain.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.3.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.4.0-blue.svg)](CHANGELOG.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
 [![Marketplace](https://img.shields.io/badge/marketplace-claude--doc--genome-555.svg)](#install)
 
 <!-- Demo: drop a GIF here once recorded, e.g. ![demo](docs/demo.gif) -->
 
-`init-project` deploys a battle-tested documentation standard for AI agents — the `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` trio — plus a skill-authoring toolkit (`skill-designer`, `skill-writer`, `skill-writer-auditor`, `document-writer`). After the one-time seed, the project grows its own documentation using the deployed standard; the skill is never run again in that project.
+`init-project` deploys a battle-tested documentation standard for AI agents — the `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` trio — plus a skill-authoring toolkit (`skill-designer`, `skill-writer`, `skill-writer-auditor`, `document-writer`). After the one-time seed, the project grows its own documentation using the deployed standard. `init` runs once; later you can opt into `update` to pull newer portable files from the bundle — a safe 3-way merge that never overwrites your local edits.
 
 Keywords: Claude Code plugin · AI agent documentation · CLAUDE.md scaffolding · agent rules · prompt/skill standards.
 
@@ -40,6 +40,17 @@ The skill scans the project's stack, interviews for unscannable values, copies t
 | `/init-project` | a new project | deploy the standard (one-shot seed) |
 | `/init-project check` | the bundle's home repo | report drift between the bundle and the live files |
 | `/init-project promote` | the bundle's home repo | consolidate proven live changes back into the bundle |
+| `/init-project update` | an initialized project | pull newer portable files from the bundle (safe 3-way merge; skips local edits) |
+
+## Updating
+
+`init` seeds once; the project then evolves on its own. When the bundle ships newer portable files, opt into them:
+
+```
+/init-project update
+```
+
+It compares the bundle against your files three ways (manifest ↔ live ↔ bundle): missing files are added, untouched files are updated, and any file you edited locally is reported as a **conflict and left untouched** — promote your change upstream or merge it by hand. Rendered files (`CLAUDE.md`, `index.md`, project-authored guides) are never overwritten.
 
 ## Philosophy
 

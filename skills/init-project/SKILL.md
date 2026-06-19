@@ -6,7 +6,7 @@ description: Use this skill ONCE per new project to deploy the agent documentati
 # init-project
 
 ## purpose
-Bootstrap a new project's agent documentation system from a portable bundle in one shot. After init the project self-maintains using the deployed standard (`doc-organization.md §8.3` decision tree + portable meta-standards) — this skill is never run again in that project. `check`/`promote` modes maintain the bundle itself and run only at this master repo.
+Bootstrap a new project's agent documentation system from a portable bundle in one shot. After init the project self-maintains using the deployed standard (`doc-organization.md §8.3` decision tree + portable meta-standards). `init` runs once per project; `update` may be re-run later at that project to pull newer portable files from the bundle (3-way safe merge — never clobbers un-promoted local edits). `check`/`promote` maintain the bundle itself and run only at this master repo.
 
 ## dependencies
 - `./portable/rules/` — 7 portable rules (always-loaded + path-scoped)
@@ -15,6 +15,7 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 - `./portable/agents/` — skill-writer-auditor.md
 - `./templates/` — CLAUDE.md.tpl, agent-guide/index.md.tpl, docs/index.md.tpl
 - `./VERSION` — bundle version, bumped on every promote
+- `scripts/update.mjs` (repo root) — engine for the `update` mode (3-way bundle→live merge); `scripts/sync-version.mjs` — version single-source sync
 
 ## modes
 
@@ -23,6 +24,7 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 | `/init-project` | new project | deploy bundle (workflow below) |
 | `/init-project check` | master repo | sha256 compare bundle ↔ live per §map → report drift |
 | `/init-project promote` | master repo | copy live → bundle for every mapped file, bump VERSION |
+| `/init-project update` | initialized project | pull newer portable files bundle → live, 3-way safe (manifest ↔ live ↔ bundle); skip conflicts (workflow below) |
 
 ## workflow (init — new project)
 1. Scan project: detect stack + optional modules per `## module matrix` signal column. Output: proposed module set + discovered slot values.
@@ -30,10 +32,10 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 3. Copy `portable/` verbatim: `portable/rules/*` → `.claude/rules/`; `portable/agent-guide/*` → `docs/agent-guide/general/`; `portable/skills/*` → `.claude/skills/`; `portable/agents/*` → `.claude/agents/`.
 4. Render templates: fill `{{slots}}` from interview into `CLAUDE.md`, `docs/agent-guide/index.md`, `docs/index.md`; missing slot → keep TODO marker.
 5. Generate optional rules: for each confirmed optional module, write a project-fitted rule into `docs/agent-guide/general/` per `rule-writing-standards`, and append its trigger line to `CLAUDE.md` in the same step — no hardcoded template.
-6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], modules:[...] }` (provenance only, not read at runtime).
+6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], modules:[...] }` (provenance; read by `update` for 3-way drift detection — keep `files[].sha256` accurate).
 7. Verify: every deployed file is at the correct tier; every rule/agent-guide file carries `scope:` frontmatter; CLAUDE.md within token budget; every behavior-affecting on-demand file has a trigger line or router entry (reachability, file→trigger); every `MUST Read` trigger in CLAUDE.md resolves to a deployed file (reachability, trigger→file — no dead trigger); no unrendered `{{slot}}` remains except intentional TODO markers. Done = checklist passes + manifest written.
 
-## bundle ↔ live map (check / promote — master repo)
+## bundle ↔ live map (check / promote — master repo; update — initialized project)
 | bundle path | live path |
 |---|---|
 | `portable/rules/*` | `.claude/rules/*` |
@@ -42,7 +44,15 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 | `portable/agents/*` | `.claude/agents/*` |
 
 - `check`: sha256 each pair → list mismatches. Default update direction is live → bundle (promote); fix live first, then promote.
-- `promote`: copy live → bundle for every mapped file, bump `VERSION`.
+- `promote`: copy live → bundle for every mapped file, then bump the version via `node scripts/sync-version.mjs set <x.y.z>` (writes canonical `VERSION` + mirrors it into `.claude-plugin/*` and the README badge).
+
+## workflow (update — initialized project)
+Direction bundle → live (reverse of promote). Touches only the verbatim portable set; rendered phenotype (`CLAUDE.md`, `index.md`, project-authored guides) is out of scope. Invoke `update.mjs` by its path **inside the installed plugin** (it self-locates the bundle from its own location); `--project` is the initialized project root and defaults to the current directory.
+1. Dry-run: `node <plugin>/scripts/update.mjs --project <project-root>` → review the ADD / UPDATE / CONFLICT plan and the version delta.
+2. Resolve every CONFLICT first — a conflict = a portable file edited locally since deploy. Promote it upstream (so the improvement enters the bundle) or overwrite manually after review. Never blind-overwrite.
+3. Apply: `node <plugin>/scripts/update.mjs --apply --project <project-root>` → writes ADD + UPDATE, skips conflicts, refreshes manifest `version` + `files[].sha256`.
+4. Additive + in-place only — `update` never deletes: a file removed from the bundle stays in the project, and a file deleted locally is re-added. Prune those manually if needed.
+5. Exit code: 0 = up-to-date or applied cleanly; 1 = conflicts remain; 2 = setup error (no manifest → project was not init'd by this plugin).
 
 ## module matrix
 | module | includes | deploy when | scan signal (examples, not exhaustive) |

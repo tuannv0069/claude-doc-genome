@@ -1,7 +1,7 @@
 {
   "name": "init-project",
   "description": "Bootstrap a project's agent documentation system in one shot: deploys the CLAUDE.md + .claude/rules/ + docs/agent-guide/ trio plus the skill-authoring toolkit. Built on a neural-network doc model — context economy, growth-from-evidence, and a genome/phenotype heredity mechanism.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "author": {
     "name": "Tuấn Nguyễn"
   },
