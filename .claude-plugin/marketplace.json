@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "init-project",
-      "source": ".",
+      "source": "./",
       "description": "Deploy the agent documentation standard (CLAUDE.md + rules + agent-guide) plus the skill-authoring toolkit into a project, in one shot.",
       "version": "1.3.0",
       "category": "productivity",
