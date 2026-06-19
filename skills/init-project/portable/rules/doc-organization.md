@@ -253,6 +253,8 @@ new content
       → project index file (≤ 1 line per rule, per claude-md-standards.md)
 ```
 
+Branch 5: router entry unconditional; always-loaded trigger decided via interception test + user confirm → §10.
+
 For content classes WITHIN rule docs (substantive vs operational vs routing vs detection) → §6.
 
 ## §9 Portability axis
@@ -273,7 +275,9 @@ Every file in the rules tier and the on-demand guide tree declares frontmatter `
 - **Naming:** kebab-case; topic-based names, no version/date suffixes (`cache.md`, not `cache-v2.md`); the router file of a doc tree is always `index.md` — never `README.md` as router (README = human landing page of repo root only); path already describes — don't repeat folder name in file name.
 - **New-file-vs-extend:** topic already has a source-of-truth file → extend it with a new §ID; new topic → new file with §1 anchor from the first commit.
 - **Always-loaded budget:** total lines of rules files without `paths:` ≤ budget declared in the project's placement data; project index file excluded (own budget per `claude-md-standards.md`). Over budget → demote least-used file to path-scoped or split terse+pointer.
-- **Reachability:** every on-demand content file MUST have a router entry (§7.3); a behavior-affecting file additionally needs a trigger line at the always-loaded surface (project index file or an always-loaded rule): `cond → MUST Read <file>`. File with neither router entry nor trigger = dead content — audit must flag.
+- **Reachability:** every on-demand content file MUST have a router entry (§7.3); a behavior-affecting file (per interception test) additionally needs a trigger line at the always-loaded surface (project index file or an always-loaded rule): `cond → MUST Read <file>`. File with neither router entry nor trigger = dead content — audit must flag.
+- **Interception test (router-only default):** on-demand file defaults to router entry ONLY. It is *behavior-affecting* (earns an always-loaded trigger) only if WITHOUT the trigger the agent starts the task and acts wrong BEFORE it would consult the router — task self-signals nothing to read a guide, and is not already reached via an existing trigger/hub. Pass → trigger candidate; fail → router-only.
+- **Trigger-decision confirm:** on-demand file → router entry written unconditionally (mechanical); always-loaded trigger NEVER self-decided — run interception test, present result + recommendation (add | skip), ask user, write/skip per user. Confirm in BOTH outcomes.
 - **Recognizable trigger:** trigger condition = observable signal at decision time — user keywords, task type, file type touched — never an abstract description. Wording canon: `claude-md-standards.md <trigger_lines>`.
 - **Link integrity:** add/rename/move/delete propagates to every linking node in the same commit — full law in ALWAYS section (top).
 - **Project placement data:** the root router (`index.md`) carries the project's placement data in §1: (a) always-loaded budget value, (b) migration ledger — files not yet at their standard location, each with target area; end state = empty ledger; no permanent exemptions.
@@ -300,6 +304,6 @@ Category list = `scope: project`; the laws of this layer = portable. Content-wri
 1. substantive rule → ONE source-of-truth file, stable §ID; portable files = append-only §ID
 2. agent/skill/catalog → pointer-only, NEVER inline canonical content
 3. new content → decision tree §8.3; on-demand tree: area + router laws §7
-4. always-loaded only for pre-decision guardrails (budget-capped); everything else = trigger line + on-demand
+4. always-loaded only for pre-decision guardrails (budget-capped); everything else = trigger line + on-demand — on-demand trigger to always-loaded surface = interception test + user confirm (both outcomes), router entry stays unconditional
 5. every file change maintains its links same-commit; audit hunts orphans + dead links
 </critical_recap>
