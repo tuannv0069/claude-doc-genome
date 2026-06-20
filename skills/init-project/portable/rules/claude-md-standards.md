@@ -171,13 +171,35 @@ extracted on-demand + affects behavior → trigger line in CLAUDE.md per `<trigg
 
 - on-demand file affecting behavior → CLAUDE.md carries trigger line: `cond → MUST Read <file>`
 - no trigger line AND not in any index → dead content (agent never reads it)
-- trigger cond = observable signal at decision time: user keywords | task type | file type touched
+- trigger cond = **observable** signal at decision time — binary-decidable from user message alone, no classification judgment
 - 1 trigger line buys whole on-demand file → cheaper than always-loading content
 
-<example type="trigger_cond">
+observable test: can agent decide YES/NO by scanning user message for literal keywords / tool names / file patterns / code symbols — without first classifying the task? YES → observable. NO → judgment-dependent → rewrite.
+
+| signal type | observable? | example |
+|-------------|-------------|---------|
+| user keyword / phrase | ✅ | `commit / branch / merge`, `debug / RCA / "root cause"` |
+| tool name pattern | ✅ | `mcp__<server>__*`, `playwright-cli` |
+| code symbol / file pattern | ✅ | `*.config.ts`, `useQuery / useMutation` |
+| action + concrete object | ✅ | `self-run dev server`, `write/edit mermaid block` |
+| abstract task classification | ❌ | `multi-step task`, `complex task`, `ad-hoc task` |
+| intent requiring interpretation | ❌ | `when deep analysis is needed`, `task requiring execution` |
+
+<example type="trigger_cond_good">
 input: on-demand RCA guide must be read before any root-cause analysis
-✅ output: debug / RCA / "why" / "root cause" → MUST Read docs/agent-guide/rca-guide.md first
-❌ output: when deep analysis is needed → read rca-guide.md  # not recognizable at decision time
+✅ output: debug / root cause / RCA / "why" / "root cause" → MUST Read docs/agent-guide/rca-guide.md first
+</example>
+
+<example type="trigger_cond_bad_abstract">
+input: orchestration policy must be read before multi-agent work
+❌ output: ad-hoc free-session multi-step / multi-agent task → MUST Read orchestration-policy.md  # "multi-step task" = judgment call, matches nearly everything
+✅ output: fan-out Edit/Write across >3 files / dispatch subagent for execution → MUST Read orchestration-policy.md  # concrete action verbs, binary-decidable
+</example>
+
+<example type="trigger_cond_bad_intent">
+input: file export guide must be read before implementing export
+❌ output: when user needs file export functionality → read file-export.md  # "needs" = interpretation
+✅ output: implement export / CSV / Excel / download → MUST Read file-export.md  # keyword list
 </example>
 
 </trigger_lines>

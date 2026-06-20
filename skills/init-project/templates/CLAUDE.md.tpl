@@ -19,7 +19,7 @@
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `docs/agent-guide/general/five-why.md` first
 - write/edit mermaid block in .md → MUST Read `docs/agent-guide/general/mermaid.md` before emit
-- ad-hoc free-session multi-step / multi-agent task (main model drives directly, no skill owns flow) → MUST Read `docs/agent-guide/general/orchestration-policy.md` first (delegate execution to implementer model, effort by difficulty, persist plan to durable file); skill-driven flow excluded
+- fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `docs/agent-guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan to durable file); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
 {{ALWAYS_PROJECT_RULES}}
 {{OPTIONAL_MODULE_TRIGGERS}}
 

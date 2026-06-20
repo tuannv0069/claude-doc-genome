@@ -12,23 +12,27 @@ note: §ID append-only (portable) — never renumber; retired sections keep thei
 
 ## §1 When this applies
 
-- ad-hoc task in a free session that is **multi-step OR multi-agent** (review+fix, plan+implement, fan-out) → apply §2–§4.
+- ad-hoc task requiring **multi-file execution** (Edit/Write across files — review+fix, plan+implement, fan-out) → apply §2–§4.
 - single-shot / trivial mechanical task (one file, no delegation benefit) → skip; do it inline.
+- research / investigation / RCA task (grep + read + reason, no or few edits) → skip; orchestrator does it inline — subagent re-read cost > benefit.
 - task driven by a skill → out of scope (skill's own design governs).
 
 ## §2 Orchestrate vs execute (model split)
 
 <rules section="ALWAYS">
 - main high-capability model = Orchestrator: scope control, planning, reasoning over artifacts, dispatch, verify-gate, synthesis.
-- delegate execution (Edit/Write) to a cheaper/faster implementer model **by default**.
+- delegate **execution (Edit/Write across multiple files)** to a cheaper/faster implementer model.
 - hard-reasoning execution (subtle business rule, defect-prone pattern) → escalate to the orchestrator model or higher effort, not forced cheap-model + multi-round fixup.
+- research / investigation (grep + read + analyze) → orchestrator inline; subagent spawn + re-read duplicates context for no gain.
+- ≤3 files to edit + context already warm → inline; delegation overhead (spawn + re-read + verify) costs more than the edit.
 </rules>
 
 <rules section="NEVER">
-- block a trivial inline edit behind a subagent when spawn overhead > benefit (re-read cost, latency).
+- delegate grep/read/analyze to a subagent when orchestrator already has the context (double-read = wasted tokens).
+- block a trivial or medium inline edit behind a subagent when spawn overhead > benefit (re-read cost, latency).
 </rules>
 
-Decision: delegate is the default; inline and escalate are the two escape hatches.
+Decision: delegate for multi-file execution; inline for research and small edits; escalate for hard reasoning.
 
 <example type="delegation">
 input: apply a multi-file change across several modules
@@ -36,10 +40,16 @@ input: apply a multi-file change across several modules
 ❌ orchestrator edits all files itself
 </example>
 
-<example type="escape_hatch_inline">
-input: rename one mistyped identifier in a file already in context
-✅ orchestrator edits inline — subagent spawn + re-read costs more than the edit
-❌ spawn an implementer agent to change one line
+<example type="inline_edit">
+input: fix 3 files already in context (< 50 lines of edits total)
+✅ orchestrator edits inline — context already warm, no re-read needed
+❌ spawn an implementer agent that must re-read all 3 files + their dependencies
+</example>
+
+<example type="inline_research">
+input: investigate root cause of a recurring bug (grep + read + analyze)
+✅ orchestrator greps, reads relevant sections, reasons over findings inline
+❌ spawn 3 subagents to search in parallel → each re-reads overlapping files → 200k tokens for 20k worth of work
 </example>
 
 <example type="escape_hatch_escalate">
@@ -85,7 +95,7 @@ input: orchestrate a 2-step review→fix over many findings
 </example>
 
 <critical_recap>
-1. orchestrator plans/dispatches; implementer model executes by default — inline trivial, escalate hard-reasoning.
+1. delegate multi-file execution (Edit/Write); research + small edits = inline; hard-reasoning = escalate.
 2. effort by difficulty, not scope.
 3. plan → durable gitignored file, single source of truth, self-contained; never pure-context, never long-term doc storage.
 </critical_recap>

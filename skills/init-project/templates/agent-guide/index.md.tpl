@@ -29,7 +29,7 @@ Migration ledger — top-level files not yet at standard location (target = empt
 | `general/five-why.md` | RCA / "5 why" / "root cause" request; debug bug in AI-produced artifact (code/doc) |
 | `general/markdown.md` | edit any `*.md` (GFM rules) |
 | `general/mermaid.md` | create/edit Mermaid diagram |
-| `general/orchestration-policy.md` | ad-hoc free-session multi-step / multi-agent task (main model drives directly, no skill) — orchestrate-vs-execute model split, effort selection, plan persistence |
+| `general/orchestration-policy.md` | fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) — delegate Edit/Write, inline ≤3 files or warm context, escalate hard-reasoning, plan persistence; research/grep/read = orchestrator inline |
 {{GENERAL_OPTIONAL_ROWS}}
 
 <!-- areas (frontend/, backend/, bd/, dd/, ...) grow per doc-organization.md §7 as the project accumulates content; register each new file here in the same commit -->
