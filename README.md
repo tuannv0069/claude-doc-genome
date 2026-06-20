@@ -3,7 +3,7 @@
 > One-shot **Claude Code plugin** that bootstraps an AI-agent documentation system — `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` — then lets the project self-maintain.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.5.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5.1-blue.svg)](CHANGELOG.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
 [![Marketplace](https://img.shields.io/badge/marketplace-claude--doc--genome-555.svg)](#install)
 
