@@ -20,6 +20,7 @@
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `docs/agent-guide/general/five-why.md` first
 - write/edit mermaid block in .md → MUST Read `docs/agent-guide/general/mermaid.md` before emit
 - fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `docs/agent-guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan to durable file); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
+- create / use / clean up isolated git worktree → MUST Read `docs/agent-guide/general/worktree.md` first (path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push)
 {{ALWAYS_PROJECT_RULES}}
 {{OPTIONAL_MODULE_TRIGGERS}}
 
