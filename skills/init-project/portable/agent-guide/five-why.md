@@ -23,11 +23,11 @@ output language: final RCA report → Vietnamese; this guidance file → English
 | group | question | output |
 |---|---|---|
 | G1 — Root + Fix | What is the actual root cause? What is the fix? | root location + fix patch/diff |
-| G2 — Rule + Prevention | Which rule/guideline in `.claude/` or `CLAUDE.md` caused the root? How to amend so agent does not repeat? | rule §ID + rule diff, OR "gap — no rule covers" |
+| G2 — Rule + Prevention | Which rule/guideline (`docs/agent-guide/**`, `.claude/` rule/skill/agent, or `CLAUDE.md`) caused the root? How to amend so agent does not repeat? | rule §ID + rule diff, OR "gap — no rule covers" |
 
 <rules section="ALWAYS">
 - G1 mandatory
-- G2 mandatory when root lives inside AI artifact (code/doc agent produced) or inside `CLAUDE.md` / `.claude/` (agent, skill, rule, agent-guide)
+- G2 mandatory when root lives inside AI artifact (code/doc agent produced) or inside a genome rule tier — `docs/agent-guide/**`, `.claude/` (rule/skill/agent), or `CLAUDE.md`
 - G1 already answers G2 (e.g. fix = rule fix in one step, or root unrelated to any rule) → skip G2, write a one-line reason
 - each why = one falsifiable hypothesis (cite `file:line` | `§ID` | observable behavior)
 - G2 finds no rule → record `gap — no rule covers <topic>` + propose location
@@ -81,7 +81,7 @@ G2: rule §ID cited → stop
 
 ---
 
-### G2 — Rule in `CLAUDE.md` / `.claude/` & Prevention
+### G2 — Rule in `docs/agent-guide/` / `.claude/` / `CLAUDE.md` & Prevention
 
 1. Which rule/guideline caused the G1 root?
    → `<rule path §ID>` — <excerpt>   *(or ⇒ **gap**)*
@@ -97,7 +97,7 @@ G2: rule §ID cited → stop
 | Confirm        | awaiting user approval |
 ````
 
-G2 skippable → keep heading `### G2 — Rule in CLAUDE.md / .claude/ & Prevention`, body = one line: `skip — G1 already covers it (<short reason>)`. Do not delete heading → grep `### G2` to audit format-complete RCAs.
+G2 skippable → keep heading `### G2 — Rule in docs/agent-guide/ / .claude/ / CLAUDE.md & Prevention`, body = one line: `skip — G1 already covers it (<short reason>)`. Do not delete heading → grep `### G2` to audit format-complete RCAs.
 
 ### §4.1 element rules
 
