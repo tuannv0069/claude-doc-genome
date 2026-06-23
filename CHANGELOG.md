@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-06-23
+
+### Added
+
+- `update` mode now WARNs when a template (`.tpl`) changed in the bundle since deploy. Rendered phenotype files (`CLAUDE.md`, `index.md`) are still never overwritten — slots hold project-specific values — but the user is told to re-render manually instead of the change being silently dropped (`scripts/update.mjs`).
+- `init-manifest.json` records a `templates[]` array (`.tpl` path + sha at deploy time); `update` compares it against the current bundle to detect template drift. Manifests predating this field warn conservatively (`cannot prove unchanged`) until the next init (`skills/init-project/SKILL.md` step 6).
+
 ## [1.4.0] - 2026-06-19
 
 ### Added

@@ -26,6 +26,7 @@ import { dirname, join, relative } from 'node:path';
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BUNDLE_BASE = join(repoRoot, 'skills/init-project/portable');
+const TEMPLATE_BASE = join(repoRoot, 'skills/init-project/templates');
 const VERSION_FILE = join(repoRoot, 'skills/init-project/VERSION');
 
 // bundle group → live target dir (relative to project root)
@@ -34,6 +35,15 @@ const GROUPS = [
   ['agent-guide', 'docs/agent-guide/general'],
   ['skills', '.claude/skills'],
   ['agents', '.claude/agents'],
+];
+
+// template (.tpl) → live rendered file (relative to project root).
+// update never overwrites these (rendered phenotype — slots filled per project);
+// it only WARNS when the .tpl changed since deploy so the user can re-render manually.
+const TEMPLATES = [
+  ['CLAUDE.md.tpl', 'CLAUDE.md'],
+  ['agent-guide/index.md.tpl', 'docs/agent-guide/index.md'],
+  ['docs/index.md.tpl', 'docs/index.md'],
 ];
 
 function fail(msg) { console.error(`update: ${msg}`); process.exit(2); }
@@ -63,9 +73,24 @@ if (!existsSync(MANIFEST)) {
 
 const manifest = JSON.parse(readFileSync(MANIFEST, 'utf8'));
 const manifestSha = new Map((manifest.files || []).map((f) => [toPosix(f.path), f.sha256]));
+const templateSha = new Map((manifest.templates || []).map((t) => [toPosix(t.path), t.sha256]));
 const bundleVersion = readFileSync(VERSION_FILE, 'utf8').trim();
 
 const plan = { upToDate: [], add: [], update: [], conflict: [] };
+
+// Template drift: .tpl changed in the bundle since this project was deployed.
+// Detect-only — never rewrites the rendered live file (slots are project-specific).
+const templateDrift = [];   // { tpl, live, recorded:boolean }
+for (const [tplRel, liveRel] of TEMPLATES) {
+  const tplFile = join(TEMPLATE_BASE, tplRel);
+  if (!existsSync(tplFile)) continue;
+  const recorded = templateSha.get(toPosix(tplRel));
+  if (recorded === undefined) {
+    templateDrift.push({ tpl: tplRel, live: liveRel, recorded: false });   // pre-this-feature manifest
+  } else if (recorded !== sha(tplFile)) {
+    templateDrift.push({ tpl: tplRel, live: liveRel, recorded: true });
+  }
+}
 
 for (const [group, liveDir] of GROUPS) {
   const bundleDir = join(BUNDLE_BASE, group);
@@ -101,6 +126,15 @@ if (plan.conflict.length) {
   console.log('\nCONFLICT (local edit since deploy — not overwritten):');
   plan.conflict.forEach((i) => console.log(`  ${i.rel}`));
   console.log('  → resolve: promote the local change upstream, or overwrite manually after review.');
+}
+if (templateDrift.length) {
+  console.log('\nWARN — template changed since deploy (rendered file NOT auto-updated):');
+  for (const t of templateDrift) {
+    const why = t.recorded ? '.tpl changed in bundle' : 'no deploy sha in manifest — cannot prove unchanged';
+    console.log(`  ${t.tpl} → ${t.live}  (${why})`);
+  }
+  console.log('  → re-render manually: diff the .tpl against your live file and re-apply structural changes,');
+  console.log('    keeping project-specific slot values; or re-run /init-project to regenerate.');
 }
 
 if (!apply) {

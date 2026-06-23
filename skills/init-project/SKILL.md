@@ -32,7 +32,7 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 3. Copy `portable/` verbatim: `portable/rules/*` → `.claude/rules/`; `portable/agent-guide/*` → `docs/agent-guide/general/`; `portable/skills/*` → `.claude/skills/`; `portable/agents/*` → `.claude/agents/`.
 4. Render templates: fill `{{slots}}` from interview into `CLAUDE.md`, `docs/agent-guide/index.md`, `docs/index.md`; missing slot → keep TODO marker.
 5. Generate optional rules: for each confirmed optional module, write a project-fitted rule into `docs/agent-guide/general/` per `rule-writing-standards`, and append its trigger line to `CLAUDE.md` in the same step — no hardcoded template.
-6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], modules:[...] }` (provenance; read by `update` for 3-way drift detection — keep `files[].sha256` accurate).
+6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], templates:[{path,sha256}], modules:[...] }` (provenance; `files[]` read by `update` for 3-way drift detection — keep sha256 accurate; `templates[]` records the `.tpl` sha each rendered file was built from — `path` = template path relative to `templates/` e.g. `CLAUDE.md.tpl`, used by `update` to WARN when a template changed since deploy).
 7. Verify: every deployed file is at the correct tier; every rule/agent-guide file carries `scope:` frontmatter; CLAUDE.md within token budget; every behavior-affecting on-demand file has a trigger line or router entry (reachability, file→trigger); every `MUST Read` trigger in CLAUDE.md resolves to a deployed file (reachability, trigger→file — no dead trigger); no unrendered `{{slot}}` remains except intentional TODO markers. Done = checklist passes + manifest written.
 
 ## bundle ↔ live map (check / promote — master repo; update — initialized project)
@@ -52,6 +52,7 @@ Direction bundle → live (reverse of promote). Touches only the verbatim portab
 2. Resolve every CONFLICT first — a conflict = a portable file edited locally since deploy. Promote it upstream (so the improvement enters the bundle) or overwrite manually after review. Never blind-overwrite.
 3. Apply: `node <plugin>/scripts/update.mjs --apply --project <project-root>` → writes ADD + UPDATE, skips conflicts, refreshes manifest `version` + `files[].sha256`.
 4. Additive + in-place only — `update` never deletes: a file removed from the bundle stays in the project, and a file deleted locally is re-added. Prune those manually if needed.
+   - `templates/*` (CLAUDE.md, index.md — rendered phenotype) are never overwritten: their slots hold project-specific values. `update` only emits a WARN when a `.tpl` changed since deploy (sha vs `manifest.templates[]`); re-render manually (diff `.tpl` vs live, re-apply structural changes, keep slot values) or re-run `/init-project`. The WARN persists until the next init re-records the template sha.
 5. Exit code: 0 = up-to-date or applied cleanly; 1 = conflicts remain; 2 = setup error (no manifest → project was not init'd by this plugin).
 
 ## module matrix
