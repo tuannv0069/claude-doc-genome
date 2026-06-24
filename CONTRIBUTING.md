@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in improving `init-project`.
+Thanks for your interest in improving `claude-doc-genome`.
 
 ## Report an issue
 

@@ -1,6 +1,6 @@
 # claude-doc-genome
 
-Claude Code documentation genome — portable rules, guides, skills, agents, and templates for `init-project` plugin.
+Claude Code documentation genome — portable rules, guides, skills, agents, and templates for the `claude-doc-genome` plugin.
 
 ## stack
 - Node.js (scripts: sync-version.mjs, update.mjs)

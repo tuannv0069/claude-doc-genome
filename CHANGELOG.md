@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.7.1] - 2026-06-24
+
+### Changed
+
+- Plugin renamed from `init-project` to `claude-doc-genome` so it no longer displays as `init-project:init-project`; the skill keeps its `/init-project` command (now shown as `claude-doc-genome:init-project`). Install command is now `/plugin install claude-doc-genome@claude-doc-genome` (`.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`).
+- Branding unified to `claude-doc-genome` across `README.md`, `CLAUDE.md`, and `CONTRIBUTING.md` for product/plugin references; skill name, `/init-project` commands, and `skills/init-project/` paths unchanged.
+
 ## [1.7.0] - 2026-06-23
 
 ### Added
@@ -36,6 +43,8 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
-[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.7.1...HEAD
+[1.7.1]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.1
+[1.7.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.0
 [1.4.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.4.0
 [1.3.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.3.0
