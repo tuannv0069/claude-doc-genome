@@ -1,12 +1,7 @@
 ---
 name: skill-writer
-description: >
-  Write, create, or review a SKILL.md (slash-command skill definition). Handles
-  simple skills + orchestration (Model B/C/D) + dynamic workflow scripts, incl.
-  per-subagent agent files. Do NOT use for project rules
-  (rule-writing-standards) or non-skill markdown.
+description: Use when the user wants to write, create, or review a SKILL.md (slash-command skill definition) — simple skills, orchestration (Model B/C/D), dynamic workflow scripts, incl. per-subagent agent files. Trigger: "write/create a skill", "tạo skill", "review skill", "/skill-writer". Do NOT use for project rules (rule-writing-standards) or non-skill markdown.
 argument-hint: "<description | path-to-design | review path>"
-disable-model-invocation: true
 allowed-tools: Read Grep Glob Write Edit Bash
 ---
 

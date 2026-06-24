@@ -1,8 +1,7 @@
 ---
 name: skill-designer
-description: Design a Claude Code skill / orchestrator workflow (model A/B/C/D, subagents, contracts, state; substrate skill-orchestration or dynamic workflow) → outputs design.md ready for /skill-writer. Do NOT use to implement SKILL.md (use /skill-writer) or run an existing workflow.
+description: Use when the user wants to design a new Claude Code skill or orchestrator workflow before implementation — model A/B/C/D, subagents, contracts, state, substrate (skill-orchestration vs dynamic workflow). Trigger: "design a skill", "thiết kế skill/workflow", "/skill-designer". Outputs design.md ready for /skill-writer. Do NOT use to implement SKILL.md (use /skill-writer) or run an existing workflow.
 argument-hint: "[task description]"
-disable-model-invocation: true
 allowed-tools: Read Grep Glob Write Edit Bash
 ---
 

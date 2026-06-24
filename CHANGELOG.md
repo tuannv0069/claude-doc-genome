@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-06-24
+
+### Changed
+
+- `skill-designer` and `skill-writer` are now model-invocable — removed `disable-model-invocation: true` from both SKILL.md frontmatter so the agent can self-invoke them, not only the user via slash command (`skills/init-project/portable/skills/skill-designer/SKILL.md`, `skills/init-project/portable/skills/skill-writer/SKILL.md`).
+- Rewrote both skills' `description` to the `skill-md-standards` frontmatter spec: open with "Use when…", add concrete trigger phrases, keep the scope boundary. With model-invocation enabled the description is the matcher, so trigger accuracy now matters.
+
 ## [1.7.1] - 2026-06-24
 
 ### Changed
@@ -43,7 +50,8 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
-[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.7.1...HEAD
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.8.0
 [1.7.1]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.1
 [1.7.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.0
 [1.4.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.4.0
