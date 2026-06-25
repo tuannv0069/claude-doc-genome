@@ -18,8 +18,12 @@
 - new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `docs/agent-guide/general/five-why.md` first
+- run a review (audit / review / code review / inspect / vet / find bug(s) / build a checklist, incl. running against an existing checklist) (free-form, not a skill-owned flow) → MUST Read `docs/agent-guide/general/review-checklist-method.md` first (existing checklist → skip P0–P2, start at P3; it pulls in `bug-report-format.md` at the output step)
+- write or format a bug report for findings already determined, no review to run (free-form, not a skill-owned flow) → MUST Read `docs/agent-guide/general/bug-report-format.md`
+- fix a bug / apply a fix / patch a defect in any artifact — code, docs, rule, config (free-form, not a skill-owned flow) → MUST Read `docs/agent-guide/general/fix-impact-analysis.md` first (scope the blast radius before editing)
 - write/edit mermaid block in .md → MUST Read `docs/agent-guide/general/mermaid.md` before emit
-- fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `docs/agent-guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan to durable file); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
+- fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `docs/agent-guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan under `.agent/tmp/<task-slug>/<scope>/`); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
+- agent creates a working file (script/dump/log/json/screenshot) with no user- or skill-specified destination → write under `.agent/tmp/<task-slug>/`; never repo root (layout: `docs/agent-guide/general/orchestration-policy.md` §4)
 - create / use / clean up isolated git worktree → MUST Read `docs/agent-guide/general/worktree.md` first (path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push)
 {{ALWAYS_PROJECT_RULES}}
 {{OPTIONAL_MODULE_TRIGGERS}}

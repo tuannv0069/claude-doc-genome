@@ -134,7 +134,7 @@ G2 skippable → keep heading `### G2 — Rule in docs/agent-guide/ / .claude/ /
 
 ## §6 relation
 
-before acting → `.claude/rules/critical-thinking.md` (challenge direction). after defect → this file. both may apply same turn.
+before acting → `.claude/rules/critical-thinking.md` (challenge direction). after defect → this file. before applying the G1 fix → `fix-impact-analysis.md` (scope the blast radius — a root-correct fix is not automatically safe to apply). all may apply same turn.
 
 <critical_recap>
 1. answer exactly the 2 question groups, no free-form

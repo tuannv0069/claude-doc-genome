@@ -77,7 +77,8 @@ input: a one-file change touching tricky conditional logic
 
 <rules section="ALWAYS">
 - write the plan / fix-plan to a durable file before dispatch; never keep it pure-context.
-- store in a gitignored scratch location in the MAIN repo (survives subagent boundary, worktree cleanup, context compaction).
+- store under the gitignored scratch root `.agent/tmp/` in the MAIN repo (survives subagent boundary, worktree cleanup, context compaction).
+- free-form/ad-hoc path = `.agent/tmp/<task-slug>/<scope>/...` (e.g. `.agent/tmp/review-fix/<id>/plan.json`); structured skill flows follow the orchestrator `{prefix}/sessions/{JOB_KEY}/{SESSION}/` layout.
 - plan file = single source of truth; update it when the plan changes (stale plan worse than none).
 - plan must be self-contained for the executor: acceptance criteria + targets + per-task effort — not vague prose.
 - subagents + verify rounds read state from the file, not from orchestrator memory.
@@ -85,6 +86,7 @@ input: a one-file change touching tricky conditional logic
 
 <rules section="NEVER">
 - write transient plan/state into long-term doc storage (clutter, gets committed).
+- scatter scratch outside `.agent/tmp/` (repo root, ad-hoc dirs) — untracked clutter, no single cleanup root.
 - store the plan inside a throwaway worktree (lost on cleanup).
 </rules>
 
@@ -97,5 +99,5 @@ input: orchestrate a 2-step review→fix over many findings
 <critical_recap>
 1. delegate multi-file execution (Edit/Write); research + small edits = inline; hard-reasoning = escalate.
 2. effort by difficulty, not scope.
-3. plan → durable gitignored file, single source of truth, self-contained; never pure-context, never long-term doc storage.
+3. plan → durable file under `.agent/tmp/` (free-form: `<task-slug>/<scope>/`), single source of truth, self-contained; never pure-context, never long-term doc storage, never scattered outside `.agent/tmp/`.
 </critical_recap>

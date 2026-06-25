@@ -10,7 +10,7 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 
 ## dependencies
 - `./portable/rules/` — 7 portable rules (always-loaded + path-scoped)
-- `./portable/agent-guide/` — five-why.md, markdown.md, mermaid.md, orchestration-policy.md, worktree.md (deploy to `docs/agent-guide/general/`)
+- `./portable/agent-guide/` — five-why.md, bug-report-format.md, review-checklist-method.md, fix-impact-analysis.md, markdown.md, mermaid.md, orchestration-policy.md, worktree.md (deploy to `docs/agent-guide/general/`)
 - `./portable/skills/` — skill-designer/, skill-writer/, document-writer/ (whole trees)
 - `./portable/agents/` — skill-writer-auditor.md
 - `./templates/` — CLAUDE.md.tpl, agent-guide/index.md.tpl, docs/index.md.tpl
