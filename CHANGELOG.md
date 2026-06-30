@@ -6,6 +6,16 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-06-30
+
+### Added
+
+- New portable guide `agent-guide/task-planning.md` (`scope: portable`) — plan + verify before executing any artifact-changing task. Two independent axes: scale → depth (small/medium/full; the 7-step §4 scales down to inline for small), task type → form (truth source + acceptance-criteria shape; type never raises depth). Invariant principles §3 (plan-before-execute, auditable not-subjective criteria, doer ≠ checker output-audit, genome-rule attached per sub-task), with §3.2/§3.6 pointing to `critical-thinking.md` rather than restating it. §4 seven steps carry two cross-cutting branches — loop-back (later step exposes earlier defect) and off-ramp ("task should not run" → STOP, propose in-scope alternative); §4.5 plan-review is conditional (full + costly-if-wrong only). Registered: posture trigger in `rules/critical-thinking.md` (names this file), router row in `templates/agent-guide/index.md.tpl`, dependencies in `skills/init-project/SKILL.md`.
+
+### Changed
+
+- `rules/critical-thinking.md` ALWAYS gains one posture line: artifact-changing task → scale rigor to scope; plan before execute; design verification into the plan; verify output by an independent check on the truth source, not the doer's own reasoning → points to the new `agent-guide/task-planning.md`. Generic posture (portable-pure, no project path); the named guide is a genome file deployed by every init, so the pointer never dangles.
+
 ## [1.9.0] - 2026-06-25
 
 ### Changed
@@ -66,7 +76,8 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
-[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.10.0...HEAD
+[1.10.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.10.0
 [1.8.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.8.0
 [1.7.1]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.1
 [1.7.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.0

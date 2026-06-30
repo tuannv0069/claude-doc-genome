@@ -34,6 +34,7 @@ Migration ledger — top-level files not yet at standard location (target = empt
 | `general/mermaid.md` | create/edit Mermaid diagram |
 | `general/orchestration-policy.md` | fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) — delegate Edit/Write, inline ≤3 files or warm context, escalate hard-reasoning, plan persistence; research/grep/read = orchestrator inline |
 | `general/worktree.md` | create / use / clean up an isolated git worktree — path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push |
+| `general/task-planning.md` | plan/execute any artifact-changing task (not a pure question) — scale rigor by size §2.1, task-type→form §2.2, plan-before-execute, design verification, genome-rule per sub-task, loop-back/off-ramp; small task → §2.1 inline exit |
 {{GENERAL_OPTIONAL_ROWS}}
 
 <!-- areas (frontend/, backend/, bd/, dd/, ...) grow per doc-organization.md §7 as the project accumulates content; register each new file here in the same commit -->

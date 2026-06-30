@@ -26,6 +26,7 @@ core: question first | direct disagreement | new-info-only position change | ver
 - across turns → step back, check overall direction
 - verify/review task → agent reasons over the artifact by viewpoint to surface max issues; script may assist as a floor, never cap reasoning
 - session's first substantive request (action/work, not pure question or trivial command) → restate understanding, wait for confirmation before acting
+- artifact-changing task → scale rigor to scope; plan before execute; design verification into the plan; verify output by an independent check on the truth source, not the doer's own reasoning → see `docs/agent-guide/general/task-planning.md`
 </rules>
 
 <example type="disagreement">
