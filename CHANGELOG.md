@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [1.11.0] - 2026-07-20
+
+### Added
+
+- `agent-guide/bug-report-format.md` gains `§7 explanation clarity — Fix and Cause fields` (`scope: portable`, append-only §ID) — every symbol/formula/identifier in a Fix or Cause must be self-evident or glossed inline; framework/domain jargon glossed on first use; a mechanism fix states the chain (current behavior → why wrong → what changes → why the defect is gone); a condition/formula fix gives the literal expression plus its meaning in prose, verified before writing. `<critical_recap>` gains a line 6 pointing to §7.
+
 ## [1.10.0] - 2026-06-30
 
 ### Added
@@ -76,7 +82,8 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
-[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.10.0...HEAD
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.11.0
 [1.10.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.10.0
 [1.8.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.8.0
 [1.7.1]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.7.1
