@@ -1,15 +1,15 @@
 # claude-doc-genome — Claude Code plugin
 
-> One-shot **Claude Code plugin** that bootstraps an AI-agent documentation system — `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` — then lets the project self-maintain.
+> One-shot **Claude Code plugin** that bootstraps an AI-agent documentation system — `CLAUDE.md` + `.claude/rules/` + `.agent-workspace/` — then lets the project self-maintain.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.11.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](CHANGELOG.md)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
 [![Marketplace](https://img.shields.io/badge/marketplace-claude--doc--genome-555.svg)](#install)
 
 <!-- Demo: drop a GIF here once recorded, e.g. ![demo](docs/demo.gif) -->
 
-`claude-doc-genome` deploys a battle-tested documentation standard for AI agents — the `CLAUDE.md` + `.claude/rules/` + `docs/agent-guide/` trio — plus a skill-authoring toolkit (`skill-designer`, `skill-writer`, `skill-writer-auditor`, `document-writer`). After the one-time seed, the project grows its own documentation using the deployed standard. `init` runs once; later you can opt into `update` to pull newer portable files from the bundle — a safe 3-way merge that never overwrites your local edits.
+`claude-doc-genome` deploys a battle-tested documentation standard for AI agents — the `CLAUDE.md` + `.claude/rules/` + `.agent-workspace/` trio — plus a skill-authoring toolkit (`skill-designer`, `skill-writer`, `skill-writer-auditor`, `document-writer`). After the one-time seed, the project grows its own documentation using the deployed standard. `init` runs once; later you can opt into `update` to pull newer portable files from the bundle — a safe 3-way merge that never overwrites your local edits.
 
 Keywords: Claude Code plugin · AI agent documentation · CLAUDE.md scaffolding · agent rules · prompt/skill standards.
 
@@ -64,13 +64,24 @@ The documentation system is modeled as a **neural network**: files are neurons, 
 
 ## What gets deployed
 
-| group | content |
-|---|---|
-| rules | `doc-organization`, `critical-thinking`, `file-reading`, `claude-md-standards`, `skill-md-standards`, `rule-writing-standards`, `subagent-standards` |
-| agent-guide | `five-why`, `markdown`, `mermaid`, `orchestration-policy` |
-| skills | `skill-designer`, `skill-writer`, `document-writer` |
-| agents | `skill-writer-auditor` |
-| templates | `CLAUDE.md`, `agent-guide/index.md`, `docs/index.md` |
+Everything the agent owns lands in one root, `.agent-workspace/` — the guide tree, the lesson store, per-task working state, and shared tooling. `docs/` stays what it should be: the project's own work product.
+
+```
+.agent-workspace/
+├── guide/        on-demand guide tree (router: index.md)
+├── lessons/      raw records of working techniques that failed
+├── tasks/        per-task plan + state (gitignored)
+├── worktrees/    isolated git checkouts for parallel work (gitignored)
+└── tooling/      shared agent scripts, one subfolder per purpose
+```
+
+| group | live target | content |
+|---|---|---|
+| rules | `.claude/rules/` | `doc-organization`, `critical-thinking`, `file-reading`, `claude-md-standards`, `skill-md-standards`, `rule-writing-standards`, `subagent-standards` |
+| guide | `.agent-workspace/guide/general/` | `bug-report-format`, `doc-system-mechanics`, `five-why`, `fix-impact-analysis`, `lesson-capture`, `markdown`, `mermaid`, `orchestration-policy`, `review-checklist-method`, `task-planning`, `worktree` |
+| skills | `.claude/skills/` | `skill-designer`, `skill-writer`, `document-writer` |
+| agents | `.claude/agents/` | `skill-writer-auditor` |
+| templates | rendered per project | `CLAUDE.md`, `guide/index.md`, `docs/index.md`, `lessons/index.md` |
 
 ## Contributing
 

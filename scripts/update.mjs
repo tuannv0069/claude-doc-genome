@@ -32,7 +32,7 @@ const VERSION_FILE = join(repoRoot, 'skills/init-project/VERSION');
 // bundle group → live target dir (relative to project root)
 const GROUPS = [
   ['rules', '.claude/rules'],
-  ['agent-guide', 'docs/agent-guide/general'],
+  ['guide', '.agent-workspace/guide/general'],
   ['skills', '.claude/skills'],
   ['agents', '.claude/agents'],
 ];
@@ -42,8 +42,9 @@ const GROUPS = [
 // it only WARNS when the .tpl changed since deploy so the user can re-render manually.
 const TEMPLATES = [
   ['CLAUDE.md.tpl', 'CLAUDE.md'],
-  ['agent-guide/index.md.tpl', 'docs/agent-guide/index.md'],
+  ['guide/index.md.tpl', '.agent-workspace/guide/index.md'],
   ['docs/index.md.tpl', 'docs/index.md'],
+  ['lessons/index.md.tpl', '.agent-workspace/lessons/index.md'],
 ];
 
 function fail(msg) { console.error(`update: ${msg}`); process.exit(2); }

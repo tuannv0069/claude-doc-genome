@@ -5,7 +5,7 @@ scope: portable
 <critical>
 scope: creating or editing any Mermaid diagram
 rendering: GitHub, VS Code Markdown Preview, mermaid.live
-companion: `docs/agent-guide/general/markdown.md` — nested code block wrapping rules
+companion: `.agent-workspace/guide/general/markdown.md` — nested code block wrapping rules
 </critical>
 
 <rules section="NEVER">

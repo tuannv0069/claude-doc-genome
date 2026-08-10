@@ -12,16 +12,21 @@ Open a GitHub issue with:
 
 ## Local setup
 
-Enable the version-drift pre-commit hook once per clone (CI enforces the same check on every PR):
+Enable the pre-commit hook once per clone (CI enforces the same checks on every PR):
 
 ```sh
 git config core.hooksPath .githooks
 ```
 
+It blocks two things: version fields out of sync (`scripts/sync-version.mjs check`) and a broken
+documentation network — dead trigger, orphan guide, dead `§ID` (`scripts/doc-lint.mjs`). Run either
+by hand at any time.
+
 ## Propose a change
 
 1. Fork the repository and create a branch from `main`.
-2. Make your change inside `skills/init-project/` (the plugin) — keep the `portable/` bundle generic (no project-specific names, paths, or values).
+2. Make your change in the right copy. This repo is **deployed instance #1** of its own standard, so a portable rule, guide, skill, or agent exists twice on purpose (`doc-organization.md` §4): the live copy under `.claude/` and `.agent-workspace/guide/`, and the packaged copy under `skills/init-project/portable/`. Edit the **live** copy — that is the one the agent actually reads — then mirror it into the bundle with `/init-project promote`. If you cannot run the skill, copy the file across by hand and say so in the PR. Either way `node scripts/update.mjs --project .` must end with `conflict: 0` before you open it. Keep the bundle generic — no project-specific names, paths, or values.
+   Everything else (`SKILL.md`, `templates/`, `scripts/`, the repo's own docs) has one copy and is edited directly.
 3. Log your change under `## [Unreleased]` in `CHANGELOG.md`. Do **not** bump the version — the maintainer cuts versions at release time (see [Releasing](#releasing)).
 4. Open a pull request describing the change and the reasoning.
 

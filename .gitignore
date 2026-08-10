@@ -5,3 +5,7 @@ Thumbs.db
 *.tmp
 .idea/
 .vscode/
+
+# agent workspace — transient state only; guide/ and lessons/ ARE committed
+.agent-workspace/tasks/
+.agent-workspace/worktrees/

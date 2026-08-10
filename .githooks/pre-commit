@@ -1,15 +1,23 @@
 #!/bin/sh
-# Block commits that leave the version fields out of sync.
+# Block commits that leave the version fields out of sync, or the doc network broken.
 # Enable once per clone:  git config core.hooksPath .githooks
 # Bypass a single commit:  git commit --no-verify
 
 if ! command -v node >/dev/null 2>&1; then
-  echo "pre-commit: node not found — skipping version check (CI still enforces)" >&2
+  echo "pre-commit: node not found — skipping checks (CI still enforces)" >&2
   exit 0
 fi
 
 if ! node scripts/sync-version.mjs check; then
   echo "" >&2
   echo "pre-commit: version drift — run 'node scripts/sync-version.mjs sync' and re-stage." >&2
+  exit 1
+fi
+
+# Link integrity — dead triggers, orphan guides, pointer rot (doc-system-mechanics.md §5).
+# Prevention is the point: a dead §ID reads as fine in review and fails at read time.
+if ! node scripts/doc-lint.mjs --quiet; then
+  echo "" >&2
+  echo "pre-commit: doc-lint failed — fix the findings above, or re-run 'node scripts/doc-lint.mjs'." >&2
   exit 1
 fi

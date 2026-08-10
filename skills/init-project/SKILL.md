@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Use this skill ONCE per new project to deploy the agent documentation standard — the trio CLAUDE.md + .claude/rules/ + docs/agent-guide/ — plus the skill-authoring set (skill-designer, skill-writer, skill-writer-auditor) and the document-writer documentation skill. Trigger phrases — "init project docs", "khởi tạo bộ tài liệu agent", "deploy doc standard", "/init-project". Two maintenance modes run ONLY at this master repo — "/init-project check" (drift report) and "/init-project promote" (consolidate live → bundle). Do NOT use to author a single new skill (use skill-designer/skill-writer), and do NOT re-run init on an already-initialized project.
+description: Use this skill ONCE per new project to deploy the agent documentation standard — the trio CLAUDE.md + .claude/rules/ + .agent-workspace/guide/ — plus the skill-authoring set (skill-designer, skill-writer, skill-writer-auditor) and the document-writer documentation skill. Trigger phrases — "init project docs", "khởi tạo bộ tài liệu agent", "deploy doc standard", "/init-project". Two maintenance modes run ONLY at this master repo — "/init-project check" (drift report) and "/init-project promote" (consolidate live → bundle). Do NOT use to author a single new skill (use skill-designer/skill-writer), and do NOT re-run init on an already-initialized project.
 ---
 
 # init-project
@@ -10,39 +10,42 @@ Bootstrap a new project's agent documentation system from a portable bundle in o
 
 ## dependencies
 - `./portable/rules/` — 7 portable rules (always-loaded + path-scoped)
-- `./portable/agent-guide/` — five-why.md, bug-report-format.md, review-checklist-method.md, fix-impact-analysis.md, markdown.md, mermaid.md, orchestration-policy.md, worktree.md, task-planning.md (deploy to `docs/agent-guide/general/`)
+- `./portable/guide/` — bug-report-format.md, doc-system-mechanics.md, five-why.md, fix-impact-analysis.md, lesson-capture.md, markdown.md, mermaid.md, orchestration-policy.md, review-checklist-method.md, task-planning.md, worktree.md (deploy to `.agent-workspace/guide/general/`)
 - `./portable/skills/` — skill-designer/, skill-writer/, document-writer/ (whole trees)
 - `./portable/agents/` — skill-writer-auditor.md
-- `./templates/` — CLAUDE.md.tpl, agent-guide/index.md.tpl, docs/index.md.tpl
+- `./templates/` — CLAUDE.md.tpl, guide/index.md.tpl, docs/index.md.tpl, lessons/index.md.tpl
 - `./VERSION` — bundle version, bumped on every promote
-- `scripts/update.mjs` (repo root) — engine for the `update` mode (3-way bundle→live merge); `scripts/sync-version.mjs` — version single-source sync
+- `scripts/update.mjs` (repo root) — engine for the `update` mode (3-way bundle→live merge); `scripts/init-manifest.mjs` — computes the step-6 manifest; `scripts/sync-version.mjs` — version single-source sync
 
 ## modes
 
 | invocation | runs where | action |
 |---|---|---|
 | `/init-project` | new project | deploy bundle (workflow below) |
-| `/init-project check` | master repo | sha256 compare bundle ↔ live per §map → report drift |
-| `/init-project promote` | master repo | copy live → bundle for every mapped file, bump VERSION |
+| `/init-project check` | master repo (init'd) | sha256 compare bundle ↔ live per §map → report drift |
+| `/init-project promote` | master repo (init'd) | copy live → bundle for every mapped file, bump VERSION |
 | `/init-project update` | initialized project | pull newer portable files bundle → live, 3-way safe (manifest ↔ live ↔ bundle); skip conflicts (workflow below) |
 
 ## workflow (init — new project)
+0. Create the agent workspace `.agent-workspace/` at the project root — everything the agent owns lives here, nothing of it under `docs/` (`doc-organization.md §11`). Subfolders are created by the step that fills them: `guide/` (step 3), `lessons/` (step 4), `tasks/` and `worktrees/` (first use at runtime). Add `.agent-workspace/tasks/` and `.agent-workspace/worktrees/` to `.gitignore` — task state and throwaway checkouts are never committed (`orchestration-policy.md §5`). `tooling/` (shared agent scripts, grouped into one subfolder per purpose so a task loads only the group it needs) is a convention only — create it with its first script, never empty.
 1. Scan project: detect stack + optional modules per `## module matrix` signal column. Output: proposed module set + discovered slot values.
-2. Interview: confirm proposed module set; ask slots not scannable (dev ports in use, scope ownership, doc language). Unanswerable slot → leave TODO marker, never invent a value; module uncertain → skip it.
-3. Copy `portable/` verbatim: `portable/rules/*` → `.claude/rules/`; `portable/agent-guide/*` → `docs/agent-guide/general/`; `portable/skills/*` → `.claude/skills/`; `portable/agents/*` → `.claude/agents/`.
-4. Render templates: fill `{{slots}}` from interview into `CLAUDE.md`, `docs/agent-guide/index.md`, `docs/index.md`; missing slot → keep TODO marker.
-5. Generate optional rules: for each confirmed optional module, write a project-fitted rule into `docs/agent-guide/general/` per `rule-writing-standards`, and append its trigger line to `CLAUDE.md` in the same step — no hardcoded template.
-6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], templates:[{path,sha256}], modules:[...] }` (provenance; `files[]` read by `update` for 3-way drift detection — keep sha256 accurate; `templates[]` records the `.tpl` sha each rendered file was built from — `path` = template path relative to `templates/` e.g. `CLAUDE.md.tpl`, used by `update` to WARN when a template changed since deploy).
-7. Verify: every deployed file is at the correct tier; every rule/agent-guide file carries `scope:` frontmatter; CLAUDE.md within token budget; every behavior-affecting on-demand file has a trigger line or router entry (reachability, file→trigger); every `MUST Read` trigger in CLAUDE.md resolves to a deployed file (reachability, trigger→file — no dead trigger); no unrendered `{{slot}}` remains except intentional TODO markers. Done = checklist passes + manifest written.
+2. Interview: confirm proposed module set; ask slots not scannable (dev ports in use, scope ownership, doc language, always-loaded budget — offer 600 lines as the default; the genome's own floor is the figure recorded in the placement-data row of the router this init renders). Unanswerable slot → leave TODO marker, never invent a value; module uncertain → skip it.
+3. Copy `portable/` verbatim: `portable/rules/*` → `.claude/rules/`; `portable/guide/*` → `.agent-workspace/guide/general/`; `portable/skills/*` → `.claude/skills/`; `portable/agents/*` → `.claude/agents/`.
+4. Render templates: fill `{{slots}}` from interview into `CLAUDE.md`, `.agent-workspace/guide/index.md`, `docs/index.md`; missing slot → keep TODO marker. `lessons/index.md.tpl` carries no slot — copy it verbatim to `.agent-workspace/lessons/index.md`, seeding the lesson store empty (`lesson-capture.md` §5).
+   - **A rendered target that already exists is MERGED, never overwritten.** A project with its own `CLAUDE.md` is carrying rules nothing else records — release steps, ownership, domain guardrails — and rendering over them deletes the only copy. Carry every existing rule into the project-rule slots, then add the template's; the deployed standard is additive to that project, not a replacement for it. A category the project has no work products for (`docs/`) is not rendered at all — an empty router is scaffolding, not content; record the `.tpl` sha in the manifest anyway so `update` warns only on a real template change.
+5. Generate optional rules: for each confirmed optional module, write a project-fitted rule into `.agent-workspace/guide/general/` per `rule-writing-standards`, and append its trigger line to `CLAUDE.md` in the same step — no hardcoded template.
+6. Write manifest `.claude/init-manifest.json`: `{ version, deployedAt, files:[{path,sha256}], templates:[{path,sha256}], modules:[...] }` (provenance; `files[]` read by `update` for 3-way drift detection — keep sha256 accurate; `templates[]` records the `.tpl` sha each rendered file was built from — `path` = template path relative to `templates/` e.g. `CLAUDE.md.tpl`, used by `update` to WARN when a template changed since deploy). Generate it — `node <plugin>/scripts/init-manifest.mjs --project <project-root> --modules <list>` — never hand-write the hashes: a wrong sha256 does not fail here, it surfaces later as a phantom CONFLICT or a silent overwrite of a local edit.
+7. Verify: every deployed file is at the correct tier; every rule/guide file carries `scope:` frontmatter; CLAUDE.md within token budget; every behavior-affecting on-demand file has a trigger line or router entry (reachability, file→trigger); every `MUST Read` trigger in CLAUDE.md resolves to a deployed file (reachability, trigger→file — no dead trigger); no unrendered `{{slot}}` remains except intentional TODO markers. Done = checklist passes + manifest written.
 
 ## bundle ↔ live map (check / promote — master repo; update — initialized project)
 | bundle path | live path |
 |---|---|
 | `portable/rules/*` | `.claude/rules/*` |
-| `portable/agent-guide/*` | `docs/agent-guide/general/*` |
+| `portable/guide/*` | `.agent-workspace/guide/general/*` |
 | `portable/skills/*` | `.claude/skills/*` |
 | `portable/agents/*` | `.claude/agents/*` |
 
+- **Precondition:** the master repo must itself be init'd — it is *deployed instance #1* (`doc-organization.md §4`), and without a live tier `check` has nothing to compare and `promote` has nothing to copy from. A master repo with no `.claude/rules/` runs `/init-project` on itself first (step 4's merge rule applies to its existing `CLAUDE.md`). Until then the bundle is edited directly and no mechanism can detect that it drifted.
 - `check`: sha256 each pair → list mismatches. Default update direction is live → bundle (promote); fix live first, then promote.
 - `promote`: copy live → bundle for every mapped file, then bump the version via `node scripts/sync-version.mjs set <x.y.z>` (writes canonical `VERSION` + mirrors it into `.claude-plugin/*` and the README badge).
 
@@ -54,16 +57,18 @@ Direction bundle → live (reverse of promote). Touches only the verbatim portab
 4. Additive + in-place only — `update` never deletes: a file removed from the bundle stays in the project, and a file deleted locally is re-added. Prune those manually if needed.
    - `templates/*` (CLAUDE.md, index.md — rendered phenotype) are never overwritten: their slots hold project-specific values. `update` only emits a WARN when a `.tpl` changed since deploy (sha vs `manifest.templates[]`); re-render manually (diff `.tpl` vs live, re-apply structural changes, keep slot values) or re-run `/init-project`. The WARN persists until the next init re-records the template sha.
 5. Exit code: 0 = up-to-date or applied cleanly; 1 = conflicts remain; 2 = setup error (no manifest → project was not init'd by this plugin).
+6. Verify reachability of every ADD — mandatory, and the reason step 4's WARN is not enough. `update` writes the portable file but never the trigger line or router entry that reaches it, so a newly-added guide lands as dead content: present in the project, read by nobody. For each ADD, confirm the live `CLAUDE.md` carries its trigger (when the file is behavior-affecting per `doc-organization.md` §10 interception test) AND the live `.agent-workspace/guide/index.md` carries its router entry; write whichever is missing, and create any directory the new file's guidance assumes (e.g. a store folder seeded from `templates/`). Done = every ADD reachable by trigger or router, both directions resolving.
 
 ## module matrix
 | module | includes | deploy when | scan signal (examples, not exhaustive) |
 |---|---|---|---|
-| core | `portable/*` (all 4 groups) + 3 templates | always | — |
-| runtime | `agent-guide/general/local-runtime.md` + CLAUDE.md trigger (skill writes per scan, step 5) | project self-runs a dev server | `package.json` dev/start scripts, `launchSettings.json`, vite/next/dotnet/django/cargo config |
-| e2e | `agent-guide/general/<tool>.md` (named after detected tool) + CLAUDE.md trigger (step 5) | project has E2E browser tests | playwright/cypress/selenium dep, `e2e/` folder, E2E config |
+| core | `portable/*` (all 4 groups) + 4 templates | always | — |
+| runtime | `.agent-workspace/guide/general/local-runtime.md` + CLAUDE.md trigger (skill writes per scan, step 5) | project self-runs a dev server | `package.json` dev/start scripts, `launchSettings.json`, vite/next/dotnet/django/cargo config |
+| e2e | `.agent-workspace/guide/general/<tool>.md` (named after detected tool) + CLAUDE.md trigger (step 5) | project has E2E browser tests | playwright/cypress/selenium dep, `e2e/` folder, E2E config |
+| superpowers | CLAUDE.md trigger only (step 5), two lines: (a) design/plan a non-trivial task → run the superpowers brainstorming → writing-plans flow, which supersedes `task-planning.md` §6–§8 per its §1 precedence (§2/§3/§4 governance still applies); (b) implementing task-by-task → superpowers sets WHEN the review checkpoints fire; the instrument still comes from `review-checklist-method.md` §7, which superpowers does not override. Working files of either → `.agent-workspace/tasks/<task-slug>/` | the superpowers skill set is already installed | `superpowers` skills in `.claude/skills/`, or a superpowers plugin in the harness settings |
 
 - Optional module deploys only when scan confirms OR user confirms at interview — uncertain → skip.
-- Git: minimal guardrail (commit only on request, never push) ships in `CLAUDE.md.tpl`; detailed policy is `scope: project` — project writes `docs/agent-guide/general/git.md` on demand, adding its trigger line in the same commit (reachability — never a trigger pointing at a missing file).
+- Git: minimal guardrail (commit only on request, never push) ships in `CLAUDE.md.tpl`; detailed policy is `scope: project` — project writes `.agent-workspace/guide/general/git.md` on demand, adding its trigger line in the same commit (reachability — never a trigger pointing at a missing file).
 - A skipped module needed later → project writes the rule itself per the deployed standard. New module enters the bundle only via `promote` after a real project battle-tests the pattern.
 
 ## independence rules

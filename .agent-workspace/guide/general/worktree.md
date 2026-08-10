@@ -23,7 +23,7 @@ Skip when single-thread work where modifying the main tree is safe.
 1. Resolve branch:
    - exists on remote → `git fetch origin <branch>` + checkout (resume)
    - missing → `git fetch origin <base-branch>` + create from `origin/<base-branch>`
-2. Worktree path: `.agent/worktrees/<ID>-<TAG>-<SESSION>/` — `<TAG>` = workflow tag (e.g. `FS`, `BE`); `<SESSION>` = unique caller run id (prevents collision across reruns).
+2. Worktree path: `.agent-workspace/worktrees/<ID>-<TAG>-<SESSION>/` — `<TAG>` = workflow tag (e.g. `FS`, `BE`); `<SESSION>` = unique caller run id (prevents collision across reruns).
 3. `git worktree add <worktree-path> <branch>`
 4. Symlink non-tracked config (`.env`, runtime settings, credentials) the workflow needs — only items it will actually use.
 5. Resolve absolute path once: `WORKTREE_ABS=$(realpath <worktree-path>)`. Child agents do NOT inherit CWD — pass `WORKTREE_ABS` explicitly so they `cd` into the same tree.
@@ -53,7 +53,7 @@ git worktree prune
 Never remove a worktree whose code was not pushed — preserve it so work is recoverable.
 
 <critical_recap>
-1. worktree path: `.agent/worktrees/<ID>-<TAG>-<SESSION>/`; pass `realpath` abs to child agents
+1. worktree path: `.agent-workspace/worktrees/<ID>-<TAG>-<SESSION>/`; pass `realpath` abs to child agents
 2. symlink only non-tracked config the workflow will actually use
 3. cleanup removes worktree ONLY after commit pushed — else preserve + warn
 </critical_recap>

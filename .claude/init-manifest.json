@@ -1,0 +1,173 @@
+{
+  "version": "2.0.0",
+  "deployedAt": "2026-08-10T10:49:32.998Z",
+  "notes": "Master repo = deployed instance #1 (doc-organization.md §4). CLAUDE.md was MERGED with the pre-existing release-workflow rules, not rendered over. docs/index.md deliberately not rendered — this repo has no docs/ work-product category yet; its .tpl sha is recorded so update.mjs WARNs only on a real template change.",
+  "modules": [
+    "core",
+    "superpowers"
+  ],
+  "files": [
+    {
+      "path": ".claude/rules/claude-md-standards.md",
+      "sha256": "8457d0def1a38f04a2e08503b55a0881438a3c4ee3f08d80db3c34e127fbbfe1"
+    },
+    {
+      "path": ".claude/rules/critical-thinking.md",
+      "sha256": "7e89c74d20ff6392e4302e55d1b9d7ac997a23d81d7aec910b6ae9b1fea71472"
+    },
+    {
+      "path": ".claude/rules/doc-organization.md",
+      "sha256": "23a6b9fd22288c701c770a6b8368ce53384035d5b042352afaff66ab11908447"
+    },
+    {
+      "path": ".claude/rules/file-reading.md",
+      "sha256": "f51a32fb014a76d6b4e5d4e2b4c725c5acb4898026a971628d45cd9b0731b843"
+    },
+    {
+      "path": ".claude/rules/rule-writing-standards.md",
+      "sha256": "8c8ca9d8bba909a40df437d9059f7f8c7dc8d91c3c27975c2b59d0b7aa800b28"
+    },
+    {
+      "path": ".claude/rules/skill-md-standards.md",
+      "sha256": "f2917dea9edca6012be54cf3af0eb92657f3ea57fb1b70023d6b8f6996c0d6e3"
+    },
+    {
+      "path": ".claude/rules/subagent-standards.md",
+      "sha256": "a2c6e7b98d960f53ded6148ee7cf8443c038a4aaf51ff603ef41f52ce0eb82d8"
+    },
+    {
+      "path": ".agent-workspace/guide/general/bug-report-format.md",
+      "sha256": "37b03f9ee0564f1112b32b3a24256df178c0d30daf29ff3363819a1ae49113e1"
+    },
+    {
+      "path": ".agent-workspace/guide/general/doc-system-mechanics.md",
+      "sha256": "ed27f54b1c133873ecd286631bc5342efb7182a5d7ecfbe427bee921ce0363c2"
+    },
+    {
+      "path": ".agent-workspace/guide/general/five-why.md",
+      "sha256": "1ebc6c35dbdbd4dc17744437df6351ce141913a64c903b97ac66edebe9e0446d"
+    },
+    {
+      "path": ".agent-workspace/guide/general/fix-impact-analysis.md",
+      "sha256": "11d7ae1e3d409bf8d068af5af458e1a28c5765ef791243cda03e9647cc90f59b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/lesson-capture.md",
+      "sha256": "439c1eb3c0124c46a5d860de72b03272346c4db3dca29105cd864a71d6cf3d44"
+    },
+    {
+      "path": ".agent-workspace/guide/general/markdown.md",
+      "sha256": "865c9c43b6d734b82e3d18e1b7631395f787261052d1a49bec9c4afd20b5db3c"
+    },
+    {
+      "path": ".agent-workspace/guide/general/mermaid.md",
+      "sha256": "f8af731ed97e08a442dda65df9bc4fcb28cdd9d6f608d8043f5e618a0b09f723"
+    },
+    {
+      "path": ".agent-workspace/guide/general/orchestration-policy.md",
+      "sha256": "0d61b3ded203cfc92a247e7ef90e21bb85d91d967bf75933817f4a53dca13356"
+    },
+    {
+      "path": ".agent-workspace/guide/general/review-checklist-method.md",
+      "sha256": "c4e1e08425ff35dcbf55d2e4b59371cfe0564cb7d9c0e87f3477c33b73e49d14"
+    },
+    {
+      "path": ".agent-workspace/guide/general/task-planning.md",
+      "sha256": "194ca9a02f45b9fcd3ea0946d5e9d0b1be6189c3282a6c03f347d3efde19ac1b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/worktree.md",
+      "sha256": "635ad2b0a4c91067bfc67bb297cf858dd651eaf752d9f5c9bcb4317293e5d14e"
+    },
+    {
+      "path": ".claude/skills/document-writer/README.md",
+      "sha256": "d50451f78958398133453d7c64f6f05d1acb37a48f0eeb1ad6217bdf9006ff9e"
+    },
+    {
+      "path": ".claude/skills/document-writer/SKILL.md",
+      "sha256": "38bd23b5d98477cc85484f26f7591190ef4a8bf3680df90c1449149f66433354"
+    },
+    {
+      "path": ".claude/skills/skill-designer/README.md",
+      "sha256": "dc6d0872e5c2f54b1c2b99b9c6ca9b00be34299736fcadbde9a2afea8ba1b0b3"
+    },
+    {
+      "path": ".claude/skills/skill-designer/SKILL.md",
+      "sha256": "27a968825be114eaccb104c9cee4b75ae0da94ca0018fa5b1ceeda81aabb4aea"
+    },
+    {
+      "path": ".claude/skills/skill-writer/README.md",
+      "sha256": "0526236c355e54647ecdfdc232152783a5059f618afd750ec2e9d84f979ad2a1"
+    },
+    {
+      "path": ".claude/skills/skill-writer/SKILL.md",
+      "sha256": "e747751fff9f284d62e8b958ca65892c63547e9d2f9f918148be529d17ca1412"
+    },
+    {
+      "path": ".claude/skills/skill-designer/docs/design-template.md",
+      "sha256": "c66daabd86427c4552619d2dce14eebcce70c470df5934582f76d4d49a5729bc"
+    },
+    {
+      "path": ".claude/skills/skill-designer/docs/extra-checks.sh",
+      "sha256": "111bafda2063e21042386deb5d13d19b49724dbf1602a72119b35732c2675a47"
+    },
+    {
+      "path": ".claude/skills/skill-designer/docs/orchestrator-rules.md",
+      "sha256": "85c2171e5e929532122fa799c081d2c063c6174ab16a5b5d273531793132d97d"
+    },
+    {
+      "path": ".claude/skills/skill-designer/docs/plan-gate-spec.md",
+      "sha256": "1cf226e7cd83f2427e985270b7e8de0f2db9a315ed1ea3afeb03eab115b842a2"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/examples.md",
+      "sha256": "98051273fdb2e5baece9bc174f9c7888b480ea8cad77b969d68f6b1379c96998"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/extra-checks.sh",
+      "sha256": "d54e565c9e42bea03d6c6149fe2da77ded7799be1f63ce8c901cdaad1a076332"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/skill-rules-orch.md",
+      "sha256": "a621ad784ba7132dd07955553d27ca54d4ca79711a95f91c578a57d5adc231c5"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/skill-rules-quality.md",
+      "sha256": "a6035a0f0a558f58b198b17b039885fbdcdc019d53b3567ea2a64f15606ece64"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/skill-rules-spec.md",
+      "sha256": "17d0d77cc72a0baa12aecf61a223049f06542989ae715648d4ea6792160118d7"
+    },
+    {
+      "path": ".claude/skills/skill-writer/docs/skill-rules-workflow.md",
+      "sha256": "853953c6e79280381ce389799c015d116202559181ba37ba140049cb7f4a466e"
+    },
+    {
+      "path": ".claude/skills/skill-writer/scripts/test-skill.sh",
+      "sha256": "26629c27d46e09c9575719cf80c0c08b0b282ad90b31c2588ee2ee1d391b8cfc"
+    },
+    {
+      "path": ".claude/agents/skill-writer-auditor.md",
+      "sha256": "4357a96a181f59fc8fd92a218efbdfa14e451e817783e8e0c1be2ea8d2d896ee"
+    }
+  ],
+  "templates": [
+    {
+      "path": "CLAUDE.md.tpl",
+      "sha256": "e5923b0979ccf5522cc330f17f1a16bc1391e5294528f8dafb36f5f80987dce7"
+    },
+    {
+      "path": "guide/index.md.tpl",
+      "sha256": "a2ee61915c2723ed60a41d86a5f63d8e2e26a72f092d5ce1081192f85cc5bc01"
+    },
+    {
+      "path": "docs/index.md.tpl",
+      "sha256": "f7885576f44e8dc7f2787d4652ba6364745f0b9340cf9c44fcb573b5329ca9bb"
+    },
+    {
+      "path": "lessons/index.md.tpl",
+      "sha256": "b0662fb8cc464ccc1712aa0c101752aa13a98eba62de714fa369f4915b94e134"
+    }
+  ]
+}

@@ -5,7 +5,7 @@ scope: portable
 <critical>
 scope: all *.md in repo
 rendering: GitHub, VS Code Markdown Preview
-companion: `docs/agent-guide/general/mermaid.md` — before creating/editing any Mermaid diagram
+companion: `.agent-workspace/guide/general/mermaid.md` — before creating/editing any Mermaid diagram
 </critical>
 
 <rules section="NEVER">
