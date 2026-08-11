@@ -30,6 +30,7 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
   3. `git tag vX.Y.Z`
   4. `git push origin main --tags`
   5. `gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog>"` — GitHub Release mandatory, not optional
+- start any artifact task (write / edit / review / investigate) → MUST Read `.agent-workspace/lessons/index.md` §1 first → row matches the work about to be done → read that store; no row matches → skip, lookup done
 - new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first

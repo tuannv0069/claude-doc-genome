@@ -4,7 +4,7 @@ scope: portable
 
 <critical>
 scope: a working technique just failed — user correction, repeat failure, a probe that lied. Record it so the next run of the SAME work type does not repeat it.
-core: record in the turn it failed | one store per work type, never inside a curated guide | escalate by recurrence: record → rule → machine check.
+core: record in the turn it failed | one store per work type, never inside a curated guide | escalate by recurrence: record → rule → machine check | read-back = router lookup at task start (§7), not a per-store trigger.
 forbidden: work-technique lesson in harness memory | record pasted into a guide | record promoted straight to always-loaded | a store nothing reads.
 note: §ID append-only (portable) — never renumber; retired sections keep their number.
 </critical>
@@ -109,6 +109,8 @@ input: routing a store so the agent reaches it without a new always-loaded line
 ✅ `lessons already paid for → .agent-workspace/lessons/<work-type>.md` at the top of the paired guide; its existing trigger reaches both
 </example>
 
+Primary read-back path = §7 (router lookup at task start). The pointer line above is the secondary entrance — it fires when the agent enters from the paired guide rather than from the start of a task.
+
 The store is never loaded per turn, so it may grow without limit.
 
 ## §6 relation
@@ -117,10 +119,33 @@ The store is never loaded per turn, so it may grow without limit.
 - `five-why.md` — run it when the record's `wrong` line cannot explain itself; the root cause is what gets recorded, not the symptom.
 - `doc-organization.md §1` — content classification; §8.3 branch 5 routes a record here, and §4's step 2 is what turns it into a substantive rule with a `§ID`.
 
+## §7 Read-back by router lookup — the unconditional path
+
+An always-loaded rule reads `.agent-workspace/lessons/index.md` §1 at the start of every artifact task. Registering a store there (§3) is therefore the whole wiring: reachability stops scaling with the number of stores, and "a store nothing reads" stops being possible.
+
+<rules section="ALWAYS">
+- register a store in `lessons/index.md` §1 → read-back is wired; add no per-store trigger
+- write the router's work-type cell as the ACTION about to be performed, not the topic name
+- no row matches the work about to start → skip, lookup done
+</rules>
+
+<rules section="NEVER">
+- read a near-miss store because no row matched — a wrong lesson costs more than no lesson
+- spend an always-loaded line on a single store — the router row carries it
+</rules>
+
+<example type="work_type_cell">
+input: router cell for the store about verifying a design before implementing
+❌ `design verification` — a topic name; the agent must guess whether its work belongs to it
+✅ `about to verify a design / write a verification gate` — the action, matched against what the agent is doing
+</example>
+
+The condition costs no judgment: it is true for every artifact task, so classification lives in the router table where a row either matches or does not. That is why §5's per-work-type routing is the secondary entrance, not the mechanism — it needed a trigger per store, and this needs none.
+
 <critical_recap>
 1. record in the SAME turn as the correction — deferred means lost.
 2. three stores, no overlap: work technique → `lessons/`; project fact → `docs/` work product; user identity → memory.
-3. records never live inside a curated guide — that is what makes guides bloat.
-4. escalate by recurrence: record → rule → machine check; a check beats prose because it cannot be skipped.
-5. a gate that fires on correct work is worse than no gate.
+3. read-back = router lookup at task start (§7); registering the row IS the wiring, no per-store trigger.
+4. records never live inside a curated guide — that is what makes guides bloat.
+5. escalate by recurrence: record → rule → machine check; a check beats prose because it cannot be skipped.
 </critical_recap>

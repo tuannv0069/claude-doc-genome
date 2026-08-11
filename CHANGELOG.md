@@ -6,6 +6,18 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-08-11
+
+### Added
+
+- Lesson read-back is now wired unconditionally. `CLAUDE.md.tpl` carries one new `## ALWAYS` line — start any artifact task (write / edit / review / investigate) → read `.agent-workspace/lessons/index.md` §1, match the work about to be done against a row, no match → skip. Cost is O(1) in the number of stores: registering a store in the router (already mandatory per `lesson-capture.md` §3) is the whole wiring, so no store ever needs a trigger of its own.
+- `lesson-capture.md` §7 states that path and demotes §5's per-work-type routing to the secondary entrance — the one that fires when the agent arrives from a paired guide instead of from the start of a task. §5 keeps its number and its content (portable §IDs are append-only).
+- `templates/lessons/index.md.tpl` §1 gains the "no row matches → skip, read nothing" branch and renames the router's second column to *the action about to be performed*. Without an explicit skip branch an agent with no matching row reads the nearest file instead, and a wrong lesson costs more than no lesson.
+
+### Fixed
+
+- The read-back law was previously reachable only from `lesson-capture.md`, which CLAUDE.md triggers on *being corrected* — so "read the store before starting the work" was visible only after the work had already gone wrong. The always-loaded lookup closes that loop, and with it the `a store nothing reads` failure the file's own `<critical>` block lists as forbidden.
+
 ## [2.0.0] - 2026-08-10
 
 ### Changed — BREAKING
