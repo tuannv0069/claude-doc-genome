@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-08-13
+
+### Added
+
+- `conversational-output.md` — new always-loaded rule governing structure/tone of conversational replies (conclusion-first, one idea per paragraph, structure matches content shape, fact vs recommendation vs assumption labeled, action-relevant replies end with a next step). Promoted to `.claude/rules/` (live tier) and wired into `CLAUDE.md`'s `## see also` always-loaded list; the bundle copy under `skills/init-project/portable/rules/` already existed and is unchanged. `skills/init-project/SKILL.md` dependency count updated 7 → 8 portable rules. `templates/CLAUDE.md.tpl`'s `## see also` block also gained the same bullet — without it every future `/init-project` deploy would ship the rule file but never wire it into the rendered project's `CLAUDE.md`.
+
 ## [2.1.0] - 2026-08-11
 
 ### Added

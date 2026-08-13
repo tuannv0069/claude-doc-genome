@@ -9,7 +9,7 @@ description: Use this skill ONCE per new project to deploy the agent documentati
 Bootstrap a new project's agent documentation system from a portable bundle in one shot. After init the project self-maintains using the deployed standard (`doc-organization.md §8.3` decision tree + portable meta-standards). `init` runs once per project; `update` may be re-run later at that project to pull newer portable files from the bundle (3-way safe merge — never clobbers un-promoted local edits). `check`/`promote` maintain the bundle itself and run only at this master repo.
 
 ## dependencies
-- `./portable/rules/` — 7 portable rules (always-loaded + path-scoped)
+- `./portable/rules/` — 8 portable rules (always-loaded + path-scoped)
 - `./portable/guide/` — bug-report-format.md, doc-system-mechanics.md, five-why.md, fix-impact-analysis.md, lesson-capture.md, markdown.md, mermaid.md, orchestration-policy.md, review-checklist-method.md, task-planning.md, worktree.md (deploy to `.agent-workspace/guide/general/`)
 - `./portable/skills/` — skill-designer/, skill-writer/, document-writer/ (whole trees)
 - `./portable/agents/` — skill-writer-auditor.md

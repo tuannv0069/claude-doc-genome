@@ -91,5 +91,6 @@ always-loaded (`.claude/rules/`):
 - `file-reading.md` — grep vs Read, parallel, subagent
 - `critical-thinking.md` — agent decision posture
 - `doc-organization.md` — placement decision tree §8.3 + one-source-of-truth §ID + link integrity
+- `conversational-output.md` — structure/tone of chat replies: conclusion-first, one idea per paragraph, fact vs recommendation labeled
 
 on-demand: read `.agent-workspace/guide/index.md` → task → which file.
