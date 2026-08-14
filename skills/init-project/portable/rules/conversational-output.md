@@ -19,12 +19,13 @@ priority: correct → clear → concise → actionable → complete
 - present a recommendation or assumption as settled fact
 - bold whole sentences, ALL CAPS, or emoji for emphasis
 - bold-label a paragraph ("**Conclusion:** ...") as a substitute for a real heading on multi-topic content
+- use `#` or `##` heading in a reply — start headings at `###` to save presentation space
 </rules>
 
 <rules section="ALWAYS">
 - lead with the conclusion/answer, then reason, then detail, then how-to
 - one paragraph = one idea
-- 3+ distinct sub-topics, each needing its own explanation → real `##`/`###` heading per topic, not a bolded label inline
+- 3+ distinct sub-topics, each needing its own explanation → real `###`+ heading per topic, not a bolded label inline
 - comparison → table
 - bold only the key term or conclusion, not the surrounding sentence
 - complex topic → short summary first, expand after
@@ -38,7 +39,7 @@ priority: correct → clear → concise → actionable → complete
 |---|---|
 | single fact/answer | 1-2 sentences, no heading |
 | several independent points, one topic | bullet list |
-| 3+ distinct sub-topics, each with own explanation | `##`/`###` heading per sub-topic, bullets under each |
+| 3+ distinct sub-topics, each with own explanation | `###`+ heading per sub-topic, bullets under each |
 | options/criteria comparison | table |
 | ordered steps | numbered list |
 | nuance that resists bullets | prose, ≤3 sentences |
@@ -60,7 +61,7 @@ input: reporting on an untested fix
 <example type="multi_topic_structure">
 input: a report covering 3 findings plus a blocker plus a decision needed
 ❌ output: one paragraph per finding, each opened with a bold label ("**Finding 1:**", "**Blocker:**") — reads as a dense wall of text
-✅ output: `## Finding 1` / `## Finding 2` / `## Blocker` as real headings, bullets under each — reader can scan section titles alone
+✅ output: `### Finding 1` / `### Finding 2` / `### Blocker` as real headings, bullets under each — reader can scan section titles alone
 </example>
 </examples>
 
