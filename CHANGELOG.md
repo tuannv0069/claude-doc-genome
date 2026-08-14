@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-08-14
+
 ### Added
 
 - `conversational-output.md` — new NEVER rule bans `#`/`##` heading levels in conversational replies; headings must start at `###` to save presentation space. Updated the matching ALWAYS rule, conditional table, and multi-topic example to reference `###`+ instead of `##`/`###`. Promoted live → bundle (`skills/init-project/portable/rules/conversational-output.md`).
