@@ -10,6 +10,7 @@ optimize: claude follows project rules + min tokens (compounds across session)
 ai-first: ignore human readability
 note: this STANDARD file uses XML wrap; CLAUDE.md target uses plain markdown
 cross-file rule placement: CLAUDE.md may carry terse pointer to substantive rule; full content lives in guide §ID — see `doc-organization.md`.
+language: CLAUDE.md is written in English — conversation language never applies to this file.
 </critical>
 
 <rule_schema>
@@ -89,6 +90,7 @@ cut test: remove word → behavior unchanged → cut
 - abstract rule → ✅/❌ pair inline
 - complex rule (> 5 lines) → extract per `<extract_target>`
 - extract affecting behavior → trigger line per `<trigger_lines>`
+- write CLAUDE.md in English — every rule line, heading, and table cell
 - conflict → explicit priority
 </rules>
 
@@ -315,6 +317,7 @@ claude.md: [150 lines of test patterns]
 - [ ] no decorative md, no XML wrap in CLAUDE.md target
 - [ ] MUST/NEVER ≤ 10% rules
 - [ ] no nested bullets > 2 levels
+- [ ] written in English (headings, rule lines, table cells)
 
 fail → fix before commit
 </self_check>
@@ -324,7 +327,8 @@ fail → fix before commit
 <critical_recap>
 1. CLAUDE.md target: plain markdown, no XML wrap (compounds per turn)
 2. one rule = one location (claude.md OR sub-file)
-3. size budget enforced by counting: `wc -l CLAUDE.md` < 200
-4. extract sections > 20 lines to .claude/rules/
-5. zero hedges, zero decoration
+3. English only, whatever language the conversation runs in
+4. size budget enforced by counting: `wc -l CLAUDE.md` < 200
+5. extract sections > 20 lines to .claude/rules/
+6. zero hedges, zero decoration
 </critical_recap>

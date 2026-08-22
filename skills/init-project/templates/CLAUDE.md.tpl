@@ -43,6 +43,7 @@
 | target | language |
 |--------|----------|
 | frontmatter `scope: portable` | English, any location (overrides rows below) |
+| `CLAUDE.md` | English regardless of conversation language (`claude-md-standards.md`) |
 | `.claude/**` | English |
 | `.agent-workspace/guide/**` | English (portable doc standard) |
 | `.agent-workspace/lessons/**` | English — same language as the paired guide, so a promotion is a copy, not a translation (`lesson-capture.md` §3) |

@@ -6,6 +6,13 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-08-22
+
+### Added
+
+- `claude-md-standards.md` — CLAUDE.md must be written in English regardless of conversation language. Added as a `<critical>` line, an `ALWAYS` bullet, a `<self_check>` item, and a `<critical_recap>` entry. The rule is `scope: portable` + `paths: **/CLAUDE.md`, so it binds every project the genome deploys to. Promoted live → bundle (`skills/init-project/portable/rules/claude-md-standards.md`).
+- `## language` table gained a `CLAUDE.md` row in both `CLAUDE.md` and `templates/CLAUDE.md.tpl` — the table previously covered `.claude/**`, `.agent-workspace/**`, `skills/**` and the public-facing docs, but never the root `CLAUDE.md` itself, so a Vietnamese-conversation project had no rule pinning it to English.
+
 ## [2.3.0] - 2026-08-14
 
 ### Added
