@@ -32,6 +32,7 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
   5. `gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog>"` — GitHub Release mandatory, not optional
 - starting ANY task, questions included → MUST Read `.agent-workspace/lessons/index.md` §1 router; read the matching store AND every store its `checks` cell names (one hop only); no row matches → skip; already looked up this session → do not repeat
 - starting ANY task, questions included → MUST Read `.agent-workspace/guide/roles/index.md` §1 router; read the primary role file in full and only `§6 Not done until` of each checking role; no row matches → skip; already looked up this session → do not repeat
+- about to edit a law file (`.claude/rules/**`, `.agent-workspace/guide/**`, a role file, a lesson store), write an answer to a reviewer's comment, or declare out-of-scope / accepted debt / a rejected option in any artifact → MUST Read `.agent-workspace/guide/general/decision-journal.md` first (§6 grep `.agent-workspace/decisions/` for that subject BEFORE the edit; §5 write the entry in the same turn; §1 admission test — `git log` reconstructs it → do not write it)
 - new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first

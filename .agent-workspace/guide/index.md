@@ -35,6 +35,7 @@ Migration ledger — top-level files not yet at standard location (target = empt
 | `general/markdown.md` | edit any `*.md` (GFM rules) |
 | `general/mermaid.md` | create/edit Mermaid diagram |
 | `general/orchestration-policy.md` | fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) — delegate Edit/Write, inline ≤3 files or warm context, escalate hard-reasoning, plan persistence; research/grep/read = orchestrator inline, but §6 persists its findings to a file past the 3rd read |
+| `general/decision-journal.md` | writing or reading a decision entry under `.agent-workspace/decisions/` — §1 the admission test (`git log` reconstructs it → do not write it), §2 the five classes, §3 entry shape, §5 when to write, §6 grep before reversing a law, §8 supersede lifecycle, §9 cap and archive |
 | `general/worktree.md` | create / use / clean up an isolated git worktree — path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push |
 | `general/task-planning.md` | plan/execute any artifact-changing task (not a pure question) — scale rigor by size §2.1, task-type→form §2.2, plan-before-execute, design verification, genome-rule per sub-task, loop-back/off-ramp; small task → §2.1 inline exit |
 | `general/verification-gate-design.md` | design or write a machine verification gate (a `test_*.py` / `verify_*.py` check that says pass/fail on an artifact) — §1 name the unit of both sides before comparing, §2 a gate proving "nothing extra" does not prove "nothing missing" |
