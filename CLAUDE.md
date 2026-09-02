@@ -30,7 +30,8 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
   3. `git tag vX.Y.Z`
   4. `git push origin main --tags`
   5. `gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog>"` — GitHub Release mandatory, not optional
-- start any artifact task (write / edit / review / investigate) → MUST Read `.agent-workspace/lessons/index.md` §1 first → row matches the work about to be done → read that store; no row matches → skip, lookup done
+- starting ANY task, questions included → MUST Read `.agent-workspace/lessons/index.md` §1 router; read the matching store AND every store its `checks` cell names (one hop only); no row matches → skip; already looked up this session → do not repeat
+- starting ANY task, questions included → MUST Read `.agent-workspace/guide/roles/index.md` §1 router; read the primary role file in full and only `§6 Not done until` of each checking role; no row matches → skip; already looked up this session → do not repeat
 - new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first
@@ -39,13 +40,12 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
 - fix a bug / apply a fix / patch a defect in any artifact — code, docs, rule, config (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/fix-impact-analysis.md` first (scope the blast radius before editing)
 - user corrects the method / rejects the output / "why did you" · "that's not right" · "it should be" → MUST Read `.agent-workspace/guide/general/lesson-capture.md` (record it in that same turn, into `.agent-workspace/lessons/<work-type>.md` — not harness memory, not a guide file)
 - write/edit mermaid block in .md → MUST Read `.agent-workspace/guide/general/mermaid.md` before emit
+- write or edit a `test_*.py` / `verify_*.py` file (a machine verification gate) → MUST Read `.agent-workspace/guide/general/verification-gate-design.md` first (name the unit of BOTH sides before wiring a comparison; a near-100% violation rate on first run means suspect the gate, not the artifact)
 - fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan under `.agent-workspace/tasks/<task-slug>/<scope>/`); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
 - agent creates a working file (script/dump/log/json/screenshot) with no user- or skill-specified destination → write under `.agent-workspace/tasks/<task-slug>/`; never repo root (layout: `.agent-workspace/guide/general/orchestration-policy.md` §4)
 - research / investigation passes its 3rd file read or search, or dispatches an agent, with no file to change → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` §6 — persist findings to `.agent-workspace/tasks/<task-slug>/` while working, never only in the reply
 - create / use / clean up isolated git worktree → MUST Read `.agent-workspace/guide/general/worktree.md` first (path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push)
 - skill writes its working files (plan, research notes, run state) to its own default path → redirect them to `.agent-workspace/tasks/<task-slug>/`; only the finished deliverable goes to `docs/` (full rule: `.agent-workspace/guide/general/orchestration-policy.md` §4; boundary: `doc-organization.md §11`)
-- design / plan a non-trivial task → run the superpowers brainstorming → writing-plans flow; it supersedes `task-planning.md` §6–§8 per that file's §1 precedence (its §2/§3/§4 governance still applies)
-- implement task-by-task under superpowers → superpowers sets WHEN the review checkpoints fire; the instrument still comes from `.agent-workspace/guide/general/review-checklist-method.md` §7, which superpowers does not override. Working files of either flow → `.agent-workspace/tasks/<task-slug>/`
 
 <!-- git: minimal guardrail above (NEVER block) + release workflow (ALWAYS block); detailed policy is scope: project — when the project writes .agent-workspace/guide/general/git.md, add its trigger line here in the same commit (reachability — never a trigger pointing at a missing file) -->
 

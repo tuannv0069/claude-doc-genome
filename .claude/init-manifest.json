@@ -3,8 +3,7 @@
   "deployedAt": "2026-08-10T10:49:32.998Z",
   "notes": "Master repo = deployed instance #1 (doc-organization.md §4). CLAUDE.md was MERGED with the pre-existing release-workflow rules, not rendered over. docs/index.md deliberately not rendered — this repo has no docs/ work-product category yet; its .tpl sha is recorded so update.mjs WARNs only on a real template change.",
   "modules": [
-    "core",
-    "superpowers"
+    "core"
   ],
   "files": [
     {

@@ -9,3 +9,7 @@ Thumbs.db
 # agent workspace — transient state only; guide/ and lessons/ ARE committed
 .agent-workspace/tasks/
 .agent-workspace/worktrees/
+
+# python bytecode
+__pycache__/
+*.pyc

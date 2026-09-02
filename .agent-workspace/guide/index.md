@@ -37,5 +37,17 @@ Migration ledger — top-level files not yet at standard location (target = empt
 | `general/orchestration-policy.md` | fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) — delegate Edit/Write, inline ≤3 files or warm context, escalate hard-reasoning, plan persistence; research/grep/read = orchestrator inline, but §6 persists its findings to a file past the 3rd read |
 | `general/worktree.md` | create / use / clean up an isolated git worktree — path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push |
 | `general/task-planning.md` | plan/execute any artifact-changing task (not a pure question) — scale rigor by size §2.1, task-type→form §2.2, plan-before-execute, design verification, genome-rule per sub-task, loop-back/off-ramp; small task → §2.1 inline exit |
+| `general/verification-gate-design.md` | design or write a machine verification gate (a `test_*.py` / `verify_*.py` check that says pass/fail on an artifact) — §1 name the unit of both sides before comparing, §2 a gate proving "nothing extra" does not prove "nothing missing" |
+| `general/role-selection.md` | choose the working role for a task, or write / edit a role file — §2 matching rule, §3 the seven-section skeleton, §4 subagent role-handoff, §5 adding a role, §6 the router table format the gate reads, §7 a role clause losing to a project rule |
+
+### roles (`.agent-workspace/guide/roles/`)
+
+Role set — one file per role, same seven-section skeleton. Enter through the hub, never read a role file directly.
+
+| file (`.agent-workspace/guide/`) | read when |
+|---|---|
+| `roles/index.md` | starting any task — look up work type → primary role + checking role(s); `CLAUDE.md` points here (`general/role-selection.md` §2) |
+
+Lesson stores (`.agent-workspace/lessons/`) are **not** registered here — their own router `lessons/index.md` §1 is the only one (`general/lesson-capture.md` §7).
 
 <!-- areas (frontend/, backend/, bd/, dd/, ...) grow per doc-system-mechanics.md §7 as the project accumulates content; register each new file here in the same commit -->

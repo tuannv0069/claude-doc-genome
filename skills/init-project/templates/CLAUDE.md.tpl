@@ -16,7 +16,8 @@
 {{NEVER_PROJECT_RULES}}
 
 ## ALWAYS
-- start any artifact task (write / edit / review / investigate) → MUST Read `.agent-workspace/lessons/index.md` §1 first → row matches the work about to be done → read that store; no row matches → skip, lookup done
+- starting ANY task, questions included → MUST Read `.agent-workspace/lessons/index.md` §1 router; read the matching store AND every store its `checks` cell names (one hop only); no row matches → skip; already looked up this session → do not repeat
+- starting ANY task, questions included → MUST Read `.agent-workspace/guide/roles/index.md` §1 router; read the primary role file in full and only `§6 Not done until` of each checking role; no row matches → skip; already looked up this session → do not repeat
 - new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
 - add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
 - debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first
@@ -25,6 +26,7 @@
 - fix a bug / apply a fix / patch a defect in any artifact — code, docs, rule, config (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/fix-impact-analysis.md` first (scope the blast radius before editing)
 - user corrects the method / rejects the output / "why did you" · "that's not right" · "it should be" → MUST Read `.agent-workspace/guide/general/lesson-capture.md` (record it in that same turn, into `.agent-workspace/lessons/<work-type>.md` — not harness memory, not a guide file)
 - write/edit mermaid block in .md → MUST Read `.agent-workspace/guide/general/mermaid.md` before emit
+- write or edit a `test_*.py` / `verify_*.py` file (a machine verification gate) → MUST Read `.agent-workspace/guide/general/verification-gate-design.md` first (name the unit of BOTH sides before wiring a comparison; a near-100% violation rate on first run means suspect the gate, not the artifact)
 - fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan under `.agent-workspace/tasks/<task-slug>/<scope>/`); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
 - agent creates a working file (script/dump/log/json/screenshot) with no user- or skill-specified destination → write under `.agent-workspace/tasks/<task-slug>/`; never repo root (layout: `.agent-workspace/guide/general/orchestration-policy.md` §4)
 - research / investigation passes its 3rd file read or search, or dispatches an agent, with no file to change → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` §6 — persist findings to `.agent-workspace/tasks/<task-slug>/` while working, never only in the reply

@@ -6,6 +6,25 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Added
+
+- `verification-gate-design.md` — new portable guide: name the unit of BOTH sides before wiring a comparison gate (§1), and a gate proving "nothing extra" never proves "nothing missing" (§2). Reached by a new `CLAUDE.md` trigger on `test_*.py` / `verify_*.py`, and by a router row.
+- Role tier — `.agent-workspace/guide/roles/` with seven portable roles (business-analyst, tech-lead, developer, qa, project-manager, security, comtor), each on the same seven-section skeleton and capped at 90 lines. Its hub `roles/index.md` carries §1 for the genome roles and §1a for the roles a project adds itself. New portable guide `role-selection.md` holds the mechanism: §2 matching, §3 the skeleton, §4 subagent role-handoff, §5 adding a role, §6 the router format the gate reads, §7 what happens when a role clause collides with a project rule.
+- `.agent-workspace/tooling/` — the genome's own machine gates, Python 3 stdlib only, deployed by init and mapped into the bundle as `portable/tooling/*`. `verify_lesson_router.py` enforces the lesson router contract (5 rules) and `verify_role_files.py` the role contract (4 rules); each ships a `test_*.py` that breaks one rule per case — 18 and 15 mutation cases.
+- `lesson-capture.md` §8 — which phase a lesson belongs to: a store is chosen by the phase the record protects, not by the task that found the defect. Introduces the closed seven-value `phase:` declaration every store now carries, and the `checks` relation between stores.
+- Templates `roles/index.md.tpl`; `lessons/index.md.tpl` regrown to the four-column router.
+
+### Changed
+
+- `lesson-capture.md` §7 rewritten as the dispatch law: one unconditional lookup replaces per-work-type routing, and a dispatcher passes the matched store path plus its `checks` paths into a subagent prompt. §1–§6 keep their numbers (portable §ID is append-only).
+- `CLAUDE.md` and `CLAUDE.md.tpl` — the lesson lookup line is now unconditional (it previously required classifying the work as an "artifact task"), and a matching unconditional role lookup line joins it.
+- `.agent-workspace/lessons/index.md` — the §1 router gained the `checks` column and a six-step lookup protocol; the store `verify-context-rule-change.md` now declares `phase: building-gate`.
+- `SKILL.md` — dependencies, bundle map, copy step, render step and the step-7 verify checklist all cover the roles and tooling groups; step 7 now runs the deployed gates, because a gate present but red means the deploy is incomplete.
+
+### Removed
+
+- superpowers is no longer part of the genome. Dropped the two `superpowers` ALWAYS triggers from `CLAUDE.md` (design/plan flow, implement task-by-task) and the `superpowers` entry from `.claude/init-manifest.json` modules. Nothing generic is lost: `task-planning.md` §1 already states the precedence rule without naming a skill, `review-checklist-method.md` §7 is still reached by the existing review trigger, and the working-file redirect is still covered by the generic "skill writes its working files" trigger. The `superpowers` row also leaves the init module matrix (`skills/init-project/SKILL.md`), so no project the genome deploys to receives a superpowers trigger.
+
 ## [2.4.0] - 2026-08-22
 
 ### Added

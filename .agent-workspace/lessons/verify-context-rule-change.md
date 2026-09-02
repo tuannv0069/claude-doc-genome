@@ -4,7 +4,10 @@ scope: project
 
 # Lessons — verifying a change to always-loaded context
 
-Store for: about to check whether a change to `CLAUDE.md` or `.claude/rules/*` actually changes agent behaviour.
+<critical>
+scope: about to check whether a change to `CLAUDE.md` or `.claude/rules/*` actually changes agent behaviour — how to build a probe that measures the rule instead of the session.
+phase: building-gate
+</critical>
 
 ### Verify an always-loaded rule change in a fresh session — a subagent of the current session reads a frozen copy
 
