@@ -40,6 +40,7 @@ Migration ledger — top-level files not yet at standard location (target = empt
 | `general/worktree.md` | create / use / clean up an isolated git worktree — path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push |
 | `general/task-planning.md` | plan/execute any artifact-changing task (not a pure question) — scale rigor by size §2.1, task-type→form §2.2, plan-before-execute, design verification, genome-rule per sub-task, loop-back/off-ramp; small task → §2.1 inline exit |
 | `general/verification-gate-design.md` | design or write a machine verification gate (a `test_*.py` / `verify_*.py` check that says pass/fail on an artifact) — §1 name the unit of both sides before comparing, §2 a gate proving "nothing extra" does not prove "nothing missing" |
+| `general/rule-health.md` | judging a finding from `python .agent-workspace/tooling/scan_rule_health.py` — §2 finding vs context (only a finding enters the ledger), §3 judging `dup`, §4 judging `dead` (`sid_missing` · `path_missing` · `target_empty` · `paths_no_match` · `naming_prefix`), §5 `drift` and `growth`, §6 every finding closes `fixed` or `exempt` with an `allowed_by` §ID, §7 what the tool cannot see |
 | `general/role-selection.md` | choose the working role for a task, or write / edit a role file — §2 matching rule, §3 the seven-section skeleton, §4 subagent role-handoff, §5 adding a role, §6 the router table format the gate reads, §7 a role clause losing to a project rule |
 
 ### roles (`.agent-workspace/guide/roles/`)

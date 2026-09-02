@@ -181,6 +181,27 @@ Category list = `scope: project`; the laws of this layer = portable. Content-wri
 
 ---
 
+## §12 A narrowed or retired law leaves no text behind
+
+A file states the law **as it stands**; git holds what it said before. The two are different
+records and the file must not try to be both.
+
+<rules section="ALWAYS">
+- law retired or narrowed → **delete** the old text in the same commit that narrows it
+- a `scope: portable` `§ID` slot that must survive keeps its number with a bare `(retired)` marker — no date, no reason (§2, §9)
+- the narrowing commit message carries the why; the file carries only the rule now in force
+</rules>
+
+<rules section="NEVER">
+- leave the superseded sentence beside the new one — the next reader cannot tell which binds
+- write change history into a rule, guide or standard body; the record files (`.agent-workspace/decisions/`, `.agent-workspace/lessons/`) are the exception and own that job
+</rules>
+
+A file that has never deleted a line is the measurable form of this violation, and it is what
+the `growth` signal of the rule-health scan reports (`.agent-workspace/guide/general/rule-health.md` §5).
+
+---
+
 <critical_recap>
 1. substantive rule → ONE source-of-truth file, stable §ID; portable files = append-only §ID
 2. agent/skill/catalog → pointer-only, NEVER inline canonical content

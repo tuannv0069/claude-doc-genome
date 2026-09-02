@@ -6,6 +6,20 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-09-02
+
+### Added
+
+- `rule-health.md` + `scan_rule_health.py` — the debt recorded at 2.7.0 is paid rather than carried. The scan reports (never edits) six signals over the genome's own corpus: `dup` (verbatim duplicate / divergent copy), `dead` (`sid_missing` · `path_missing` · `target_empty` · `paths_no_match` · `naming_prefix`), `drift` (a cited section changed after the citing file did), `growth` (a file that has never deleted a line, against §12), and `budget` — the only hard gate, exit 1. The guide governs judgement: §2 separates a finding from a context line, §6 requires every finding to close `fixed` or `exempt` with an `allowed_by` §ID, §7 states what the tool cannot see. Reached by a new `CLAUDE.md` trigger and a router row.
+- `test_scan_rule_health.py` — 20 mutation cases pinning the scope contract, which is the part that fails silently: an empty scope, a missing `rule-writing-standards.md`, nobody declaring `paths:`, frozen archives leaking in, the `naming_prefix` and `paths_no_match` signals in both directions, glob expansion, budget in three states, and ledger integrity. Writing it found a real defect: on Windows a temp/8.3 short name and its long form denote one directory and spell it differently, so `_fp_path` produced machine-specific absolute ledger keys — fixed.
+- `doc-organization.md` §12 — a narrowed or retired law leaves no text behind: delete the old text in the same commit, a portable `§ID` slot that must survive keeps its number with a bare `(retired)` marker, and change history belongs to git and the record files. This is the law the `growth` signal measures.
+
+### Changed
+
+- `scan_rule_health.py` semantics: a single declared `paths:` glob matching no file is now a `paths_no_match` FINDING instead of aborting the scan as a declaration error. An entirely empty scope stays a hard error. The distinction is what makes a portable rule shipped ahead of an optional tier — `wiki-tier.md` here — legal without blinding the scan.
+- `FROZEN` now names this lineage's paths (`.agent-workspace/tasks/`, `.agent-workspace/worktrees/`) and no longer mentions a bolt-on skill set.
+
+
 ## [2.7.0] - 2026-09-02
 
 ### Added
