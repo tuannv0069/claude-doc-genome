@@ -21,3 +21,14 @@ if ! node scripts/doc-lint.mjs --quiet; then
   echo "pre-commit: doc-lint failed — fix the findings above, or re-run 'node scripts/doc-lint.mjs'." >&2
   exit 1
 fi
+
+# Codex surface parity — the live Claude Code tier is the source, AGENTS.md / .agents/ / .codex/
+# are rendered from it (harness-adapter.md §4). A rule added on one harness and not the other is
+# drift, and drift is what kills the second target within a few releases.
+if command -v python >/dev/null 2>&1; then
+  if ! python .agent-workspace/tooling/render_codex.py --check --quiet; then
+    echo "" >&2
+    echo "pre-commit: Codex surface is stale — run 'python .agent-workspace/tooling/render_codex.py' and re-stage." >&2
+    exit 1
+  fi
+fi

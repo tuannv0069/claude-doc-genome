@@ -6,6 +6,27 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-09-06
+
+### Added
+
+- **Codex as a second harness target.** `harness-adapter.md` is the new source of truth for how the genome binds to more than one agent harness: §2 the slot map (root index, always-loaded tier, path-scoped rule, skill, subagent, on-demand tree) with a column per harness, §3 the three Codex deltas that change behaviour rather than paths, §4 the one-source law, §5 the generated surface, §6 the procedure for adding a third harness. Reached by a router row.
+- `render_codex.py` + `test_render_codex.py` — renders and gates the Codex binding surface from the live Claude Code tier: `CLAUDE.md` → `AGENTS.md`, `.claude/skills/<n>/SKILL.md` → `.agents/skills/<n>/SKILL.md`, `.claude/agents/<n>.md` → `.codex/agents/<n>.toml`. The stubs carry routing metadata and a pointer, never a copy of the instructions, so the body count stays at one. `--check` gates both directions (`verification-gate-design.md` §2) — nothing missing, nothing left behind after a source is deleted — and enforces Codex's `project_doc_max_bytes` (32 KiB) counted in bytes. 21 mutation cases.
+- `agents-md-standards.md` — path-scoped to `**/AGENTS.md`, holding only the Codex deltas: the file is generated so `CLAUDE.md` is what you edit, two budgets apply at once (< 200 lines AND < 32 KiB), an always-loaded rule reaches Codex only as a `MUST Read` trigger, and `.codex/rules/` is Starlark shell-command policy rather than a rule tier. Every wording and density law stays in `claude-md-standards.md`.
+- This repo is now deployed instance #1 of both harnesses: it carries a generated `AGENTS.md`, `.agents/skills/`, and `.codex/agents/`, and the pre-commit hook runs `render_codex.py --check`.
+- `/init-project` gained a harness target — `claude` (default) · `codex` · `both`. Every target deploys the identical body; `codex` and `both` additionally run the render step. The generated surface never enters the bundle, so its drift gate is `render_codex.py --check` rather than a sha256 pair.
+
+### Removed
+
+- **The skill-authoring toolkit** — `skill-designer`, `skill-writer` (both trees) and the `skill-writer-auditor` agent, from the bundle and from the live tier. This is the breaking change that makes the release MAJOR: an initialized project running `update` keeps whatever it already has (update never deletes), but a fresh `init` no longer deploys them. `skill-md-standards.md` and `subagent-standards.md` stay — the standards a skill or agent file is written to were never part of the toolkit.
+
+### Changed
+
+- `capability-packaging.md` — the `<critical>` core line, the opening paragraph, §4, §5 and its example no longer name the removed authoring chain. The guide's job is unchanged: it raises the candidate and the human decides; the approved candidate is now authored directly against `skill-md-standards.md` or `subagent-standards.md`.
+- `document-writer/README.md` — the self-test pointed at `test-skill.sh` inside the deleted `skill-writer` tree; it now points at the `<self_check>` list in `skill-md-standards.md`.
+- `scan_rule_health.py` — `FROZEN` now excludes the generated Codex surface (`AGENTS.md`, `.agents/**`, `.codex/**`). Those files are rendered from the live tier, so every line they share with their source is duplication by construction; scanning them produced 17 `dup` findings that could never be closed, which is the failure `rule-health.md` §2 names. Two cases added to `test_scan_rule_health.py`.
+- `CLAUDE.md` — three NEVER lines (stale Codex surface, hand-editing a generated file, writing genome content into `.codex/rules/`), a scope-table row for the generated surface, and a language-table row.
+
 ## [2.8.0] - 2026-09-02
 
 ### Added
@@ -199,7 +220,8 @@ All notable changes to this project are documented here. The format is based on
 - Three modes: `init` (seed a new project), `check` (drift report), `promote` (consolidate live changes into the bundle).
 - Templates for `CLAUDE.md`, `agent-guide/index.md`, and `docs/index.md`.
 
-[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/tuannv0069/claude-doc-genome/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v3.0.0
 [1.11.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.11.0
 [1.10.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.10.0
 [1.8.0]: https://github.com/tuannv0069/claude-doc-genome/releases/tag/v1.8.0

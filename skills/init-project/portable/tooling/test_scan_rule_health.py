@@ -165,6 +165,17 @@ with tempfile.TemporaryDirectory() as t:
     check(not S._is_absolute_key(S._fp_path(str(d / ".claude" / "rules" / "a.md"), d)),
           "case 20: a ledger key came out machine-specific (absolute)")
 
+    # ---- the generated Codex surface is not scanned ---------------------
+    # AGENTS.md is rendered from CLAUDE.md, so every shared line is duplication by
+    # construction; a `dup` finding there could never be closed (`rule-health.md` §2).
+    d = build(tmp, {"a.md": rule()},
+              files={"AGENTS.md": "\n".join(["# project", "", "- a rule line", ""]),
+                     ".agents/skills/x/SKILL.md": "\n".join(
+                         ["---", "name: x", "---", "", "- a rule line", ""])})
+    names = S._index_by_name(d)
+    check("AGENTS.md" not in names, "case 21: AGENTS.md entered the scan corpus")
+    check("SKILL.md" not in names, "case 22: a .agents/ stub entered the scan corpus")
+
 print(f"{len(fails)} failure(s)")
 for f in fails:
     print("  -", f)

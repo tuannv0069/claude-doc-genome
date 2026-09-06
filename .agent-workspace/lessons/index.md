@@ -24,6 +24,7 @@ Lookup protocol — CLAUDE.md sends a task here, and this table is the only disp
 | file | work type | paired guide | checks |
 |---|---|---|---|
 | `verify-context-rule-change.md` | about to verify that an edit to `CLAUDE.md` / `.claude/rules/*` changed agent behaviour | — | — |
+| `run-repo-gate.md` | about to run a script or gate under `.agent-workspace/tooling/` | — | — |
 
 Add / rename / delete a store file → update this table **and** the pointer line at the top of its paired guide in the same commit (`lesson-capture.md` §5). This table is the **only** router a store is registered in — never add a second entry elsewhere (`lesson-capture.md` §7).
 

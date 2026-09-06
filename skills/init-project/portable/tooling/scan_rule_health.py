@@ -451,7 +451,8 @@ def signal_growth(files: list[Path], root: Path) -> tuple[list[dict], dict]:
 
 PTR = re.compile(r"`?([A-Za-z0-9_\-./]+\.md)`?\s*`?\s*§\s*([0-9]+(?:\.[0-9]+)*[a-z]?)")
 ANCHOR = re.compile(r"(?:^|\n)\s*(?:#{1,6}\s*)?(?:\*\*)?§\s*([0-9]+(?:\.[0-9]+)*[a-z]?)")
-FROZEN = (".git/", ".agent-workspace/worktrees/", ".agent-workspace/tasks/")
+FROZEN = (".git/", ".agent-workspace/worktrees/", ".agent-workspace/tasks/",
+          "AGENTS.md", ".agents/", ".codex/")
 
 
 def _anchors(text: str) -> set[str]:
@@ -465,6 +466,11 @@ def _index_by_name(root: Path) -> dict:
     round (`lesson-capture.md` §8: an old name in there is not a dead pointer). Scale: an archive
     can hold thousands of .md files against a few hundred live ones, so folding it in would make
     every common file name "ambiguous".
+
+    The Codex surface — `AGENTS.md`, `.agents/**`, `.codex/**` — is excluded for a different
+    reason: it is GENERATED from the live tier (`harness-adapter.md` §5), so every line it shares
+    with its source is duplication by construction. Scanning it would turn `dup` into a list of
+    findings nobody can ever close, which is the failure `rule-health.md` §2 names.
     """
     out: dict = defaultdict(list)
     for p in root.rglob("*.md"):

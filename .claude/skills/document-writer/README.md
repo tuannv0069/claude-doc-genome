@@ -35,6 +35,6 @@ Subagents cannot invoke skills — embed §4–§6 directly into the subagent pr
 
 ## Self-test
 
-```bash
-bash .claude/skills/skill-writer/scripts/test-skill.sh .claude/skills/document-writer/
-```
+No shared test script ships with the genome. Check this skill against the
+`<self_check>` list in `.claude/rules/skill-md-standards.md`, which is the standard
+its SKILL.md is written to.

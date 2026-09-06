@@ -4,16 +4,16 @@ scope: portable
 
 <critical>
 scope: a repeatable procedure is being run with no skill and no subagent owning it — decide whether to package it, and propose that to the human.
-core: detect the procedure where it is already WRITTEN, not by counting runs | agent proposes, human approves, `skill-designer` builds | one candidate per task, raised at the end.
+core: detect the procedure where it is already WRITTEN, not by counting runs | agent proposes, human approves, the approved candidate is authored against the standards | one candidate per task, raised at the end.
 forbidden: create a skill or agent file without approval | make run-counting the primary detector | package a procedure whose trigger, steps or output is not already written down.
 note: §ID append-only (portable) — never renumber; retired sections keep their number.
 </critical>
 
 # Capability packaging
 
-The authoring chain already exists: `skill-designer` → `skill-writer` → `skill-writer-auditor`,
-shaped by `.claude/rules/skill-md-standards.md` and `subagent-standards.md`. All of it starts only
-when a human names a skill to build. This file supplies the missing half — **when the agent itself
+What a packaged artifact must look like is already settled: `.claude/rules/skill-md-standards.md`
+governs a skill file, `subagent-standards.md` governs an agent file. Both take effect only once a
+human has named the thing to build. This file supplies the missing half — **when the agent itself
 raises the question.**
 
 ## §1 What is a capability
@@ -101,7 +101,7 @@ event, twice is a rule, three times is worth a mechanism.
 | steps that differ every run except in name | neither — it is not a procedure |
 
 A candidate needing both — a flow that dispatches an isolated pass — is still one proposal; the
-split between skill and subagent is decided by `skill-designer`, not here.
+split between skill and subagent is settled when the artifact is authored, not here.
 
 <rules section="NEVER">
 - package a procedure as a subagent because it is long — length is not isolation
@@ -113,9 +113,9 @@ split between skill and subagent is decided by `skill-designer`, not here.
 <rules section="ALWAYS">
 - raise it at the END of the task it was noticed in — the work in hand is what the user asked for
 - state four things: the candidate's name, which detector found it, the form proposed (§4), what it would replace
-- keep it to five lines — the design belongs to `skill-designer`
+- keep it to five lines — the design belongs to the build, not to the proposal
 - one candidate per task
-- approved → `skill-designer` → `skill-writer` → `skill-writer-auditor`, unchanged
+- approved → author the artifact against `skill-md-standards.md` (skill) or `subagent-standards.md` (agent)
 </rules>
 
 <rules section="NEVER">
@@ -125,7 +125,7 @@ split between skill and subagent is decided by `skill-designer`, not here.
 
 <example type="proposal">
 input: a guide with a fixed trigger, 7 ordered sections and a tool that writes defined cells, owned by no skill
-❌ run `skill-designer` on it, then report the new skill — the human never chose to spend the turn
+❌ write the skill file, then report it — the human never chose to spend the turn
 ✅ "Candidate: `<guide>.md` — Detector A (trigger + ordered steps + defined output, no owner). Proposed form: skill. It would replace the manual read-and-follow of that guide each run. Build it?"
 </example>
 
