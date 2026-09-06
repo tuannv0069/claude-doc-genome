@@ -16,9 +16,10 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
 - edit VERSION or version mirrors manually — use `node scripts/sync-version.mjs set X.Y.Z`
 - commit with version drift (pre-commit hook enforces `sync-version.mjs check`)
 - commit with a broken doc network — dead trigger, orphan guide, dead `§ID` (pre-commit hook enforces `doc-lint.mjs`)
-- commit with a stale Codex surface (pre-commit hook enforces `render_codex.py --check`)
-- hand-edit `AGENTS.md`, `.agents/skills/**`, `.codex/agents/**` — generated; edit the Claude Code source and re-render
-- write genome content into `.codex/rules/` — that path is Codex shell-command policy, not a rule tier
+- commit with a stale Codex set (pre-commit hook enforces `render_codex.py --check`)
+- hand-edit a file carrying the `render_codex.py` generated marker — edit its Claude Code source and re-render
+- let either platform set name a path of the other — `.claude/**` and `.codex/**` are peers (`harness-adapter.md` §4)
+- write prose into a `*.rules` file — that extension is Codex command-approval policy, not a rule tier
 - inline substantive rule in agent/skill/catalog — reference source-of-truth §ID; see `.claude/rules/doc-organization.md`
 - soften disagreement into "you could also consider" — say so directly
 - change position from user pressure alone — require new info/reasoning
@@ -61,7 +62,8 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
 |------|------|--------|
 | bundle (genome) | `skills/init-project/portable/` | **promote-only** — never hand-edit; written by `/init-project promote` from the live tier |
 | live tier (deployed instance #1) | `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, `.agent-workspace/guide/general/` | implement — this is where a portable rule/guide/skill/agent is edited |
-| Codex surface (deployed instance #1) | `AGENTS.md`, `.agents/skills/`, `.codex/agents/` | generated — `render_codex.py` owns every byte; rendered from the live tier (`harness-adapter.md` §5) |
+| Codex set — generated (deployed instance #1) | `AGENTS.md`, `.codex/config.toml`, `.codex/rules/*.md` carrying the marker, `.agents/skills/`, `.codex/agents/` | generated — `render_codex.py` owns every byte, composed from the Claude Code set (`harness-adapter.md` §5) |
+| Codex set — authored | `.codex/rules/agents-md-standards.md`, `.codex/rules/codex-agents-standards.md` | implement — each describes a mechanism only Codex has, so it is written here and mirrored from nowhere (`harness-adapter.md` §4) |
 | templates (phenotype) | `skills/init-project/templates/` | implement — `{{slot}}` rendering; not covered by check/promote |
 | skill body | `skills/init-project/SKILL.md`, `VERSION` | implement |
 | scripts | `scripts/` | implement |
@@ -69,7 +71,7 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
 | repo docs | `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `LICENSE` | implement |
 | this project's own phenotype | `CLAUDE.md`, `.agent-workspace/guide/index.md`, `.agent-workspace/lessons/` | implement — rendered once at init, then hand-maintained |
 
-`/init-project check` is the drift gate between the first two rows: a mismatch means live moved and the bundle has not caught up. `render_codex.py --check` is the drift gate between the live tier and the Codex surface.
+`/init-project check` is the drift gate between the first two rows: a mismatch means live moved and the bundle has not caught up. `render_codex.py --check` is the drift gate between the Claude Code set and the Codex set — it also fails on a file of either set naming a path of the other.
 
 ## language
 
@@ -78,7 +80,7 @@ Claude Code documentation genome — portable rules, guides, skills, agents, and
 | frontmatter `scope: portable` | English, any location (overrides rows below) |
 | `CLAUDE.md` | English regardless of conversation language (`claude-md-standards.md`) |
 | `.claude/**` | English |
-| `AGENTS.md`, `.agents/**`, `.codex/**` | English — generated from `.claude/**` |
+| `AGENTS.md`, `.agents/**`, `.codex/**` | English |
 | `.agent-workspace/guide/**` | English (portable doc standard) |
 | `.agent-workspace/lessons/**` | English — same language as the paired guide, so a promotion is a copy, not a translation (`lesson-capture.md` §3) |
 | `skills/**`, `scripts/**` | English |

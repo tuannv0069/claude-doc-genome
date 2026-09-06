@@ -6,6 +6,31 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-09-06
+
+### Changed
+
+- **The Codex target is now a complete platform set of its own, not a pointer layer over the Claude Code one.** No file of either set names a path of the other; only `.agent-workspace/**` is shared, because it belongs to neither. This reverses the v3.0.0 design, where a Codex deployment reached into `.claude/` for its rules and skills — that made every Codex-only deployment incomplete and turned an auto-load guarantee into a file the agent had to choose to open.
+- `AGENTS.md` now carries the always-loaded rule tier **inline, in full**, and `.codex/config.toml` ships a `project_doc_max_bytes` sized to it. The v3.0.0 rule forbidding this rested on treating the platform's 32 KiB default as fixed; the shipped manual's list of keys a project config may not override does not contain it, so a repository can raise the cap.
+- `.codex/rules/*.md` is the Codex prose rule tier. The same directory holds `*.rules`, which the platform loads into its Starlark command-approval engine for a trusted project — the engine selects by extension, so markdown beside it is inert. Prose in a `.rules` file would be fed to that engine, and the breakage would land in the user's other work.
+- `.agents/skills/<n>/SKILL.md` and `.codex/agents/<n>.toml` now carry the full body of the skill or agent, not a routing pointer.
+- `harness-adapter.md` restates the corrected law throughout: §1 three parts rather than two, §2 the slot map with the size-control row, §3.1 reversed, §4 independence, §5 the generated set and its marker, §6 prefer the running product over its documentation when they disagree about a path.
+
+### Added
+
+- `.codex/rules/agents-md-standards.md` and `.codex/rules/codex-agents-standards.md` — the Codex set's own standards, authored rather than mirrored. `claude-md-standards.md` governs a file the Codex set does not have, and `subagent-standards.md` describes a markdown agent file spawned by the other platform's tool; a path rewrite cannot make a wrong mechanism right. Both ship in a new bundle group `portable/codex-rules/`.
+- `render_codex.py` gained a third gate with no direction: no generated file may name a path of the other platform, nor a rule the set deliberately does not carry. A cross-reference reads perfectly in review and resolves to nothing on a machine that deployed one platform. 35 mutation cases.
+- A file in `.codex/rules/` **without** the generated marker is treated as authored for that platform and left alone — the mixed directory is how a platform-only rule gets a trigger line without being owned by the renderer.
+
+### Removed
+
+- `portable/rules/agents-md-standards.md` — moved to `portable/codex-rules/`, which is the breaking change that makes this release MAJOR.
+- The pointer-stub model for Codex skills and agents, and every `.claude/`-facing reference in the generated set.
+
+### Fixed
+
+- v3.0.0 shipped `.agents/skills/` on the strength of a documentation page while the running product also uses `$CODEX_HOME/skills`. The shipped manual settles the repository scope at `.agents/skills` and that is what the renderer targets; the lesson is recorded in `.agent-workspace/lessons/establish-external-platform-fact.md`.
+
 ## [3.0.0] - 2026-09-06
 
 ### Added
