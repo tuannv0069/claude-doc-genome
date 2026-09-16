@@ -1,13 +1,8 @@
-"""Rule-health scan of the genome - it REPORTS, it never edits a file.
+"""Report possible duplication, drift, growth, and broken references.
 
-The scope is derived from the genome itself: the UNION of `paths:` across every file in
-`.claude/rules/`. A rule file declaring `paths:` means "this rule tier applies to these files",
-which is exactly the definition of the scan's scope. No path is hardcoded anywhere - this file
-is portable-pure (`doc-organization.md` §9).
-
-An EMPTY scope is an ERROR, never "clean" (`verification-gate-design.md`: a gate that cannot
-find its input must SHOUT). A single declared glob matching nothing is a different thing - it is
-a finding (`paths_no_match`), because a rule may legitimately ship ahead of the tier it governs.
+The scan reads the live instruction trees and any additional paths declared by
+rules. Findings need interpretation. The scan updates its ledger of scanned
+files; it does not rewrite the instructions or enforce a writing style.
 """
 from __future__ import annotations
 
@@ -17,25 +12,25 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-RWS = ".claude/rules/rule-writing-standards.md"
-ROUTER = ".agent-workspace/guide/index.md"
 FIXED = ["CLAUDE.md"]
 
 
 def _frontmatter_paths(text: str) -> list[str]:
+    """Read path globs from the leading metadata block, not prose examples."""
+    match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|$)", text, re.S)
+    if not match:
+        return []
     out, inside = [], False
-    for line in text.splitlines():
+    for line in match.group(1).splitlines():
         if line.strip() == "paths:":
             inside = True
             continue
         if inside:
-            m = re.match(r'\s*-\s*"?([^"]+)"?\s*$', line)
-            if m:
-                out.append(m.group(1))
-                continue
-            inside = False
-        if line.strip() == "---" and out:
-            break
+            item = re.match(r'\s+-\s+(?:"([^\"]+)"|([^\s]+))\s*$', line)
+            if item:
+                out.append(item.group(1) or item.group(2))
+            else:
+                inside = False
     return out
 
 
@@ -61,15 +56,9 @@ def _expand(root: Path, glob: str) -> list[Path]:
 
 def resolve_scope(root: Path) -> tuple[list[Path], list[str]]:
     errors: list[str] = []
-    globs: list[str] = []
-
-    if not (root / RWS).exists():
-        errors.append(f"{RWS} not found - the genome scope cannot be derived")
-
-    declared, sources = _rule_paths(root)
-    if not sources:
-        errors.append("no rule file declares `paths:` - the scope cannot be derived")
-    globs += declared
+    declared, _sources = _rule_paths(root)
+    globs = [".claude/rules/**/*.md", ".claude/skills/**/*.md", ".claude/agents/**/*.md",
+             ".agent-workspace/guide/**/*.md", ".agent-workspace/lessons/**/*.md", *declared]
 
     files: list[Path] = []
     for name in FIXED:
@@ -92,17 +81,7 @@ def resolve_scope(root: Path) -> tuple[list[Path], list[str]]:
 
 
 def scope_findings(root: Path) -> list[dict]:
-    """A §10 naming violation is a FINDING, never a scope error.
-
-    `errors` is reserved for "the scan cannot run" (no rule-writing-standards.md, nobody
-    declaring `paths:`, an entirely empty scope). A standard folder that exists but does not yet
-    carry the `_` prefix is perfectly scannable - reporting it is precisely what this tool is
-    for (`doc-organization.md` §10 + §11).
-
-    A declared glob matching no file is the same shape: scannable, and reported as
-    `paths_no_match`. It is how a stale declaration surfaces, and how a rule shipped ahead of an
-    optional tier declares itself without aborting the run.
-    """
+    """Report declared paths that currently match no file."""
     out = []
     declared, _ = _rule_paths(root)
     for g in declared:
@@ -114,19 +93,6 @@ def scope_findings(root: Path) -> list[dict]:
                 "text": g,
                 "detail": f"paths_no_match a declared `paths:` glob matches no file: {g}",
             })
-    for g in declared:
-        if not g.startswith("docs/"):
-            continue
-        if g.startswith("docs/_") or "/_" in g:
-            continue
-        out.append({
-            "signal": "dead",
-            "paths": [g],
-            "lines": [],
-            "text": g,
-            "detail": f"naming_prefix a rule-bearing folder lacks the `_` prefix "
-                      f"(doc-organization.md §10): {g}",
-        })
     return out
 
 
@@ -137,9 +103,7 @@ STOP = set(
     # The second group is Vietnamese: a project may document in a language other than English,
     # and a stopword that never occurs simply never fires.
     "khong la cua va cho mot duoc thi neu".split())
-RULEISH = re.compile(r"^\s*(?:[-*]|\|)\s+\S")
 SEPARATOR = re.compile(r"^\s*\|[\s:|-]+\|\s*$")
-FENCE = re.compile(r"^`{3,}[^`]*$")
 
 
 def normalize(s: str) -> list[str]:
@@ -161,40 +125,55 @@ def _is_table_header(raw: str, next_raw: str = "") -> bool:
 
 
 def rule_lines(text: str) -> list[tuple[int, str, set[str]]]:
-    out: list[tuple[int, str, set[str]]] = []
+    """Read paragraphs, list items and table rows as comparable text units.
+
+    A wrapped paragraph is one unit with the same content as its single-line
+    form. Headings, metadata, examples and fenced code are not duplicate rules.
+    """
+    out, pending = [], []
+    start = 0
+    fenced = example = metadata = False
     lines = text.splitlines()
-    in_fence = False
-    in_example = False
+
+    def flush():
+        nonlocal pending
+        if pending:
+            unit = " ".join(pending)
+            tokens = set(normalize(unit))
+            if tokens:
+                out.append((start, unit, tokens))
+            pending = []
+
     for i, raw in enumerate(lines, 1):
-        stripped = raw.strip()
-        # <example> is handled BEFORE the fence marker: a fence nested inside an example must
-        # not flip the file's fence parity.
-        # A TAG boundary, not a prefix: `<examples>` (plural) is a DIFFERENT tag, and matching it
-        # with `startswith("<example")` would flip parity for the whole file.
-        if stripped.startswith(("<example>", "<example ")):
-            in_example = True
+        value = raw.strip()
+        if i == 1 and value == "---":
+            metadata = True
             continue
-        if stripped.startswith("</example>"):
-            in_example = False
+        if metadata:
+            if value == "---": metadata = False
             continue
-        if in_example:
-            continue
-        # The WHOLE LINE must be the fence. `startswith` would also catch a prose sentence that
-        # merely MENTIONS a fence (```mermaid``` mid-sentence) and flip parity, swallowing the rest.
-        if FENCE.match(stripped):
-            in_fence = not in_fence
-            continue
-        if in_fence:
-            continue
-        if not RULEISH.match(raw) or len(raw) < 45:
-            continue
-        next_raw = lines[i] if i < len(lines) else ""
-        if SEPARATOR.match(raw) or _is_table_header(raw, next_raw):
-            continue
-        toks = set(normalize(raw))
-        if len(toks) < 6:
-            continue
-        out.append((i, stripped, toks))
+        if value.startswith(("<example>", "<example ")):
+            flush(); example = True; continue
+        if value.startswith("</example>"):
+            example = False; continue
+        if example: continue
+        if re.match(r"^(?:`{3,}|~{3,})", value):
+            flush(); fenced = not fenced; continue
+        if fenced: continue
+        if not value or value.startswith(("#", "<", "scope:", "core:", "note:")):
+            flush(); continue
+        following = lines[i] if i < len(lines) else ""
+        if SEPARATOR.match(raw) or _is_table_header(raw, following):
+            flush(); continue
+        if value.startswith("|"):
+            flush(); start = i; pending = [value]; flush(); continue
+        if re.match(r"^(?:[-*]|\d+[.)])\s+", value):
+            flush(); start = i
+            pending = [re.sub(r"^(?:[-*]|\d+[.)])\s+", "", value)]
+        else:
+            if not pending: start = i
+            pending.append(value)
+    flush()
     return out
 
 
@@ -393,7 +372,7 @@ def is_growth_eligible(path: Path, commits: int, lines: int) -> bool:
 def _git_numstat(root: Path, path: Path) -> tuple[int, int, int]:
     out = subprocess.run(
         ["git", "log", "--follow", "--numstat", "--format=%H", "--", str(path)],
-        capture_output=True, text=True, cwd=str(root)).stdout
+        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=str(root)).stdout
     added = deleted = commits = 0
     for ln in out.splitlines():
         parts = ln.split("\t")
@@ -451,8 +430,7 @@ def signal_growth(files: list[Path], root: Path) -> tuple[list[dict], dict]:
 
 PTR = re.compile(r"`?([A-Za-z0-9_\-./]+\.md)`?\s*`?\s*§\s*([0-9]+(?:\.[0-9]+)*[a-z]?)")
 ANCHOR = re.compile(r"(?:^|\n)\s*(?:#{1,6}\s*)?(?:\*\*)?§\s*([0-9]+(?:\.[0-9]+)*[a-z]?)")
-FROZEN = (".git/", ".agent-workspace/worktrees/", ".agent-workspace/tasks/",
-          "AGENTS.md", ".agents/", ".codex/")
+FROZEN = (".git/", ".agent-workspace/worktrees/", ".agent-workspace/tasks/")
 
 
 def _anchors(text: str) -> set[str]:
@@ -467,10 +445,6 @@ def _index_by_name(root: Path) -> dict:
     can hold thousands of .md files against a few hundred live ones, so folding it in would make
     every common file name "ambiguous".
 
-    The Codex surface — `AGENTS.md`, `.agents/**`, `.codex/**` — is excluded for a different
-    reason: it is GENERATED from the live tier (`harness-adapter.md` §5), so every line it shares
-    with its source is duplication by construction. Scanning it would turn `dup` into a list of
-    findings nobody can ever close, which is the failure `rule-health.md` §2 names.
     """
     out: dict = defaultdict(list)
     for p in root.rglob("*.md"):
@@ -605,14 +579,14 @@ def same_body(a: str, b: str) -> bool:
 def _git_show(root: Path, rev: str, path: Path) -> str:
     rel = str(path.relative_to(root)).replace("\\", "/")
     r = subprocess.run(["git", "show", f"{rev}:{rel}"],
-                       capture_output=True, text=True, cwd=str(root))
+                       capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=str(root))
     return r.stdout if r.returncode == 0 else ""
 
 
 def _last_commit(root: Path, path: Path) -> str:
     rel = str(path.relative_to(root)).replace("\\", "/")
     return subprocess.run(["git", "log", "-1", "--format=%H", "--", rel],
-                          capture_output=True, text=True,
+                          capture_output=True, text=True, encoding="utf-8", errors="replace",
                           cwd=str(root)).stdout.strip()
 
 
@@ -640,49 +614,12 @@ def signal_drift(files: list[Path], root: Path) -> list[dict]:
                 out.append({
                     "signal": "drift",
                     "paths": [str(src), str(tp)],
+                    "target_sha256": hashlib.sha256(now.encode("utf-8")).hexdigest(),
                     "lines": [lineno],
                     "text": raw.strip(),
-                    "detail": f"drift {target} §{sec} doi sau {c_s[:8]}",
+                    "detail": f"drift {target} §{sec} changed after commit {c_s[:8]}",
                 })
     return out
-
-
-def _declared_budget(root: Path) -> int | None:
-    router = root / ROUTER
-    if not router.exists():
-        return None
-    for line in router.read_text(encoding="utf-8", errors="replace").splitlines():
-        cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) == 2 and cells[0] == "always-loaded budget":
-            m = re.search(r"(\d+)", cells[1])
-            if m:
-                return int(m.group(1))
-    return None
-
-
-def signal_budget(root: Path) -> list[dict]:
-    declared = _declared_budget(root)
-    if declared is None:
-        return [{
-            "signal": "budget", "paths": [ROUTER], "lines": [], "text": "",
-            "detail": "no always-loaded budget declared in guide/index.md §1",
-        }]
-    total = 0
-    for p in sorted((root / ".claude" / "rules").glob("*.md")):
-        text = p.read_text(encoding="utf-8", errors="replace")
-        head = "\n".join(text.splitlines()[:8])
-        if re.search(r"^paths:", head, re.M):
-            continue
-        total += len(text.splitlines())
-    if total <= declared:
-        return []
-    return [{
-        "signal": "budget", "paths": [".claude/rules/"], "lines": [],
-        "text": f"{total}/{declared}",
-        "detail": f"always-loaded is {total} lines, over the declared budget of {declared}",
-    }]
-
-
 
 
 import hashlib
@@ -724,6 +661,8 @@ def fingerprint(finding: dict) -> str:
         ",".join(sorted(_fp_path(p) for p in finding["paths"])),
         " ".join(normalize(finding.get("text", ""))),
     ])
+    if finding.get("target_sha256"):
+        key += "|" + finding["target_sha256"]
     return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
 
 
@@ -772,7 +711,7 @@ import argparse
 def render_report(findings: list[dict], counts: dict, stats: dict) -> str:
     lines = [
         "== rule-health ==",
-        f"denominator: {counts['files']} files, {counts['rule_lines']} rule-shaped lines",
+        f"denominator: {counts['files']} files, {counts['rule_lines']} text units",
         (f"growth: median={stats['median']:.2f} p25={stats['p25']:.2f} "
          f"p75={stats['p75']:.2f} cut={stats['cut']:.2f} population={stats['population']}"),
         (f"dup: {stats.get('dup_pairs_compared', 0)} pairs compared, "
@@ -807,7 +746,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"DECLARATION ERROR: {e}")
         return 2
 
-    ledger = load_ledger(root)
+    try:
+        ledger = load_ledger(root)
+    except (ValueError, TypeError, AttributeError, OSError) as error:
+        print(f"LEDGER ERROR: {error}")
+        return 1
     problems = ledger_problems(ledger)
     if problems:
         for p in problems:
@@ -836,20 +779,18 @@ def main(argv: list[str] | None = None) -> int:
     findings += growth
     findings += signal_dead(chosen, root, dup_stats)
     findings += signal_drift(chosen, root)
-    budget = signal_budget(root)
-    findings += budget
 
     opened = open_findings(findings, ledger)
     stats.update(dup_stats)
     print(render_report(opened, {"files": len(chosen), "rule_lines": total_lines}, stats))
 
     stamp = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
-                           text=True, cwd=str(root)).stdout.strip()
+                           text=True, encoding="utf-8", errors="replace", cwd=str(root)).stdout.strip()
     for p in chosen:
         ledger["last_scanned"][_fp_path(p, root)] = stamp
     save_ledger(root, ledger)
 
-    return 1 if budget else 0
+    return 0
 
 
 if __name__ == "__main__":

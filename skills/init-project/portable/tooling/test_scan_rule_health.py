@@ -1,182 +1,97 @@
 #!/usr/bin/env python3
-"""Test `scan_rule_health.py` against FAKE genome trees.
+"""Exercise the scanner on real text units and temporary instruction trees.
 
-The real repo must produce a report, so running the scan on it only proves it does not crash.
-The other half — does it resolve its scope correctly, and does each signal fire where it should
-— is built by mutation: each case below breaks exactly one thing.
-
-Both directions are named on purpose (`verification-gate-design.md` §2): the clean cases check
-"no false alarm", the mutation cases check "nothing missed".
-
-The scope contract is the part worth pinning hardest. A scan that silently resolves to an empty
-or wrong scope reports "0 findings" and reads exactly like a clean corpus.
+Each duplicate comparison uses paragraph content on both sides. The fixtures
+also show that an empty scope and broken references cannot pass silently.
 """
-from __future__ import annotations
-
 import sys
 import tempfile
+import subprocess
+from unittest.mock import patch
 from pathlib import Path
-
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import scan_rule_health as S  # noqa: E402
+import scan_rule_health as S
 
-sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+fails = []
+def check(condition, message):
+    if not condition: fails.append(message)
 
-fails: list[str] = []
+def put(root, name, text):
+    path = root / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    return path
 
+with tempfile.TemporaryDirectory() as folder:
+    root = Path(folder)
+    check(bool(S.resolve_scope(root)[1]), "an empty scope was accepted")
+    put(root, "CLAUDE.md", "# Project\n\nRead the registered source before making changes.\n")
+    put(root, ".claude/rules/paths.md", '---\nscope: portable\npaths:\n  - "extra/**"\n---\n\nRead the extra material.\n')
+    put(root, ".agent-workspace/guide/general/example.md", "## §1\n\nA complete explanation.\n")
+    put(root, "extra/material.md", "Project-specific material.\n")
+    put(root, ".agent-workspace/tasks/task/notes.md", "Unfinished working notes.\n")
+    paths, errors = S.resolve_scope(root)
+    names = {path.relative_to(root).as_posix() for path in paths}
+    check(not errors, f"the known trees did not establish scope: {errors}")
+    check(".agent-workspace/guide/general/example.md" in names, "the known guide tree was omitted")
+    check("extra/material.md" in names, "the declared extension was omitted")
+    check(not any("/tasks/" in name for name in names), "task notes entered the corpus")
+    (root / ".claude/rules/paths.md").unlink()
+    check(not S.resolve_scope(root)[1], "scope depended on a particular rule or paths declaration")
 
-def check(cond: bool, msg: str) -> None:
-    if not cond:
-        fails.append(msg)
+    paragraph = "Read the source file before changing its public interface and verify every existing caller."
+    wrapped = "Read the source file before changing\nits public interface and verify every existing caller."
+    a, b = S.rule_lines(paragraph), S.rule_lines(wrapped)
+    check(len(a) == len(b) == 1 and a[0][1:] == b[0][1:], "line wrapping changed the duplicate unit")
+    check(len(S.rule_lines("Short.\n\n" + paragraph)) == 2, "short prose was silently discarded")
+    rows = S.rule_lines("- " + wrapped + "\n- Preserve the call result.\n")
+    check(len(rows) == 2 and rows[0][1] == paragraph, "a multiline list item was not kept together")
+    masked = "---\nscope: portable\n---\n# Heading\n```text\n" + paragraph + "\n```\n<example>\n" + paragraph + "\n</example>\n\n" + paragraph
+    check(len(S.rule_lines(masked)) == 1, "metadata, examples, or fenced code became rule units")
+    tables = "| name | meaning |\n|---|---|\n| source | Read the defining artifact. |\n"
+    check(len(S.rule_lines(tables)) == 1, "table header was compared as an instruction")
+    found = S.signal_dup({"first/a.md": a, "second/b.md": b})
+    check(any(item["signal"] == "dup" for item in found), "a duplicate wrapped paragraph was missed")
+    unrelated = S.rule_lines("Use the final scene to reveal the result of the character's choice.")
+    check(not S.signal_dup({"first/a.md": a, "second/b.md": unrelated}), "unrelated paragraphs were reported as duplicates")
 
+    put(root, ".claude/rules/paths.md", '---\npaths:\n  - "missing/**"\n---\n')
+    check(any("paths_no_match" in item["detail"] for item in S.scope_findings(root)), "an unmatched declared path was not reported")
+    bad = put(root, ".claude/rules/broken.md", "Read `gone.md` §8 before acting.\n")
+    check(any(item["signal"] == "dead" for item in S.signal_dead([bad], root)), "a dead section pointer was missed")
+    check(S.ledger_problems({"entries": {"x": {"status": "unknown"}}}), "an invalid ledger status was accepted")
+    check(S.ledger_problems({"entries": {"x": {"status": "exempt", "reason": "none"}}}), "an exemption without its authority was accepted")
+    check(not S.ledger_problems({"entries": {"x": {"status": "fixed"}}}), "a valid fixed entry was rejected")
+    put(root, S.LEDGER, "invalid json")
+    check(S.main(["--root", str(root)]) == 1, "unreadable ledger did not fail explicitly")
 
-def rule(paths: list[str] | None = None, body: str = "- a rule line\n") -> str:
-    if not paths:
-        return "---\nscope: portable\n---\n\n" + body
-    lines = ["---", "paths:"] + [f'  - "{p}"' for p in paths] + ["scope: portable", "---", "", body]
-    return "\n".join(lines)
+# Source history is UTF-8 even when the host's preferred encoding is Windows-1252.
+with tempfile.TemporaryDirectory() as folder:
+    root = Path(folder)
+    content = "## §1 Evidence\n\nTiếng Việt: “đọc nguồn trước”.\n"
+    target = put(root, ".agent-workspace/guide/general/source.md", content)
+    caller = put(root, "CLAUDE.md", "Read `.agent-workspace/guide/general/source.md` §1.\n")
+    def git(*args):
+        subprocess.run(["git", "-c", "core.hooksPath=", *args], cwd=root,
+                       check=True, capture_output=True)
+    git("init", "-q")
+    git("add", "CLAUDE.md", ".agent-workspace/guide/general/source.md")
+    git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+        "commit", "-q", "-m", "Record Unicode source history")
+    with patch("subprocess._text_encoding", return_value="cp1252"):
+        check(S._git_show(root, "HEAD", target) == content,
+              "historical UTF-8 content was decoded with the host's default encoding")
+        check(S.signal_drift([caller], root) == [], "unchanged Unicode history reported drift")
+        target.write_text(content.replace("đọc nguồn trước", "kiểm tra bản mới"), encoding="utf-8")
+        check(any(item["signal"] == "drift" for item in S.signal_drift([caller], root)),
+              "a changed Unicode source section was not detected")
+        reviewed = S.signal_drift([caller], root)
+        ledger = {"entries": {S.fingerprint(item): {"status": "fixed"} for item in reviewed}}
+        check(not S.open_findings(reviewed, ledger), "a reviewed source revision remained open")
+        target.write_text(content.replace("đọc nguồn trước", "đối chiếu cả hai phía"), encoding="utf-8")
+        check(bool(S.open_findings(S.signal_drift([caller], root), ledger)),
+              "a later target change was hidden by an earlier drift resolution")
 
-
-def build(tmp: Path, rules: dict[str, str], files: dict[str, str] | None = None,
-          budget: int | None = 600, with_rws: bool = True, with_claude_md: bool = True) -> Path:
-    """A fake genome root. `rules` maps a .claude/rules file name to its text."""
-    d = Path(tempfile.mkdtemp(dir=tmp))
-    (d / ".claude" / "rules").mkdir(parents=True)
-    if with_rws:
-        (d / ".claude" / "rules" / "rule-writing-standards.md").write_text(
-            rule(["**/CLAUDE.md"]), encoding="utf-8")
-    for name, text in rules.items():
-        (d / ".claude" / "rules" / name).write_text(text, encoding="utf-8")
-    if with_claude_md:
-        (d / "CLAUDE.md").write_text("# project\n\n- a rule line\n", encoding="utf-8")
-    (d / ".agent-workspace" / "guide").mkdir(parents=True)
-    row = f"| always-loaded budget | {budget} lines |\n" if budget is not None else ""
-    (d / ".agent-workspace" / "guide" / "index.md").write_text(
-        "## §1 placement data\n\n| key | value |\n|---|---|\n" + row, encoding="utf-8")
-    for rel, text in (files or {}).items():
-        p = d / rel
-        p.parent.mkdir(parents=True, exist_ok=True)
-        p.write_text(text, encoding="utf-8")
-    return d
-
-
-with tempfile.TemporaryDirectory() as t:
-    tmp = Path(t)
-
-    # ---- scope resolution: the contract that matters most --------------
-    d = build(tmp, {"a.md": rule([".agent-workspace/guide/general/**"])},
-              {".agent-workspace/guide/general/x.md": "- a rule line\n"})
-    files, errors = S.resolve_scope(d)
-    check(errors == [], f"case 1: a healthy tree reported scope errors: {errors}")
-    check(any(p.name == "x.md" for p in files), "case 1b: the declared glob did not reach its file")
-    check(any(p.name == "CLAUDE.md" for p in files), "case 1c: the fixed CLAUDE.md entry is missing")
-
-    d = build(tmp, {"a.md": rule([".agent-workspace/guide/general/**"])},
-              {".agent-workspace/guide/general/x.md": "- a rule line\n"}, with_rws=False)
-    check(any("rule-writing-standards" in e for e in S.resolve_scope(d)[1]),
-          "case 2: a missing rule-writing-standards.md was not reported")
-
-    d = build(tmp, {"a.md": rule()}, with_rws=False)
-    check(any("paths" in e for e in S.resolve_scope(d)[1]),
-          "case 3: no rule declaring `paths:` was not reported")
-
-    # the hard error stays: nothing at all in scope is a declaration failure, never "clean"
-    d = build(tmp, {"a.md": rule([".agent-workspace/nowhere/**"])}, with_claude_md=False)
-    errors = S.resolve_scope(d)[1]
-    check(any("RONG" in e or "empty" in e.lower() for e in errors),
-          f"case 4: an entirely empty scope was not reported as an error: {errors}")
-
-    # ---- the fix: one glob matching nothing is a FINDING, not a scope error
-    d = build(tmp, {"a.md": rule([".agent-workspace/guide/general/**", ".agent-workspace/wiki/**"])},
-              {".agent-workspace/guide/general/x.md": "- a rule line\n"})
-    files, errors = S.resolve_scope(d)
-    check(errors == [],
-          f"case 5: a single zero-match glob still aborted the scan as a scope error: {errors}")
-    check(any(p.name == "x.md" for p in files),
-          "case 5b: the glob that DID match was dropped along with the one that did not")
-    found = S.scope_findings(d)
-    check(any("paths_no_match" in f["detail"] and "wiki" in f["detail"] for f in found),
-          f"case 6: a zero-match glob produced no finding: {found}")
-    check(not any("paths_no_match" in f["detail"] and "guide/general" in f["detail"] for f in found),
-          "case 6b: a glob that matched files was still reported as no-match")
-
-    # ---- frozen archives never enter the scope ------------------------
-    d = build(tmp, {"a.md": rule(["**"])},
-              {".agent-workspace/tasks/some-task/note.md": "- a rule line\n",
-               ".agent-workspace/guide/general/x.md": "- a rule line\n"})
-    files = S.resolve_scope(d)[0]
-    check(not any("tasks" in str(p) for p in files),
-          "case 7: a file under .agent-workspace/tasks/ entered the scan scope")
-
-    # ---- naming_prefix fires only on a docs/ glob without the underscore
-    d = build(tmp, {"a.md": rule([".agent-workspace/guide/general/**", "docs/spec/**"])},
-              {".agent-workspace/guide/general/x.md": "- a rule line\n",
-               "docs/spec/s.md": "- a rule line\n"})
-    check(any("naming_prefix" in f["detail"] for f in S.scope_findings(d)),
-          "case 8: a rule-bearing docs/ folder without the `_` prefix was not reported")
-
-    d = build(tmp, {"a.md": rule([".agent-workspace/guide/general/**", "docs/_spec/**"])},
-              {".agent-workspace/guide/general/x.md": "- a rule line\n",
-               "docs/_spec/s.md": "- a rule line\n"})
-    check(not any("naming_prefix" in f["detail"] for f in S.scope_findings(d)),
-          "case 9: a docs/ folder WITH the `_` prefix was wrongly reported")
-
-    # ---- frontmatter parsing and glob expansion ------------------------
-    check(S._frontmatter_paths(rule(["a/**", "b/*.md"])) == ["a/**", "b/*.md"],
-          "case 10: the `paths:` list was not parsed as written")
-    check(S._frontmatter_paths(rule()) == [],
-          "case 10b: a rule with no `paths:` yielded paths anyway")
-
-    d = build(tmp, {"a.md": rule(["x/**"])}, {"x/deep/y.md": "- a rule line\n"})
-    check([p.name for p in S._expand(d, "x/**")] == ["y.md"],
-          "case 11: a trailing `**` glob did not reach the files inside")
-
-    # ---- budget: the only hard gate ------------------------------------
-    d = build(tmp, {"a.md": rule()}, budget=None)
-    check(any(f["signal"] == "budget" for f in S.signal_budget(d)),
-          "case 12: an undeclared always-loaded budget was not reported")
-
-    big = rule(body="- a rule line\n" * 50)
-    d = build(tmp, {"a.md": big}, budget=10)
-    check(any(f["signal"] == "budget" for f in S.signal_budget(d)),
-          "case 13: exceeding the declared budget was not reported")
-
-    d = build(tmp, {"a.md": big}, budget=10_000)
-    check(S.signal_budget(d) == [],
-          "case 14: a corpus under the declared budget was reported anyway")
-
-    # a path-scoped rule does not spend always-loaded budget
-    d = build(tmp, {"a.md": rule(["x/**"], body="- a rule line\n" * 50)}, budget=10)
-    check(S.signal_budget(d) == [],
-          "case 15: a `paths:`-scoped rule was counted against the always-loaded budget")
-
-    # ---- ledger integrity ----------------------------------------------
-    check(S.ledger_problems({"entries": {"aa": {"status": "typo"}}}),
-          "case 16: an invalid ledger status was not reported")
-    check(S.ledger_problems({"entries": {"aa": {"status": "exempt", "reason": "r"}}}),
-          "case 17: an `exempt` entry with no allowed_by was not reported")
-    check(S.ledger_problems({"entries": {"aa": {"status": "exempt", "allowed_by": "§4"}}}),
-          "case 18: an `exempt` entry with no reason was not reported")
-    check(S.ledger_problems({"entries": {"aa": {"status": "fixed"}}}) == [],
-          "case 19: a valid `fixed` entry was reported as a problem")
-
-    # ---- ledger keys are repo-relative, never machine-specific ---------
-    d = build(tmp, {"a.md": rule()})
-    check(not S._is_absolute_key(S._fp_path(str(d / ".claude" / "rules" / "a.md"), d)),
-          "case 20: a ledger key came out machine-specific (absolute)")
-
-    # ---- the generated Codex surface is not scanned ---------------------
-    # AGENTS.md is rendered from CLAUDE.md, so every shared line is duplication by
-    # construction; a `dup` finding there could never be closed (`rule-health.md` §2).
-    d = build(tmp, {"a.md": rule()},
-              files={"AGENTS.md": "\n".join(["# project", "", "- a rule line", ""]),
-                     ".agents/skills/x/SKILL.md": "\n".join(
-                         ["---", "name: x", "---", "", "- a rule line", ""])})
-    names = S._index_by_name(d)
-    check("AGENTS.md" not in names, "case 21: AGENTS.md entered the scan corpus")
-    check("SKILL.md" not in names, "case 22: a .agents/ stub entered the scan corpus")
-
-print(f"{len(fails)} failure(s)")
-for f in fails:
-    print("  -", f)
+for failure in fails: print("FAIL:", failure)
+print(f"{len(fails)} failures")
 sys.exit(1 if fails else 0)

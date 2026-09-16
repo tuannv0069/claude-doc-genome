@@ -1,27 +1,16 @@
 #!/usr/bin/env node
-// doc-lint — the enforcement layer prescribed by doc-system-mechanics.md §5.
+// Check the documentation network defined by doc-system-mechanics.md section 5.
+// The command checks metadata, unfilled template slots, root references, guide
+// routing, section references, and the retired directory layout. It does not
+// prescribe sentence wording, document length, or a presentation style.
 //
-// Link integrity is where defects cluster: a moved file, a renumbered §ID, or a
-// trigger written before its target exists all look fine in review and are dead
-// at read time. This makes those failures mechanical instead of remembered.
+// The corpus consists of the live rule, guide, and lesson trees, the root
+// instruction file, and the init skill. Examples and fenced code are excluded
+// where their paths are illustrative. A successful result applies to this
+// corpus, not to every Markdown file in the repository.
 //
-// Scope discipline: a linter that reports non-defects gets ignored, which is
-// worse than no linter. So it checks only the two path classes where deadness
-// actually costs a read — CLAUDE.md triggers and router entries — and skips
-// illustrative names in examples. Everything else is covered by L7, since a
-// §ID pointer is never illustrative.
-//
-//   L1  every rule / guide / lessons file carries `scope:` frontmatter
-//   L2  CLAUDE.md within the platform size budget (< 200 lines)
-//   L3  always-loaded rules within the budget declared in the router's §1
-//   L4  no unrendered {{UPPER_SNAKE}} template slot
-//   L5  trigger -> file: every .md path cited in CLAUDE.md resolves
-//   L6  file <-> router: every guide file has an entry, every entry has a file
-//   L7  POINTER ROT — every `<file>.md §X.Y` reference resolves: file exists AND defines §X.Y
-//   L8  no reference to the pre-v2 `docs/agent-guide/` layout
-//
-// Usage: node scripts/doc-lint.mjs [--quiet]
-// Exit:  0 = clean · 1 = findings
+// Run node scripts/doc-lint.mjs, optionally with --quiet. The command does not
+// write files. It returns 0 when the checks pass and 1 when it reports findings.
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, basename, dirname, sep } from 'node:path';
@@ -85,31 +74,9 @@ function resolveFrom(citing, target) {
 
 // ---- L1 scope: frontmatter ---------------------------------------------
 for (const p of liveFiles) {
-  if (!/^scope:/m.test(text.get(p).split('\n').slice(0, 8).join('\n'))) {
+  const frontmatter = text.get(p).match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
+  if (!frontmatter || !/^scope:\s*(?:portable|project)\s*$/m.test(frontmatter[1])) {
     add('L1', p, 'missing `scope:` frontmatter');
-  }
-}
-
-// ---- L2 CLAUDE.md size --------------------------------------------------
-if (text.has(CLAUDE_MD)) {
-  const n = text.get(CLAUDE_MD).split('\n').length - 1;
-  if (n >= 200) add('L2', CLAUDE_MD, `${n} lines — platform budget is < 200`);
-  else if (!quiet) console.log(`  L2  CLAUDE.md ${n}/200 lines`);
-}
-
-// ---- L3 always-loaded budget -------------------------------------------
-if (existsSync(ROUTER)) {
-  const m = text.get(ROUTER).match(/always-loaded budget\s*\|\s*(\d+)\s*lines/);
-  if (!m) add('L3', ROUTER, 'no always-loaded budget in §1 placement data');
-  else {
-    const budget = Number(m[1]);
-    let total = 0;
-    for (const p of walk(RULES_DIR)) {
-      if (/^paths:/m.test(text.get(p).split('\n').slice(0, 6).join('\n'))) continue;
-      total += text.get(p).split('\n').length - 1;
-    }
-    if (total > budget) add('L3', RULES_DIR, `always-loaded ${total} lines > budget ${budget}`);
-    else if (!quiet) console.log(`  L3  always-loaded ${total}/${budget} lines`);
   }
 }
 
@@ -176,7 +143,7 @@ for (const [p, body] of text) {
 
 // ---- report -------------------------------------------------------------
 if (!findings.length) {
-  console.log(`doc-lint: clean — ${mdFiles.length} files, L1..L8 pass.`);
+  console.log(`doc-lint: clean — ${mdFiles.length} files, metadata and documentation links are valid.`);
   process.exit(0);
 }
 const byCheck = new Map();

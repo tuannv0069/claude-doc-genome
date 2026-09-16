@@ -1,28 +1,10 @@
 #!/usr/bin/env python3
-"""Gate for the lesson-store router `.agent-workspace/lessons/index.md`.
+"""Check the lesson router, declared phases, and references between stores.
 
-Law enforced, source: `guide/general/lesson-capture.md` §7 + §8, and the §1 contract
-stated in `lessons/index.md` itself. The gate scans `.agent-workspace/lessons/**` only;
-`tasks/**` and `worktrees/**` are frozen task archives, where an old store name is a
-record of what happened, not a dead pointer (`lesson-capture.md` §8).
-
-Rule 4 does not read prose. Every store DECLARES `phase:` as one value from a closed set
-of seven. Declaring two values, declaring an unknown value, or declaring nothing is caught;
-detection no longer depends on how a sentence is phrased, so no store slips through on
-vocabulary. The trade: the gate cannot catch a declaration that is simply UNTRUE — a store
-declaring `phase: writing` while its `scope:` line describes two phases passes. That is the
-built-in limit of any declaration-based check, and the backstop is a human reading
-`lesson-capture.md` §8. The `scope:` line stays prose for that reader; the gate no longer
-parses it.
-
-Principle: a gate makes the caller DECLARE; reading prose is guessing
-(`verification-gate-design.md` §1).
-
-A seeded-empty tier passes: a router with the header row and no store, and no store file on
-disk, is the state `/init-project` deploys. The gate fails on a BROKEN table — a missing
-header, a row with the wrong cell count — and on a router that lists rows while the disk
-holds none, or the reverse.
-"""
+The four router columns and the scope/phase metadata are data contracts. Lesson
+records may use complete paragraphs; this gate does not constrain their length
+or wording. A correctly seeded router with no stores is valid. The gate cannot
+judge whether a declared phase accurately describes the work in a store."""
 from __future__ import annotations
 
 import re
@@ -36,7 +18,6 @@ NAME = re.compile(r"`([a-z0-9-]+\.md)`")
 WIKILINK = re.compile(r"\[\[([a-z0-9-]+)\]\]")
 PHASES = {"writing", "reviewing", "answering", "building-gate",
           "orchestrating", "investigating", "operating"}
-FIRST_RECORD = re.compile(r"^### ", re.M)
 CRIT_OPEN = re.compile(r"^<critical>\s*$", re.M)
 CRIT_CLOSE = re.compile(r"^</critical>\s*$", re.M)
 HEADER_CELLS = ["file", "work type", "paired guide", "checks"]
@@ -87,7 +68,6 @@ def scope_status(text: str) -> tuple[str, str, str]:
     """State of a store's <critical> block.
 
     ('missing', '', '')  — no block at all
-    ('late', '', '')     — a block exists but opens AFTER the first ### record
     ('no_scope', '', '') — the block is in place but has no scope: line
     ('ok', line, phase)  — valid; `line` is the stripped scope: line, `phase` is the
                            stripped text after `phase:`, or '' when that line is absent
@@ -95,9 +75,6 @@ def scope_status(text: str) -> tuple[str, str, str]:
     m = CRIT_OPEN.search(text)
     if not m:
         return ("missing", "", "")
-    rec = FIRST_RECORD.search(text)
-    if rec and rec.start() < m.start():
-        return ("late", "", "")
     close = CRIT_CLOSE.search(text, m.end())
     block = text[m.end():close.start()] if close else text[m.end():]
     line = ""
@@ -177,11 +154,6 @@ def check(lessons: Path) -> list[str]:
         status, _line, phase = scope_status(text)
         if status == "missing":
             problems.append(f"{lessons/name}: no <critical> block")
-        elif status == "late":
-            problems.append(
-                f"{lessons/name}: <critical> opens AFTER the first ### record"
-                " — a reader at the top of the file never sees it"
-            )
         elif status == "no_scope":
             problems.append(f"{lessons/name}: <critical> block has no scope: line")
         elif not phase:

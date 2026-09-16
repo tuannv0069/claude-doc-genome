@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-"""Gate for the wiki tier: it checks LINKS, never truth.
+"""Check the wiki's recorded links, evidence fields, and identifiers.
 
-This gate does not know whether a claim is true and does not pretend to. It answers exactly
-one question: is everything an edge points at still there — and does every edge carry at least
-one readable evidence item, even where that item's content goes unconfirmed (stored-data /
-absent / running-system, R8).
-
-root = the directory holding `wiki/` (that is `.agent-workspace/`, the parent of the directory
-holding this file).
-"""
+Located evidence is checked against the source path and anchor positions. Other
+evidence forms receive schema checks, whose limits are reported to the caller.
+The gate does not establish the truth or readability of a claim. Its root is
+the directory containing wiki, normally the parent of this tooling directory."""
 import re
 import secrets
 import subprocess
@@ -43,10 +39,10 @@ class GitError(Exception):
 
 
 def _split_row(line):
-    """Split a markdown table line '| a | b | c |' into a list of trimmed cells.
+    r"""Split a markdown table line '| a | b | c |' into a list of trimmed cells.
 
-    A `\|` inside a cell is a LITERAL (escaped) pipe, not a column boundary — split on a
-    negative lookbehind, then unescape within each cell.
+    An escaped pipe belongs to the cell's content. Split only at unescaped
+    boundaries, then restore literal pipes inside each cell.
     """
     inner = line.strip()
     if inner.startswith("|"):

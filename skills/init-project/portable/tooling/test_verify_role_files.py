@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-"""Test `verify_role_files.py` against FAKE role trees.
+"""Exercise role routing and checking sections with temporary role trees.
 
-The real tree must be green once the work is done, so running the gate on it only proves the
-gate does not cry wolf. The other half — does the gate catch a real defect — is built by
-mutation: each case below breaks exactly one of the rules the gate enforces.
-
-Both directions are named on purpose (`verification-gate-design.md` §2): the clean-tree cases
-check "no false alarm", the mutation cases check "nothing missed".
-"""
+The cases verify missing or unregistered files and unresolved handoffs. They
+also establish that additional headings and prose examples remain valid."""
 from __future__ import annotations
 
 import sys
@@ -106,19 +101,18 @@ with tempfile.TemporaryDirectory() as t:
     check(any("hands off to `architect`" in p for p in V.check_tree(d)),
           "case 7: §7 handoff to an unknown role was not caught")
 
-    # --- rule 3: the seven-section frame ---------------------------------
-    d = build(tmp, dict(clean, developer=role("developer", drop=4)), clean_rows)
-    check(any("§4 missing" in p for p in V.check_tree(d)),
-          "case 8: a missing section was not caught")
-
+    # Section 6 is a routing interface. Other headings and examples may evolve.
+    d = build(tmp, dict(clean, developer=role("developer", drop=6)), clean_rows)
+    check(any("§6 missing" in p for p in V.check_tree(d)),
+          "case 8: missing checking criteria were not caught")
     d = build(tmp, dict(clean, developer=role("developer", extra=8)), clean_rows)
-    check(any("outside the fixed §1-§7 frame" in p for p in V.check_tree(d)),
-          "case 9: a section outside the frame was not caught")
-
-    # --- rule 4: ✅/❌ pair in §1, §3, §5 --------------------------------
+    check(V.check_tree(d) == [], "case 9: an additional section was rejected")
     d = build(tmp, dict(clean, developer=role("developer", no_pair=3)), clean_rows)
-    check(any("§3 has no ✅/❌ pair" in p for p in V.check_tree(d)),
-          "case 10: a section missing its ✅/❌ pair was not caught")
+    check(V.check_tree(d) == [], "case 10: prose examples were rejected")
+    d = build(tmp, dict(clean, developer=role("developer", drop=4)), clean_rows)
+    check(V.check_tree(d) == [], "an optional section was incorrectly required")
+    d = build(tmp, dict(clean, developer=role("developer").replace("## §", "### §")), clean_rows)
+    check(V.check_tree(d) == [], "heading depth was incorrectly treated as role data")
 
     # --- router format is a contract -------------------------------------
     d = build(tmp, clean, ["| writing code | developer |\n"] + clean_rows[1:])

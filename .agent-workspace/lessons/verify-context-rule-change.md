@@ -17,6 +17,14 @@ phase: building-gate
 - evidence — probe agent reported 18 bullets under `## ALWAYS` and `enable hooks after clone` as the first; `awk` over `CLAUDE.md` on disk counted 19 with the new trigger first in its block
 - seen — 1
 
+### Check retained workflow obligations while evaluating a prose rewrite
+
+- signal — A rewrite preserves the apparent meaning of a workflow instruction, and static checks pass.
+- ❌ Treating source equivalence and passing structural gates as sufficient evidence that the rewritten instruction remains effective leaves a behavioral gap.
+- ✅ In fresh sessions, inspect the required actions as well as the prose produced. If an action is skipped, test an explicit description of the operation and its scope before changing unrelated instructions. Keep pre-fix samples and report the repair separately.
+- evidence — The September 2026 genome comparison found no router reads in six sessions with the initial rewritten template. The original read both routers in six sessions. Two subsequent conversation probes read both after the template explicitly named file reading and included conversational and writing tasks. See `docs/genome/so-sanh-dau-ra-claude.md` for the full results and their limits.
+- seen — 1
+
 ### Ask a probe agent what is IN its context before reading anything into what it did
 
 - signal — using a subagent's behaviour as evidence about a rule, prompt, or file the agent was supposed to act on

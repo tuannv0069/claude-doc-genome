@@ -4,193 +4,125 @@ paths:
 scope: portable
 ---
 
-<critical>
-scope: the wiki tier — claims already established about the project's subject material, written back so a later run does not derive them again. Content lives in `.agent-workspace/wiki/<subject>/<cluster>.md`, routed by `.agent-workspace/wiki/index.md`.
-core: an investigation opens with a tier lookup and closes with a write-back (§6 R1) | an edge is `sourced` only when it carries re-runnable evidence for every class its claim class requires (§6 R2) | the tier holds structure and position, never a measurement (§1) | the gate checks links, never truth (§6 R8)
-note: §ID append-only (portable) — never renumber; retired sections keep their number. Every project-specific value is declared by the project per §7, never written into this file.
-</critical>
+# Established knowledge about subject material
 
-## §1 What enters the tier
+The optional wiki stores claims established about material the project investigates. It helps a later task reuse that knowledge without repeating the investigation. It is separate from instructions about how the assistant works and from finished deliverables.
 
-Both tests pass, or it does not enter:
+## §1 Decide what belongs in the wiki
 
-| test | passes when |
+Store a claim when it establishes something about the subject material and another existing knowledge tier does not already own it. The claim should identify useful structure, authority or location: for example, which source defines a set of valid values and what those values are.
+
+Do not store transient measurements as durable claims. A count or size observed at one moment can become false while its source still exists. Keep such observations in the task evidence or deliverable that records their context. A query used as evidence may return a measurement, but that does not make the measurement suitable for the wiki's claim field.
+
+Before adding a claim, ask whether omitting it would cause a later task to investigate the same question again. A fact encountered incidentally does not need its own record if it answers no question the investigation looked up.
+
+## §2 Place the claim in a lookup cluster
+
+A cluster is a Markdown file under `.agent-workspace/wiki/<subject>/` that groups claims answering a shared lookup topic. Choose the cluster from the question being investigated rather than creating one file per source artifact.
+
+Use the cluster searched at the start of the investigation. If no cluster covers that topic, create it and register its link in `.agent-workspace/wiki/index.md` in the same change. The router link uses a path relative to the wiki root and identifies what the cluster answers. A filename written as plain text is not a router link.
+
+Before adding a new claim, also search by its evidence locator under §6 R6. Different lookup topics can lead to the same fact; that does not require duplicate claim records.
+
+## §3 Preserve the claim-record schema
+
+The machine-readable record is called an edge. Its table has the following columns in this order:
+
+| Column | Required information |
 |---|---|
-| assertion | it answers "what has been established as true about the project's subject material" — not how to do the work (technique tier), not what a deliverable must contain (deliverable standard) |
-| negative | no other tier already covers it |
+| `id` | A stable identifier allocated by the tool in the form `<cluster>-<5 chars>`. |
+| `claim` | The assertion established by the investigation. Its language belongs to the project. |
+| `class` | A claim class declared by the project under §7. |
+| `confidence` | Either `hypothesis` or `sourced`, according to §6 R2. |
+| `evidence` | The supporting items expressed in the syntax defined in §4. |
 
-<rules section="ALWAYS">
-- store structure and position: the catalogue of valid values, where a thing lives, which artifact governs it
-- run the one-line test before writing → "delete this row; does the next run investigate from scratch?"
-</rules>
+The schema is an interface for the wiki tools. It does not prescribe how an unrelated report or user-facing document must be written. A change to these fields requires coordinated changes to the parser, existing records and tests.
 
-<rules section="NEVER">
-- store a measurement — a count, a total, a size; a measurement is only true at an instant, and the timestamp it needs is a confirmation stamp
-</rules>
+## §4 Record evidence that can be revisited
 
-<example type="structure_vs_measurement">
-✅ `<catalogue>` is the authority for `<attribute>`, and it lists `<v1>` · `<v2>` · `<v3>`
-❌ `<catalogue>` holds exactly 4 rows at lookup time
-</example>
+Every evidence item begins with a form name and a colon. The available forms identify different sources of evidence:
 
-A query that returns both stays valid evidence — the ban covers the number reaching the `claim` cell, not the query that produced it.
-
-## §2 Cluster — the file an edge lands in
-
-A cluster is one `.md` file under one subject, grouping the edges that share a **lookup topic** — what gets asked as a single block. Not one cluster per source file, not one per unit of the material's own organisation.
-
-<rules section="ALWAYS">
-- write an edge into the cluster the §6 R1 opening query already searched
-- opening query matches no cluster → create the cluster and register its router row in the same commit
-- name the cluster in its router row as a markdown link whose target is the cluster path relative to the tier root
-</rules>
-
-<example type="router_row">
-✅ `| <subject> | [<lookup topic>](<subject>/<cluster>.md) | <what it answers> |`
-❌ `| <subject> | <cluster>.md | <what it answers> |` — not a link, so the cluster reads as orphaned
-</example>
-
-Duplicate detection keys on locator, not on cluster (§6 R6): one fact is reachable from two lookup topics.
-
-## §3 Columns of an edge
-
-| column | filled by | holds |
-|---|---|---|
-| `id` | machine | `<cluster>-<5 chars>`, allocated once, never derived from content (§6 R5) |
-| `claim` | human | one sentence, in the language of the business |
-| `class` | human | the claim class, from the vocabulary the project declares (§7) |
-| `confidence` | machine default | `hypothesis` \| `sourced` (§6 R2) |
-| `evidence` | human | 1..n items, each in one form of §4, separated by `<br>` |
-
-## §4 The forms of an evidence item
-
-Forms describe an **item**, not an edge — one edge carries items of several classes when its claim class demands several (§6 R2). One form per source of evidence: source text (`located`), stored data (`stored-data`), an absence (`absent`), the running system (`running-system`). A claim class whose required sources have no carrying form can never reach `sourced` — adding the class means adding its form.
-
-| form | mandatory keys | what the gate checks |
-|---|---|---|
-| `located` | `path` (relative to the declared root) + `line` + `anchor` (verbatim string, non-ASCII allowed) | anchor still found, and the SET of matching positions equals the set recorded — surplus and missing both reported |
-| `absent` | `query` + `scope` + `expected` | keys present; the gate declares the query not re-run |
-| `stored-data` | `dataset` + `object` + `field` + `query` verbatim | keys present, `anchor` forbidden; the gate declares the content unchecked |
-| `running-system` | `account` (the session it was seen under) + `screen` (screen or entry point) + `observed` (what was seen) | keys present, `anchor` forbidden; the gate declares the running system never opened |
-
-Syntax of one item — the gate reads this shape and no other:
-
-| form | written as |
+| Form | Required values and interpretation |
 |---|---|
-| `located` | ``located: `<path>:<line>` anchor=`<verbatim string>` `` — `<path>:<line>` sits in the FIRST backtick pair of the item |
-| `absent` | `absent: query=<…> scope=<…> expected=<…>` — `key=value`; a value wrapped in backticks or double quotes is unwrapped |
-| `stored-data` | `stored-data: dataset=<…> object=<…> field=<…> query=<…>` |
-| `running-system` | `running-system: account=<…> screen=<…> observed=<…>` |
+| `located` | A source `path`, its `line` and a verbatim `anchor` used to check the recorded position. |
+| `absent` | The `query`, search `scope` and `expected` result that would have contradicted the absence claim. |
+| `stored-data` | The `dataset`, `object`, `field` and exact `query` used to inspect stored data. |
+| `running-system` | The `account` or session context, `screen` or entry point and what was `observed`. |
 
-<rules section="ALWAYS">
-- open every item with its form name and a colon — an item with no prefix is unreadable
-- separate the items of one cell with `<br>` (`<br/>` and `<br />` read as the same boundary)
-- write a `located` position inside backticks — `path=` and `line=` are not read for this form
-- treat `path` as the identity and `anchor` as the drift probe
-- claim living at several positions in the same file → repeat a `located` item per position, each its own `path:line`/`anchor` pair — the gate collects them and compares the set within that file (§6 R7)
-- record `path` relative to the root the project declares (§7); that declaration itself resolves relative to the directory holding the router — a new baseline then edits one declaration, not N edges
-</rules>
+The parser reads `located` in the form ``located: `<path>:<line>` anchor=`<verbatim text>` ``. The first pair of backticks contains the path and line; writing separate `path=` and `line=` values is not equivalent for this form.
 
-Known limit of `absent` and `running-system`: the gate never re-runs the query and never opens the running system, so an absence or an observation that has become false stays green. §6 R3 at the deliverable boundary is what catches it.
+The other forms use named `key=value` pairs. Values may be enclosed in backticks or double quotes. For example, an absence item begins with `absent:` and includes `query=`, `scope=` and `expected=`. Stored-data and running-system items do not use an `anchor`; a source-text search would not establish what a database or running system contained.
 
-## §5 Format of a cluster file
+Separate multiple items in a cell with `<br>`. The parser also accepts `<br/>` and `<br />` as that boundary. For a claim with several positions in the same source file, provide a separate `located` item for each path, line and anchor combination.
 
-<rules section="ALWAYS">
-- write the edge table as the FIRST markdown table of the file — the first table IS the edge table
-- match its header exactly: `id | claim | class | confidence | evidence`
-- keep every auxiliary table below the edge table
-- hold exactly ONE edge table per cluster
-</rules>
+Resolve each source path relative to the project's `source_root` declaration. That declaration is itself relative to the directory containing the wiki router. The path identifies the source; the anchor helps detect changed positions. A match elsewhere in a different file does not by itself invalidate the recorded locator.
 
-<rules section="NEVER">
-- write the edge table inside a code fence — a fenced table is illustration, never a table of the cluster
-- place a second table carrying the edge header — a cluster has one edge table and it is the first
-</rules>
+The locator check compares the recorded and observed sets of matching positions within the cited file. It reports missing as well as extra positions. For other evidence forms, the current tool checks the recorded structure and declares what it has not rerun or observed. The assistant must not interpret those structural checks as a new execution of the query or a new observation of the system.
 
-The fence exemption covers cluster tables only. The router's cluster-link scan does not read fences, so a sample link written anywhere in the router — fenced or not — is read as a cluster that does not exist; sample router rows live outside the router.
+## §5 Keep cluster files compatible with the parser
 
-Every table after the first is auxiliary and is never inspected. A file with no table, a first table whose header does not match, a row short of the five columns, a cluster with no router row, and a router row with no file are each reported.
+The first Markdown table in a cluster is its edge table. Its header is exactly `id | claim | class | confidence | evidence`, and each data row supplies those fields. Keep one edge table per cluster. The parser does not treat a table inside a code fence as cluster data, and it does not read auxiliary tables after the first as edge records.
 
-<example type="first_table">
-✅ edge table first, then a table explaining the subject
-❌ a summary table first, edge table below it — the summary is read as the edge table and reported as a header mismatch
-</example>
+These requirements determine which data the tool reads. Putting a summary table before the edge table changes the parser's input even if the document remains readable. A missing table, mismatched header, incomplete row or second edge table must be corrected before relying on the check.
 
-## §6 Laws
+Every cluster has a router link, and every router link resolves to a cluster. Keep illustrative cluster links out of the real router: its link scan can treat an example as a reference even when the example appears inside a fence.
 
-> **R1 — Investigation boundary.** An investigation — spending tokens to establish something about
-> the project's subject material — opens by querying the wiki and closes by writing back what it
-> established. A hit ends the investigation early. An investigation that establishes nothing writes
-> nothing.
->
-> **R2 — Confidence.** An edge is `hypothesis` until it carries re-runnable evidence for every class
-> its claim class requires; then `sourced`. `hypothesis` edges may start an investigation, never
-> answer one. Promotion happens in the turn the edge is used and confirmed — no separate review pass.
-> Promotion costs only the evidence classes the edge does not yet carry: a `located` item already
-> recorded is re-checked for drift by the gate on every run (§4), so re-opening its file to confirm
-> the anchor is duplicated work. Re-opening it because the CLAIM itself is in doubt is R3, not
-> promotion.
->
-> **R3 — Disagreement halts.** An edge crossing into a deliverable is re-opened against its evidence
-> and **compared** with the stored claim. A contradiction stops the work, is resolved, and the edge
-> is corrected in that same turn.
->
-> **R4 — Unit of writing.** The unit is a query looked up under R1. An investigation that decomposes
-> into sub-questions looks each one up and writes back one edge per sub-question. Facts encountered
-> that answer no looked-up question are not edges.
->
-> **R5 — Identity.** An edge's `id` is allocated once at creation, is never derived from its content,
-> and is unique tier-wide. The gate enforces tier-wide uniqueness as a hard failure. On a merge
-> collision the later edge is reassigned and intra-tier references are rewritten mechanically.
->
-> **R6 — No duplicate edges.** Before writing, the writer looks up the tier keyed by **locator**
-> (distinct from R1's concept-keyed opening query). An existing edge for the same subject and
-> locator is updated, never duplicated.
->
-> **R7 — Locator identity vs drift.** The path identifies the place; the anchor detects drift. Where
-> a claim has more than one live position in the file `path` names, the anchor field holds the full
-> list and the gate compares the set within that one file, reporting both surplus and missing there.
-> The same text matching in a different file is a fact about the codebase, not a surplus of this edge.
->
-> **R8 — Gate honesty.** A gate that cannot verify a claim class declares it unverified; it never
-> passes it. Passing on a proxy the claim does not depend on is a defect of the gate.
->
-> **R9 — Conservation.** An `id` present in any merge parent must be present in the merge result, or
-> explicitly listed as resolved in that merge. Ordinary deletion on a single branch is not a
-> conservation event.
->
-> **R10 — No inbound edge references.** No artifact outside the tier references an edge `id`. Guides
-> and documents point at **clusters**; edges are addressable only from inside the tier.
+## §6 Investigation and record lifecycle
 
-Wrong edge → correct it in place (R3). Edge about something that no longer exists → delete it; the file states what holds, git holds the rest. R10 is what makes deletion safe.
+### R1: Look up knowledge before investigating
 
-## §7 Extension points — what the project declares
+Begin an investigation by querying the wiki for the question being asked. Use an applicable established claim when its evidence is sufficient for the current work. End the investigation by recording what it established in the relevant cluster. If nothing was established, there is no claim to add.
 
-| extension point | the project declares |
-|---|---|
-| subject list | the subjects the tier is partitioned into, one router row each, with the phase status of that subject |
-| claim classes | the vocabulary of the `class` column, and which evidence classes each one requires |
-| subject material | the bodies of material an investigation may establish a fact from |
-| search procedure | `source_encodings:` in the router frontmatter — the extra text encodings the locator check must decode besides the default; it runs one search pass per declared encoding, unioned with the default pass. Absent → the default pass alone |
-| locator root | `source_root:` in the router frontmatter, itself resolved relative to the directory holding the router — every `located` `path` is relative to it |
-| conservation checkpoint | the merge-gate step that runs the tier's conservation check before a merge is accepted (R9) |
+### R2: Match confidence to evidence
 
-## §8 Limits the gate declares
+A new record remains `hypothesis` until it has reproducible evidence for every evidence class required by its declared claim class. A hypothesis can guide further investigation; it cannot answer the question as established fact. Promote it to `sourced` when the missing evidence is obtained and confirmed.
 
-Three separate limits, all printed on every run — two on the `class` column (the gate reads it and checks nothing about it), one on the locator (the gate does not know which files under `source_root` are dead/superseded vs live):
+A recent successful locator check can establish that recorded source text remains at the stated positions. It cannot establish that the interpretation of that text is correct. Reopen the source when the claim itself is uncertain or when the deliverable check under R3 requires it.
 
-| limit | consequence |
-|---|---|
-| the `class` value is not matched against the vocabulary the project declares (§7) | a class name that exists in no list passes |
-| the evidence forms an edge carries are not matched against the sources its class requires | an edge missing a required source reaches `sourced` and the gate stays green |
-| the gate does not know which files under `source_root` are dead/superseded vs live | an edge whose `located` evidence anchors into a dead copy sitting beside the live file it meant to cite passes exactly like one anchored into the live file — caught only at the deliverable boundary (§6 R3), not by this gate |
+### R3: Resolve contradictions before using a claim
 
-The two `class` obligations sit with the writer under §6 R2 and are re-opened at §6 R3; §4 separately declares the `absent`/`running-system` re-run limit. A gate that stayed silent about any of these would be passing on a proxy — §6 R8 names that as the gate's own defect, not the writer's.
+Before a claim enters a deliverable, compare it with the relevant evidence. If they disagree, pause the dependent work, resolve the contradiction and correct the wiki in the same turn. A prior confidence label does not override new evidence.
 
-<critical_recap>
-1. investigation opens with a lookup and closes with a write-back — R1 is the whole write door
-2. `hypothesis` starts an investigation, never answers one — R2
-3. a contradiction at the deliverable boundary stops the work — R3
-4. edge table = FIRST table of the cluster, header exact, one per cluster, never inside a fence — §5
-5. structure and position enter the tier; a measurement never does — §1
-</critical_recap>
+### R4: Record the questions actually investigated
+
+Use the looked-up question as the unit of knowledge. If the investigation separates into subquestions, look up and record each resulting claim at that level. Do not turn every incidental observation into a new edge.
+
+### R5: Keep identity stable
+
+Allocate an edge identifier once and keep it unique across the tier. Do not derive it from editable claim text. On a merge collision, allocate a new identifier for the later record and update its intra-wiki references together.
+
+### R6: Update an existing fact
+
+Search by subject and locator before writing. When an existing record already represents the same fact, update that record instead of creating another merely because the current task used a different lookup phrase.
+
+### R7: Compare locator sets at the right scope
+
+The evidence path establishes which file is being checked. Compare the recorded and observed positions for each cited anchor within that file. Do not merge matches from unrelated files into the comparison, and do not discard additional positions that should have been recorded.
+
+### R8: Distinguish structural validation from truth
+
+The tool must state which checks it performs and which evidence it cannot validate. Passing a schema or locator check does not certify a claim class or the truth of a claim. The assistant remains responsible for the evidence obligations the tool does not evaluate.
+
+### R9: Preserve knowledge across merges
+
+Check that identifiers present in any merge parent remain represented in the merge result. Resolve intentional removals explicitly using the supported merge procedure rather than silently losing records. Ordinary deletion on one branch is a separate operation; it does not establish that a merge preserved both parents' knowledge.
+
+### R10: Limit references to individual edges
+
+Artifacts outside the wiki refer to clusters rather than individual edge identifiers. References between edges remain inside the wiki. This boundary allows an obsolete fact to be corrected or removed without leaving external deliverables dependent on its internal identifier.
+
+Correct a false claim in place. Remove a claim about something that no longer exists after resolving any intra-wiki references. Git retains the previous content; the active wiki records what remains applicable.
+
+## §7 Declare project-specific knowledge boundaries
+
+The project supplies its subjects, allowed subject material and claim-class vocabulary. For each claim class, it also declares which kinds of evidence are needed. The genome does not invent those domain values.
+
+Declare `source_root:` in the wiki router's frontmatter to locate the material used by source-text evidence. Declare `source_encodings:` when the locator search must decode additional text encodings; without it, the default search pass is used. When additional encodings are declared, their matches are combined with the default pass.
+
+The project also determines when the merge conservation check runs and how an intentional resolution is reviewed. Install the wiki only when a project has subject material and a knowledge workflow that use these declarations.
+
+## §8 Interpret the tool's limits
+
+The current verifier does not establish that a `class` value belongs to the project's vocabulary, or that every evidence form required by that class has been supplied. It also cannot decide which of several files under `source_root` is the live authority and which is an obsolete copy. An anchor in an obsolete file may pass the locator check.
+
+The assistant checks those obligations when assigning confidence and before using a claim in a deliverable. Absence queries, stored data and running-system observations have the additional execution limits described in §4. A report must retain those distinctions so that a structural success is never mistaken for a fresh factual confirmation.

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// sync-version — single source of truth for the plugin version.
+// Keep the plugin version consistent with its canonical VERSION file.
 //
 // Canonical version lives in skills/init-project/VERSION (the bundle version that
 // `promote` bumps and `init` records in init-manifest.json). This script mirrors
@@ -32,7 +32,7 @@ const VERSION_FIELD = /("version":\s*")[^"]*(")/g;
 
 const readVersion = () => readFileSync(VERSION_FILE, 'utf8').trim();
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'));
-// Surgical replace of every "version" field — preserves all other formatting (no JSON reflow).
+// Replace version values while preserving the existing JSON formatting.
 const setJsonVersion = (p, v) => writeFileSync(p, readFileSync(p, 'utf8').replace(VERSION_FIELD, `$1${v}$2`));
 
 function mirrors() {

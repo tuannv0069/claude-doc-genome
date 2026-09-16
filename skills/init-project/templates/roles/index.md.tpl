@@ -2,38 +2,35 @@
 scope: project
 ---
 
-<critical>
-scope: map task → which role file to wear. Mechanism: `general/role-selection.md`.
-never: substantive rule in this hub — pointer + table only
-always: one primary role per row; checking roles contribute §6 only
-</critical>
+# Role index
 
-## §1 router — work type → role (genome roles)
+This router selects the working perspectives for a task. The matching procedure is defined in `.agent-workspace/guide/general/role-selection.md` §2. Read the primary role and the checking roles' §6 after selecting a row.
+
+## §1 Genome roles
 
 | work type | primary role | checking roles |
 |---|---|---|
-| interpreting a requirement, fixing scope before design | business-analyst | project-manager |
-| choosing a technical approach or structure across components | tech-lead | security |
-| writing or fixing content that describes what the system does — behaviour, processing branch, condition | developer | business-analyst, qa |
-| writing or fixing content that describes what a user needs — requirement, business rule, scope | business-analyst | project-manager |
-| reading code or an artifact to answer a question about how it behaves | developer | qa |
-| writing or fixing code, tooling, script | developer | qa |
-| reviewing or accepting an artifact already written | qa | business-analyst |
-| building a machine verification gate | qa | developer |
-| investigating a defect, RCA | developer | qa |
-| planning, splitting work, deciding order and scope | project-manager | tech-lead |
-| touching authentication, authorization, personal data, secrets | security | tech-lead |
-| translating content between two languages, or writing a sentence sent straight to a foreign customer | comtor | business-analyst |
+| Interpreting software requirements or determining the scope of a business operation | business-analyst | project-manager |
+| Choosing a software architecture or technical approach across components | tech-lead | security |
+| Describing or changing software behavior, conditions or processing branches | developer | business-analyst, qa |
+| Describing or changing software user needs, business rules or requirements | business-analyst | project-manager |
+| Reading source code or technical specifications to explain software behavior | developer | qa |
+| Writing or fixing source code, executable tooling or automation scripts | developer | qa |
+| Reviewing or accepting software behavior or executable tooling | qa | business-analyst |
+| Building a machine verification gate | qa | developer |
+| Investigating a software defect or its root cause | developer | qa |
+| Planning work, choosing its order or managing scope | project-manager | |
+| Planning software work with technical dependencies | project-manager | tech-lead |
+| Working with authentication, authorization, personal data or secrets | security | tech-lead |
+| Translating software requirements or technical communication for a foreign customer | comtor | business-analyst |
 
-## §1a router — project roles
+## §1a Project roles
 
-Roles this project added for its own domain (`general/role-selection.md` §5). A row here outranks a §1 row on the same work type. Empty until the project creates one — a `scope: project` role file under `roles/`, registered here in the same commit.
+Add domain-specific roles here according to `.agent-workspace/guide/general/role-selection.md` §5. A matching project row takes precedence over a genome row for the same work type.
 
 | work type | primary role | checking roles |
 |---|---|---|
 
-## §2 matching rule
+## §2 Routing contract
 
-- the matching procedure, step by step → `general/role-selection.md` §2
-- the table's own format, a contract the gate `.agent-workspace/tooling/verify_role_files.py` reads → `general/role-selection.md` §6
-- a role file colliding with a project guide or an always-loaded rule → `general/role-selection.md` §7
+The table schema is defined in `.agent-workspace/guide/general/role-selection.md` §6 and checked by `.agent-workspace/tooling/verify_role_files.py`. Resolve a conflict between role guidance and project requirements according to the guide's §7.

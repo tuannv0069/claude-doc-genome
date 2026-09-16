@@ -1,23 +1,20 @@
 ---
 scope: project
 documentType: Category Router
-purpose: Category-level router for docs/ — locate a document group; file-level discovery via naming convention or per-category index
+purpose: Locate the project's groups of finished work.
 status: Final
 ---
 
-# docs/ — Category Router
+# Project documents
 
-Router stops at **category level** (per `.claude/rules/doc-organization.md §11`). Find a specific file via naming convention or a category's own `index.md`/`README.md`.
+Use this index to find a category of project deliverables. Individual files can be found through the category's naming convention or its own index. The placement rules are defined in `.claude/rules/doc-organization.md` §11.
 
-Agent guidance ("how to do it right") lives in `.agent-workspace/guide/` (own router: `.agent-workspace/guide/index.md`) — **not** under `docs/`. Categories here are project **work product**.
-
-## §1 categories
+## §1 Categories
 
 | category | content | read when |
 |---|---|---|
 {{CATEGORY_ROWS}}
 
-## §2 rules (work product)
+## §2 Maintaining the index
 
-- new category → create + register one row in §1 in the same commit (`doc-organization.md §11`).
-- every `.md` in `docs/` carries YAML frontmatter; content rules per `.agent-workspace/guide/general/` documentation standard.
+When creating or removing a category, update its row here in the same change. Workflow guidance belongs in `.agent-workspace/guide/`, which has its own index at `.agent-workspace/guide/index.md`. Requirements specific to a deliverable belong to the project or the workflow that owns that deliverable.

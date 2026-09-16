@@ -1,0 +1,716 @@
+{
+  "date": "2026-09-16",
+  "cli_version": "2.1.73",
+  "model": "claude-opus-4-6",
+  "baseline_commit": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+  "cli_flags": [
+    "-p",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--tools",
+    "Read,Glob,Grep,Skill",
+    "--allowedTools",
+    "Read,Glob,Grep,Skill",
+    "--permission-mode",
+    "dontAsk",
+    "--strict-mcp-config",
+    "--setting-sources",
+    "project",
+    "--no-session-persistence",
+    "--max-budget-usd",
+    "2"
+  ],
+  "initial_writing_runs": 12,
+  "routing_repair_runs": 6,
+  "calibration_runs": 2,
+  "blind_review_runs": 1,
+  "initial_inputs_unchanged": true,
+  "source_task_start_matches_routing_probe": true,
+  "runs": [
+    {
+      "label": "calibration-1-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 8776,
+      "cost_usd": 0.08001499999999999,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "calibration-1-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 9406,
+      "cost_usd": 0.10798999999999999,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "client_document-1-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 26785,
+      "cost_usd": 0.08260500000000001,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md",
+            "limit": 30
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md",
+            "limit": 30
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "client_document-1-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 10510,
+      "cost_usd": 0.05703825,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "client_document-1-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 42788,
+      "cost_usd": 0.158128,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/developer.md"
+          }
+        },
+        {
+          "name": "Grep",
+          "input": {
+            "pattern": "§6",
+            "path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/business-analyst.md",
+            "output_mode": "content",
+            "-A": 10
+          }
+        },
+        {
+          "name": "Grep",
+          "input": {
+            "pattern": "§6",
+            "path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/qa.md",
+            "output_mode": "content",
+            "-A": 10
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "client_document-2-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 20398,
+      "cost_usd": 0.07921125000000001,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md",
+            "limit": 30
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md",
+            "limit": 30
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "client_document-2-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 18733,
+      "cost_usd": 0.0217205,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "client_document-2-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 49177,
+      "cost_usd": 0.100203,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/developer.md"
+          }
+        },
+        {
+          "name": "Grep",
+          "input": {
+            "pattern": "§6",
+            "path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/business-analyst.md",
+            "output_mode": "content",
+            "-A": 15
+          }
+        },
+        {
+          "name": "Grep",
+          "input": {
+            "pattern": "§6",
+            "path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/qa.md",
+            "output_mode": "content",
+            "-A": 15
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "conversation-1-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 37099,
+      "cost_usd": 0.086685,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md"
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "conversation-1-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 22294,
+      "cost_usd": 0.063632,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "conversation-1-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 42531,
+      "cost_usd": 0.120942,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "conversation-2-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 31193,
+      "cost_usd": 0.08671,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md",
+            "limit": 40
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md",
+            "limit": 40
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "conversation-2-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 18654,
+      "cost_usd": 0.022413000000000002,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "conversation-2-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 34929,
+      "cost_usd": 0.060405,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "narration-1-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 27745,
+      "cost_usd": 0.079646,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md",
+            "limit": 30
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md",
+            "limit": 30
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "narration-1-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 21891,
+      "cost_usd": 0.06278825,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "narration-1-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 33283,
+      "cost_usd": 0.11834675,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    },
+    {
+      "label": "narration-2-new-routing",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 26725,
+      "cost_usd": 0.08111475,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/lessons/index.md",
+            "limit": 30
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/new-claude-routing-probe/.agent-workspace/guide/roles/index.md",
+            "limit": 30
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "narration-2-new",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 23805,
+      "cost_usd": 0.0246115,
+      "permission_denials": [],
+      "tools": [],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api"
+      ]
+    },
+    {
+      "label": "narration-2-old",
+      "returncode": 0,
+      "is_error": false,
+      "model": "claude-opus-4-6",
+      "model_usage": [
+        "claude-opus-4-6"
+      ],
+      "duration_ms": 26245,
+      "cost_usd": 0.049358250000000006,
+      "permission_denials": [],
+      "tools": [
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/lessons/index.md"
+          }
+        },
+        {
+          "name": "Read",
+          "input": {
+            "file_path": "D:/Code/genome-rewrite-trials/rewrite-20260915/baseline-claude/.agent-workspace/guide/roles/index.md"
+          }
+        }
+      ],
+      "plugins": [],
+      "skills": [
+        "keybindings-help",
+        "debug",
+        "simplify",
+        "batch",
+        "loop",
+        "claude-api",
+        "document-writer"
+      ]
+    }
+  ],
+  "output_sha256": {
+    "blind-review.output.md": "4eb89cb8b7fbed9efd90b0a3fc3e2fc76058c39c6b4fb9fea45cd5bd9c294e78",
+    "calibration-1-new.output.md": "4bf071b344b6480e7e8a1183f70b4a1bf407fce4718baa838fb70fd4098f8792",
+    "calibration-1-old.output.md": "7d5e25e400215a68eb16c9a25ab4d6f60284eef445917bee3a34d193e01ae183",
+    "client_document-1-new-routing.output.md": "c3263a6b873405ea35f4c2779bdfb7bc40a85b013e946674c77958ed9843f539",
+    "client_document-1-new.output.md": "6e4e0f80fde6616e5a5e36809578da11604377000486b3783ad0749666487b55",
+    "client_document-1-old.output.md": "ca098305232f6c8cb9e306d15218beb67952e3a2b113274171083322809d11fe",
+    "client_document-2-new-routing.output.md": "80c384bf6d419e6c4cd413112d776b87c3676971eab94b87f7a3642169ae8e34",
+    "client_document-2-new.output.md": "818d4deb7fe0d5b23192bd8843bf6bd3a8efcf06b7e09803b6090f69d24dbed8",
+    "client_document-2-old.output.md": "884f5d98be18274d01b3e7fc37057e2c6a7f06ed96f2103590b1fe08fface155",
+    "conversation-1-new-routing.output.md": "f28117a47a552cea54227fe5493faaaac595600ff35b3ab219d6b6f2beb590d2",
+    "conversation-1-new.output.md": "025b7c3df30f89866d618455f1fe049d05aa6710d97f909dae72f6bb5a36128b",
+    "conversation-1-old.output.md": "045a7af4210931719c5bc33775f32c927e1ce388cbaf46d84fcbc447d7f02a7d",
+    "conversation-2-new-routing.output.md": "33b54de080f2f0ec2fd71d45bd4b7607c0536b8aa68ed944664460d120162b9b",
+    "conversation-2-new.output.md": "a6bb0a733456df75a05b13ce19f7a24ff753da49bab8a27041c1166a3f654ed4",
+    "conversation-2-old.output.md": "a071a3e76aabae01be571d97b7b0ab1e3aee173d42856bae5c5acf41752050b1",
+    "narration-1-new-routing.output.md": "759375801e9adc12903f75b2c17b83a9863146cd8c3d4cda818293acd5238f60",
+    "narration-1-new.output.md": "4d4d4aa9f810984f32cdecc61f6d85842e470db412978b528ca5675002268406",
+    "narration-1-old.output.md": "748852f2378269238ea99059b63fd9bdb77ac276adf1026e4019a0b19644f720",
+    "narration-2-new-routing.output.md": "b1fcf456d216e78c5ee5ba4cca3e5047dc7886c54d3a6e7f96d484b6720c994c",
+    "narration-2-new.output.md": "638fcc168fb3217cd3a2e5597524617e4525b568f76744a1071146066d269cac",
+    "narration-2-old.output.md": "fb9825dee67c605bca79b1273856c2d2ee9ba43864e5ee4dbef6704f5a45dedb"
+  }
+}

@@ -1,0 +1,495 @@
+{
+  "old": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "b0e2b1cc33f285e472ce8bff725645a1b9411d10d26497f460fc1302b9c452cc"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "9a9ae01e2ec8ab61e4a360303eaa5ecc3733ba113dcd586217275127dc2c5d8a"
+    },
+    {
+      "path": ".agent-workspace/decisions/index.md",
+      "sha256": "cbdd26f7994fa1d9a9ef0d9be44da774d2304f411a3be5d325d34fd2fe06a856"
+    },
+    {
+      "path": ".agent-workspace/guide/index.md",
+      "sha256": "e4ff13a0798112de125260416a768b2137af2a2b8d1a32d851620d56644e22f1"
+    },
+    {
+      "path": ".agent-workspace/lessons/index.md",
+      "sha256": "36721f0725f9c26b8430c5efac4ec5d38a972830253d24f6776d8f0170e45ca2"
+    },
+    {
+      "path": ".agent-workspace/guide/general/bug-report-format.md",
+      "sha256": "37b03f9ee0564f1112b32b3a24256df178c0d30daf29ff3363819a1ae49113e1"
+    },
+    {
+      "path": ".agent-workspace/guide/general/capability-packaging.md",
+      "sha256": "74ba3b6675d8f499779039071d19bfb3be158e7d6deae2392ac71681ae2798ca"
+    },
+    {
+      "path": ".agent-workspace/guide/general/decision-journal.md",
+      "sha256": "b37ea45078d8653890b3e6ab06c6e4b73335e594d64980f97acd2b3012f012b0"
+    },
+    {
+      "path": ".agent-workspace/guide/general/doc-system-mechanics.md",
+      "sha256": "ed27f54b1c133873ecd286631bc5342efb7182a5d7ecfbe427bee921ce0363c2"
+    },
+    {
+      "path": ".agent-workspace/guide/general/five-why.md",
+      "sha256": "1ebc6c35dbdbd4dc17744437df6351ce141913a64c903b97ac66edebe9e0446d"
+    },
+    {
+      "path": ".agent-workspace/guide/general/fix-impact-analysis.md",
+      "sha256": "11d7ae1e3d409bf8d068af5af458e1a28c5765ef791243cda03e9647cc90f59b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/harness-adapter.md",
+      "sha256": "978c47d64e636be940642bedebdf86e6b6ab17289af17da1363d738e1d08784a"
+    },
+    {
+      "path": ".agent-workspace/guide/general/lesson-capture.md",
+      "sha256": "0e318bc394c55efc41a4aa65e61f38d16bdad2ded500d4088183f7cea07a1be6"
+    },
+    {
+      "path": ".agent-workspace/guide/general/markdown.md",
+      "sha256": "865c9c43b6d734b82e3d18e1b7631395f787261052d1a49bec9c4afd20b5db3c"
+    },
+    {
+      "path": ".agent-workspace/guide/general/mermaid.md",
+      "sha256": "f8af731ed97e08a442dda65df9bc4fcb28cdd9d6f608d8043f5e618a0b09f723"
+    },
+    {
+      "path": ".agent-workspace/guide/general/orchestration-policy.md",
+      "sha256": "0d61b3ded203cfc92a247e7ef90e21bb85d91d967bf75933817f4a53dca13356"
+    },
+    {
+      "path": ".agent-workspace/guide/general/review-checklist-method.md",
+      "sha256": "c4e1e08425ff35dcbf55d2e4b59371cfe0564cb7d9c0e87f3477c33b73e49d14"
+    },
+    {
+      "path": ".agent-workspace/guide/general/role-selection.md",
+      "sha256": "fee5f85c3eae95adeea722eeb9f2f15c43ae50a81d41237713ea076bd5162511"
+    },
+    {
+      "path": ".agent-workspace/guide/general/rule-health.md",
+      "sha256": "babf08a1e1a93519feee8ac75822cb27ba948ff22fae38e59c05b3af6dcf7fcd"
+    },
+    {
+      "path": ".agent-workspace/guide/general/task-planning.md",
+      "sha256": "194ca9a02f45b9fcd3ea0946d5e9d0b1be6189c3282a6c03f347d3efde19ac1b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/verification-gate-design.md",
+      "sha256": "c9bc2a15e61a7a744cccc26f7ae294b2a959df6a3c64133516bfee110fed7fe6"
+    },
+    {
+      "path": ".agent-workspace/guide/general/worktree.md",
+      "sha256": "635ad2b0a4c91067bfc67bb297cf858dd651eaf752d9f5c9bcb4317293e5d14e"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/business-analyst.md",
+      "sha256": "2cd2e3c8f05002b8bc711545d5bea4f049f7c7fd08da29e73cf971f71b39c64b"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/comtor.md",
+      "sha256": "621d3bf7927f0f0c7262679e255dea30cd7604b4fd448d910144b57c9785efc2"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/developer.md",
+      "sha256": "dfffc9fac4a4ce729b90059ce097839defec4e063e60c7d8712ba9e534356c43"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/index.md",
+      "sha256": "8dd908b8298e261fd5b22015c483e84e4e550ec1394c3bec1255f57c6188b979"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/project-manager.md",
+      "sha256": "fe8c86ca28b1132603181f4a0db12ebc73ecfff38f21fc437dfe5586936f570c"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/qa.md",
+      "sha256": "d03e1ea32dc61c879b957405f7dc1c33873667cb36cd8c638e5dbccff3e1eccb"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/security.md",
+      "sha256": "c39ac0015e0b068c1cc4fe8bb247e4b51a5a1ac1aa434a3f0eb6a0d70df70079"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/tech-lead.md",
+      "sha256": "6e27d9f0aa1434034efd4ba048c5a20348cd398ea8c41f67a1be272267f526ad"
+    },
+    {
+      "path": ".claude/rules/claude-md-standards.md",
+      "sha256": "33fc66821b3e43595d22aa6878de9a6954734d22330f715be435df531750b69f"
+    },
+    {
+      "path": ".claude/rules/conversational-output.md",
+      "sha256": "1755274d09e848c35470a70dc4669635a119adc0fd34b31ad2fddf679d72c6de"
+    },
+    {
+      "path": ".claude/rules/critical-thinking.md",
+      "sha256": "7e89c74d20ff6392e4302e55d1b9d7ac997a23d81d7aec910b6ae9b1fea71472"
+    },
+    {
+      "path": ".claude/rules/doc-organization.md",
+      "sha256": "0d6767c6934f6e7116c050c5fae6cd690e548a8e988d4aa7dee0714e6bb1428e"
+    },
+    {
+      "path": ".claude/rules/file-reading.md",
+      "sha256": "f51a32fb014a76d6b4e5d4e2b4c725c5acb4898026a971628d45cd9b0731b843"
+    },
+    {
+      "path": ".claude/rules/rule-writing-standards.md",
+      "sha256": "8c8ca9d8bba909a40df437d9059f7f8c7dc8d91c3c27975c2b59d0b7aa800b28"
+    },
+    {
+      "path": ".claude/rules/skill-md-standards.md",
+      "sha256": "f2917dea9edca6012be54cf3af0eb92657f3ea57fb1b70023d6b8f6996c0d6e3"
+    },
+    {
+      "path": ".claude/rules/subagent-standards.md",
+      "sha256": "a2c6e7b98d960f53ded6148ee7cf8443c038a4aaf51ff603ef41f52ce0eb82d8"
+    },
+    {
+      "path": ".claude/rules/wiki-tier.md",
+      "sha256": "222d820e3a896af253ad9c2798ab4ad9fa9ecc1e0c15bca54034f476030e1ab2"
+    },
+    {
+      "path": ".claude/skills/document-writer/README.md",
+      "sha256": "c94b38d659a64d4f06077ef40fd53cfb1beb7901f32b397527117f34e110c3a9"
+    },
+    {
+      "path": ".claude/skills/document-writer/SKILL.md",
+      "sha256": "38bd23b5d98477cc85484f26f7591190ef4a8bf3680df90c1449149f66433354"
+    }
+  ],
+  "new": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "306046d90041f0c74fbee0f015e164395b3fa5c2a654e294df6d66922d1f6fbf"
+    },
+    {
+      "path": ".claude/init-manifest.json",
+      "sha256": "78a4b55050216f9ace39b05cd1216c60f7872d28019977649fa4c5b0352f2a33"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "b4d1c639c8ae8dcaa081bc2a6a28cf503aca2109f6633dab634d9f93ff87f98c"
+    },
+    {
+      "path": ".agent-workspace/decisions/index.md",
+      "sha256": "f33a934e48e1435986514a554ffc593e813dc3634bf9544e834693983ebac04f"
+    },
+    {
+      "path": ".agent-workspace/guide/index.md",
+      "sha256": "f61ebc85306b62174fadcef8ebc8459a584990f53934f1187b14fdc9c0432554"
+    },
+    {
+      "path": ".agent-workspace/lessons/index.md",
+      "sha256": "3997495aba4a1ccd03d549905f360736470297294654e3e88ee649d602a5a4fa"
+    },
+    {
+      "path": ".agent-workspace/guide/general/bug-report-format.md",
+      "sha256": "f631da309654944e679541f0c1af8a9aaf828ed742927a888cd0d4dfff94caa8"
+    },
+    {
+      "path": ".agent-workspace/guide/general/capability-packaging.md",
+      "sha256": "10fd061cb3ff4505fa6945169767e382b0901d8bbb0ab67dd19a63bf74a8f29f"
+    },
+    {
+      "path": ".agent-workspace/guide/general/decision-journal.md",
+      "sha256": "d6dc17d7babb7b691dc5d0368f9407676a970b03b367775dcbc4cb651caf3dee"
+    },
+    {
+      "path": ".agent-workspace/guide/general/doc-system-mechanics.md",
+      "sha256": "5388ab3f343d695fd61dfece0d44e11d5b4e68a1ce039cb2d17ddf28cf03cc6c"
+    },
+    {
+      "path": ".agent-workspace/guide/general/five-why.md",
+      "sha256": "e57ea5a6d6c610dae31996a2b19c39cfe3d7cbdddf12fe63ca04b8e2c385f78a"
+    },
+    {
+      "path": ".agent-workspace/guide/general/fix-impact-analysis.md",
+      "sha256": "328a8fa11ae1abaa453ca561e7c3f9f17181bb1c5b669ed75e9ae12bac127254"
+    },
+    {
+      "path": ".agent-workspace/guide/general/lesson-capture.md",
+      "sha256": "63c9c5326b037ec10fd72479b7a4a9ae87e6fcae9029188194a73660fcf017c4"
+    },
+    {
+      "path": ".agent-workspace/guide/general/markdown.md",
+      "sha256": "b1d0af6b0a7450d2140fc5a5da57100451df61cba9c9c410f277050080b8322b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/mermaid.md",
+      "sha256": "02e377c8da40dfb38e68d234067155b44725dfebde07c64a0ab295d76796c680"
+    },
+    {
+      "path": ".agent-workspace/guide/general/orchestration-policy.md",
+      "sha256": "6ffc63ad0151954f9aee3a6ea3ba517bcc4c37328e161a74d68c32bbfdc73cae"
+    },
+    {
+      "path": ".agent-workspace/guide/general/review-checklist-method.md",
+      "sha256": "65ce6f06992be83c468b85aa602dd8613e960813b6e2ebe97ef7de3c04a3b70f"
+    },
+    {
+      "path": ".agent-workspace/guide/general/role-selection.md",
+      "sha256": "50f18fbac165b0910e16246f2462e3b41dad26751973201a210ec1e0710345cf"
+    },
+    {
+      "path": ".agent-workspace/guide/general/rule-health.md",
+      "sha256": "dd5c9d7c9e00e2d7c344ffdff2a28e8faf1a487c8da3df969af3448f5128f0cb"
+    },
+    {
+      "path": ".agent-workspace/guide/general/task-planning.md",
+      "sha256": "bd1caeb53918a8f64d700f93c136752f7e4e366ad05cbb5290007052bdc7d8cb"
+    },
+    {
+      "path": ".agent-workspace/guide/general/verification-gate-design.md",
+      "sha256": "93aad966e370f4cb06d352511569bd2825e3eee8d57d1b8a2677a68e92b02b95"
+    },
+    {
+      "path": ".agent-workspace/guide/general/worktree.md",
+      "sha256": "582d0b3e8c0a21dd15015647ec8d9d37fd560196ca0c5b8e33d2f37aae8203cc"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/business-analyst.md",
+      "sha256": "8ace7aedfe0163051674394c9e79091d2445b0488d660bd52bf41ed73d69069e"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/comtor.md",
+      "sha256": "06ac640b9bb181af62b37a0de13c803ba0efd232033c203f8001ed98531b5c14"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/developer.md",
+      "sha256": "53de9d6135b71fbbe761fbad9a976ac7fe511d2e8d74d346c1ee0820fa31a1b9"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/index.md",
+      "sha256": "4f175953ac52d25bc9fdd79c5d5249f1ca9f56de738959e8d18f2a5ce2b00304"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/project-manager.md",
+      "sha256": "53f91ce06d2f0ef4219d94570f9ef475cdf41d5a80aa1ad1ce2f928d591fbd43"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/qa.md",
+      "sha256": "63befa47c48c849efe14e4152c7f95758ce6c534a8be8c8eb75beab9ae66937d"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/security.md",
+      "sha256": "370d6efd9ddff7cbacb01aaa5e625ae2272303c88c145434619786557e4376f8"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/tech-lead.md",
+      "sha256": "4b1eabd722147e3ba5fb8293a55ee6f89111a9cfcb1a5d035de01fc3deeacaa8"
+    },
+    {
+      "path": ".claude/rules/claude-md-standards.md",
+      "sha256": "2fcf1af4a28b42432773e84b291453f77b0b7b8e592bb3ae6b1bc97ce3a0edd6"
+    },
+    {
+      "path": ".claude/rules/critical-thinking.md",
+      "sha256": "5036cfb7e2ef94dbdb441c286f11b72a66082eaf9bc2636889c1e7d75212caf9"
+    },
+    {
+      "path": ".claude/rules/doc-organization.md",
+      "sha256": "d28a344cae7212449661fc5a9236d7fef1224fd2a1c8b5cfc8b62c899d593a17"
+    },
+    {
+      "path": ".claude/rules/file-reading.md",
+      "sha256": "944511fe20f9a16803b5fcb3122138ed90a2040b7f5e448e1f40c26a5726004f"
+    },
+    {
+      "path": ".claude/rules/skill-md-standards.md",
+      "sha256": "e38ad2a7aaea822ed17a8d167aecb7846f5b1f63ff4fb7f28d2b31c6cd48bfb6"
+    },
+    {
+      "path": ".claude/rules/subagent-standards.md",
+      "sha256": "52e5201de707b129757b47774c7ccbb3d5e844eb647a8be3592c08308c5e2892"
+    },
+    {
+      "path": ".claude/rules/wiki-tier.md",
+      "sha256": "a4fece83a95a6aea52a65ecd8183acee1c2f4103253b8907131333e4017d9b0a"
+    }
+  ],
+  "ancestor_or_user_paths": [
+    {
+      "path": "D:\\CLAUDE.md",
+      "exists": false
+    },
+    {
+      "path": "D:\\Code\\CLAUDE.md",
+      "exists": false
+    },
+    {
+      "path": "D:\\Code\\genome-rewrite-trials\\CLAUDE.md",
+      "exists": false
+    },
+    {
+      "path": "D:\\Code\\genome-rewrite-trials\\rewrite-20260915\\CLAUDE.md",
+      "exists": false
+    },
+    {
+      "path": "C:\\Users\\Admin\\.claude\\CLAUDE.md",
+      "exists": false
+    },
+    {
+      "path": "C:\\Users\\Admin\\.claude\\rules",
+      "exists": false
+    }
+  ],
+  "cli_version": "2.1.73",
+  "new-routing": [
+    {
+      "path": "CLAUDE.md",
+      "sha256": "abc411fd08604b8893d7a2a1dc07c7b57ed3b53128f8850a16d10caa6fc012bc"
+    },
+    {
+      "path": ".claude/init-manifest.json",
+      "sha256": "78a4b55050216f9ace39b05cd1216c60f7872d28019977649fa4c5b0352f2a33"
+    },
+    {
+      "path": "docs/index.md",
+      "sha256": "b4d1c639c8ae8dcaa081bc2a6a28cf503aca2109f6633dab634d9f93ff87f98c"
+    },
+    {
+      "path": ".agent-workspace/decisions/index.md",
+      "sha256": "f33a934e48e1435986514a554ffc593e813dc3634bf9544e834693983ebac04f"
+    },
+    {
+      "path": ".agent-workspace/guide/index.md",
+      "sha256": "f61ebc85306b62174fadcef8ebc8459a584990f53934f1187b14fdc9c0432554"
+    },
+    {
+      "path": ".agent-workspace/lessons/index.md",
+      "sha256": "3997495aba4a1ccd03d549905f360736470297294654e3e88ee649d602a5a4fa"
+    },
+    {
+      "path": ".agent-workspace/guide/general/bug-report-format.md",
+      "sha256": "f631da309654944e679541f0c1af8a9aaf828ed742927a888cd0d4dfff94caa8"
+    },
+    {
+      "path": ".agent-workspace/guide/general/capability-packaging.md",
+      "sha256": "10fd061cb3ff4505fa6945169767e382b0901d8bbb0ab67dd19a63bf74a8f29f"
+    },
+    {
+      "path": ".agent-workspace/guide/general/decision-journal.md",
+      "sha256": "d6dc17d7babb7b691dc5d0368f9407676a970b03b367775dcbc4cb651caf3dee"
+    },
+    {
+      "path": ".agent-workspace/guide/general/doc-system-mechanics.md",
+      "sha256": "5388ab3f343d695fd61dfece0d44e11d5b4e68a1ce039cb2d17ddf28cf03cc6c"
+    },
+    {
+      "path": ".agent-workspace/guide/general/five-why.md",
+      "sha256": "e57ea5a6d6c610dae31996a2b19c39cfe3d7cbdddf12fe63ca04b8e2c385f78a"
+    },
+    {
+      "path": ".agent-workspace/guide/general/fix-impact-analysis.md",
+      "sha256": "328a8fa11ae1abaa453ca561e7c3f9f17181bb1c5b669ed75e9ae12bac127254"
+    },
+    {
+      "path": ".agent-workspace/guide/general/lesson-capture.md",
+      "sha256": "63c9c5326b037ec10fd72479b7a4a9ae87e6fcae9029188194a73660fcf017c4"
+    },
+    {
+      "path": ".agent-workspace/guide/general/markdown.md",
+      "sha256": "b1d0af6b0a7450d2140fc5a5da57100451df61cba9c9c410f277050080b8322b"
+    },
+    {
+      "path": ".agent-workspace/guide/general/mermaid.md",
+      "sha256": "02e377c8da40dfb38e68d234067155b44725dfebde07c64a0ab295d76796c680"
+    },
+    {
+      "path": ".agent-workspace/guide/general/orchestration-policy.md",
+      "sha256": "6ffc63ad0151954f9aee3a6ea3ba517bcc4c37328e161a74d68c32bbfdc73cae"
+    },
+    {
+      "path": ".agent-workspace/guide/general/review-checklist-method.md",
+      "sha256": "65ce6f06992be83c468b85aa602dd8613e960813b6e2ebe97ef7de3c04a3b70f"
+    },
+    {
+      "path": ".agent-workspace/guide/general/role-selection.md",
+      "sha256": "50f18fbac165b0910e16246f2462e3b41dad26751973201a210ec1e0710345cf"
+    },
+    {
+      "path": ".agent-workspace/guide/general/rule-health.md",
+      "sha256": "dd5c9d7c9e00e2d7c344ffdff2a28e8faf1a487c8da3df969af3448f5128f0cb"
+    },
+    {
+      "path": ".agent-workspace/guide/general/task-planning.md",
+      "sha256": "bd1caeb53918a8f64d700f93c136752f7e4e366ad05cbb5290007052bdc7d8cb"
+    },
+    {
+      "path": ".agent-workspace/guide/general/verification-gate-design.md",
+      "sha256": "93aad966e370f4cb06d352511569bd2825e3eee8d57d1b8a2677a68e92b02b95"
+    },
+    {
+      "path": ".agent-workspace/guide/general/worktree.md",
+      "sha256": "582d0b3e8c0a21dd15015647ec8d9d37fd560196ca0c5b8e33d2f37aae8203cc"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/business-analyst.md",
+      "sha256": "8ace7aedfe0163051674394c9e79091d2445b0488d660bd52bf41ed73d69069e"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/comtor.md",
+      "sha256": "06ac640b9bb181af62b37a0de13c803ba0efd232033c203f8001ed98531b5c14"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/developer.md",
+      "sha256": "53de9d6135b71fbbe761fbad9a976ac7fe511d2e8d74d346c1ee0820fa31a1b9"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/index.md",
+      "sha256": "4f175953ac52d25bc9fdd79c5d5249f1ca9f56de738959e8d18f2a5ce2b00304"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/project-manager.md",
+      "sha256": "53f91ce06d2f0ef4219d94570f9ef475cdf41d5a80aa1ad1ce2f928d591fbd43"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/qa.md",
+      "sha256": "63befa47c48c849efe14e4152c7f95758ce6c534a8be8c8eb75beab9ae66937d"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/security.md",
+      "sha256": "370d6efd9ddff7cbacb01aaa5e625ae2272303c88c145434619786557e4376f8"
+    },
+    {
+      "path": ".agent-workspace/guide/roles/tech-lead.md",
+      "sha256": "4b1eabd722147e3ba5fb8293a55ee6f89111a9cfcb1a5d035de01fc3deeacaa8"
+    },
+    {
+      "path": ".claude/rules/claude-md-standards.md",
+      "sha256": "2fcf1af4a28b42432773e84b291453f77b0b7b8e592bb3ae6b1bc97ce3a0edd6"
+    },
+    {
+      "path": ".claude/rules/critical-thinking.md",
+      "sha256": "5036cfb7e2ef94dbdb441c286f11b72a66082eaf9bc2636889c1e7d75212caf9"
+    },
+    {
+      "path": ".claude/rules/doc-organization.md",
+      "sha256": "d28a344cae7212449661fc5a9236d7fef1224fd2a1c8b5cfc8b62c899d593a17"
+    },
+    {
+      "path": ".claude/rules/file-reading.md",
+      "sha256": "944511fe20f9a16803b5fcb3122138ed90a2040b7f5e448e1f40c26a5726004f"
+    },
+    {
+      "path": ".claude/rules/skill-md-standards.md",
+      "sha256": "e38ad2a7aaea822ed17a8d167aecb7846f5b1f63ff4fb7f28d2b31c6cd48bfb6"
+    },
+    {
+      "path": ".claude/rules/subagent-standards.md",
+      "sha256": "52e5201de707b129757b47774c7ccbb3d5e844eb647a8be3592c08308c5e2892"
+    },
+    {
+      "path": ".claude/rules/wiki-tier.md",
+      "sha256": "a4fece83a95a6aea52a65ecd8183acee1c2f4103253b8907131333e4017d9b0a"
+    }
+  ]
+}

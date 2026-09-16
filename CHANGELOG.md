@@ -6,6 +6,26 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Changed
+
+- Rewrote the distributed rules, guides, roles, templates and initialization workflow in complete prose. Shared guidance now owns working procedures and evidence requirements; projects own the style of their deliverables.
+- Removed shared word, line, sentence and layout limits from guidance and verification tools. Existing user authorization is retained throughout a task instead of requiring repeated confirmation.
+- Narrowed software-role routing to software work, so creative scripts and editorial tasks use project-specific criteria or the no-match path.
+- Expanded CI to check the documentation network, deployment fixtures and portable tools alongside version synchronization.
+
+### Fixed
+
+- The updater and manifest share all six deployment groups and seven template mappings. Roles, tooling and the additional indexes are now included.
+- Updates preserve local conflicts and retire only unchanged manifest-owned files. The completed version remains unchanged until conflicts and template review are resolved.
+- Deployment rejects unsafe paths, symbolic links, hard links, conflicting Windows path aliases and missing required project indexes.
+- Verification accepts complete prose without the old formatting gates. The scanner handles UTF-8 Git history on Windows and reopens drift when a previously reviewed target changes again.
+
+### Removed
+
+- Removed `rule-writing-standards.md` and `conversational-output.md`, including the active references and checks that enforced their shared writing policies.
+- Removed the shared `document-writer` skill from the live installation and portable bundle. Projects own their writing workflows; the generic skill deployment mapping remains available.
+- Removed the Codex deployment target and its generated surfaces, adapter, and tooling. The genome now targets Claude Code only.
+
 ## [4.0.0] - 2026-09-06
 
 ### Changed

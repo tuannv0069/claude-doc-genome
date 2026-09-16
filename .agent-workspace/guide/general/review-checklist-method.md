@@ -2,112 +2,61 @@
 scope: portable
 ---
 
-<critical>
-scope: route a free-form audit / review / find-bug request to the review instrument that fits (§7), and run the bug-finding checklist yourself over the layer no instrument reaches — on any artifact (code / doc / config) not owned by a skill's own method. The two compose; one request often needs both.
-core: every item = a concrete falsifiable bug hypothesis the AI tries to prove EXISTS — gated by a real candidate site | absence-defect sweep runs first on fresh attention | confirmation honest about execution limits | findings → bug-report-format.
-forbidden: positive "verify X is correct" items | a standing accusation with no candidate site | `present` verdict without a traced/executed evidence span | severity fixed before reachability shown | letting an enumerated hunt starve the absence sweep.
-output language: final report → conversation language; this guidance file → English.
-first: pick the instrument (§7) before §1 — instrument and method compose, neither replaces the other; a code diff hunted for what is MISSING takes both.
-</critical>
+# Investigating possible defects
 
-## §1 Principle — hunt bugs, don't confirm correctness
+This guide provides a review method for work that is not already governed by an owning skill. Use §7 to select the appropriate review instrument before applying the method.
 
-Have not run §7 yet → go there first. Building a checklist an instrument would have built better is the most common way this file gets misused.
+## §1 Investigate concrete failure hypotheses
 
-Each checklist item is a **concrete, falsifiable, binary bug hypothesis the AI actively tries to prove EXISTS** — never a correctness criterion to confirm.
+Frame each investigation around a possible defect that can be supported or disproved by evidence. Identify the candidate location or precondition before spending review effort on it.
 
-Why: bug-phrasing forces concreteness + falsifiability + an adversarial stance. "Verify X is done right" invites confirmation bias — the AI pattern-matches "looks correct" and rationalizes a pass.
+For example, a sorting defect can be investigated by comparing the query's order with the required order. A general instruction to confirm that sorting is correct does not identify the condition that could fail.
 
-<example type="item_framing">
-❌ "Verify the list query sorts correctly." — abstract, confirm-stance, AI gives a cheap pass.
-✅ "Bug: list query ORDER BY diverges from the spec's `updatedAt desc`. Site: the repository query. Confirm: read the ORDER BY clause, compare to spec." — concrete, hunting-stance, binary.
-</example>
+The purpose is to challenge the artifact, not to presume it is wrong. Do not keep an accusation in the review when no plausible location or trigger exists.
 
-## §2 Calibration priors (hold these before hunting)
+## §2 Calibrate conclusions to evidence
 
-- **Base rate.** For a competent artifact, MOST hypotheses are `absent`. Require a higher evidence bar for `present` than for `absent`. A report full of `suspected` buries the one real bug.
-- **Confirmation honesty.** The AI often cannot execute the artifact → "confirm" must be a real semantic trace, not a guess dressed as a check. Each item declares its confirmation type (§4).
-- **Spec is not ground truth.** The spec may be wrong, ambiguous, or self-contradictory. Where code and spec disagree, emit a `discrepancy` finding — do not auto-blame the code.
+Most hypotheses in a competent artifact will be absent. Require enough evidence for a positive finding rather than treating the number of findings as a measure of review quality.
 
-## §3 Procedure (phased)
+Distinguish a result observed through execution, a semantic trace through the artifact, and an inference. If execution is unavailable, state the limit. A syntactic match alone does not show that the relevant path behaves as expected.
 
-| phase | action |
-|---|---|
-| **P0 Spec sanity** | Scan the spec for internal contradiction / ambiguity. Code ≠ spec → `discrepancy` finding, not auto-blame. |
-| **P1 Absence sweep (FIRST, fresh attention)** | This is where the highest-value bugs live and what the AI is worst at — run it first, on fresh context (a separate subagent when the artifact is non-trivial — per `orchestration-policy.md` §7, delegation for unprimed attention, which is the exception to its §2 no-double-read rule). For each required behavior: "show the code path that guarantees it" → no path = absence finding (missing validation / branch / requirement). |
-| **P2 Build the hunt list (gated)** | Derive candidates two ways: (A) spec-inversion — each requirement → "what does its violation look like?"; (B) failure-mode classes for the artifact type (code: null deref, off-by-one, race, missing validation, N+1, stale cache; doc: contradiction, missing mandatory section, dead ref). **Gate:** admit an item ONLY if a concrete candidate site / precondition exists (N+1 only where a loop+query exists; race only where shared mutable state exists). No site → drop, never carry as a standing accusation. Bound to top-K by hypothesized-severity × plausibility; defer the rest and name them in the output — never a silent cap. Persist the list + verdicts to `.agent-workspace/tasks/<task-slug>/` so context compaction can't drop state. |
-| **P3 Hunt** | Per item: confirmation type = `executed` \| `traced` \| `inferred`. Confirm = a semantic trace citing the exact lines, NOT a syntactic presence check a regex could satisfy. Verdict: `present` (needs traced/executed + a quoted evidence span) \| `suspected` (inferred — capped here, cannot be `present`) \| `absent`. |
-| **P4 Precision gate** | Each `present`/`suspected` must survive a "steelman why this is actually correct" rebuttal before it ships. Fails the rebuttal → drop or downgrade. |
-| **P5 Output** | Runs on every review, including one that found nothing — **read `bug-report-format.md` now** and emit per its §3 (this is the only step that needs it — don't load it earlier). Zero surviving findings → `Verdict: PASS` + one line naming what was inspected, never a bare "no bugs" (that file's §4). Severity = **confirmed-severity** (reachability + trigger condition shown), not the P2 hypothesized-severity. Map confidence onto the format's Status: `traced`/`executed` → `confirmed`; `inferred` → `suspected`. A `confirmed`/`present` finding ships with its evidence span. |
+The specification can itself be wrong or ambiguous. When code and specification disagree, investigate the discrepancy rather than automatically assigning blame to the code.
 
-**Existing checklist provided** (user already has one) → skip P0–P2, start at P3 — the hunt + confirmation + output discipline still applies.
+## §3 Review procedure
 
-## §4 Checklist item shape
+1. Inspect the relevant requirements for contradictions or gaps that would make the expected behavior unclear.
+2. Look for required behavior that is absent. For each requirement, identify the part of the artifact that establishes it. Give this work fresh attention; use an independent reader for consequential artifacts under `orchestration-policy.md` §7.
+3. Build candidate hypotheses from requirements and failure modes appropriate to the artifact. Admit a candidate only when it has a concrete location or precondition. Prioritize by plausible consequence and likelihood, and record any meaningful portion of the requested scope left unexamined.
+4. Investigate each candidate by executing or tracing the relevant behavior. Preserve the exact evidence and distinguish `executed`, `traced`, and `inferred` conclusions. A `present` finding needs execution or a semantic trace; inference alone supports only `suspected`.
+5. Challenge every proposed finding with the strongest evidence-based explanation of why the artifact might already be correct. Withdraw or qualify findings that do not survive that challenge.
+6. Report the surviving conclusions with the information in `bug-report-format.md` §1. Assess severity from demonstrated reachability and consequence, rather than from the alarming form of the original hypothesis.
 
-| field | content |
-|---|---|
-| bug hypothesis | the defect, phrased negatively + concretely |
-| candidate site | where it would live — **gates admission** (no site → not admitted) |
-| confirm-by | the semantic trace required + type (`executed`/`traced`/`inferred`) |
-| hypothesized-severity | triage / ordering only — never reported as-is |
-| verdict | `present` / `suspected` / `absent` |
-| evidence span | quoted line(s) proving it — **required for `present`** |
+Save the developing candidate list, verdicts, and evidence in the task workspace so the review can resume after context loss.
 
-## §5 examples
+If the user supplies a checklist, investigate its items rather than silently replacing the requested scope. The checklist does not remove the requirements for evidence, precision, or honest uncertainty. Explain any required behavior it does not cover when that omission affects the requested conclusion.
 
-<example type="gating">
-❌ standing accusation: list "Bug: race condition exists" with no shared-state site found → AI spends attention dispositioning a phantom, drifts toward `suspected` to satisfy the hunt.
-✅ gated: no shared mutable state located → the race hypothesis is never admitted; attention goes to real candidate sites.
-</example>
+## §4 Information retained for each candidate
 
-<example type="confirmation_honesty">
-❌ "Null check missing at line X?" → AI sees `if (x != null)` and answers `absent` from syntax alone — never traced that `x` was dereferenced two lines above on a null path.
-✅ confirm-by = "trace `x` from assignment to use; confirm a dereference on a path where `x` can be null" → `present` only with the quoted dereference line as evidence; otherwise `inferred` → capped at `suspected`.
-</example>
+Retain the hypothesis, candidate location or precondition, the evidence needed to decide it, and the current conclusion. A confirmed finding also needs the evidence span that supports it. An initial severity estimate is for prioritization and must be reassessed after the trigger and impact are established.
 
-## §6 relation
+The verdicts `present`, `suspected`, and `absent` distinguish a demonstrated defect, an unresolved possibility, and a hypothesis the inspected evidence does not support. These meanings can be stored in the working format appropriate to the task.
 
-- Pairs with `bug-report-format.md` — this file = how to GENERATE findings; that file = how to PRESENT them (§3 skeleton, severity scale, output discipline). Read it **only at P5 (output)**, not while building the checklist — different step, different time.
-- A skill that owns its own review method takes precedence; this governs un-owned free-form requests.
-- Spawning a fresh subagent for P1 / a large P2 hunt = per `orchestration-policy.md` §7 (delegation for unprimed attention, not for throughput), with the plan persisted to `.agent-workspace/tasks/` per its §4.
+## §5 Examples
 
-## §7 Pick the instrument first
+Do not investigate a race condition as a standing accusation when no shared mutable state or concurrent access has been located. First establish the candidate path that could race.
 
-A dedicated review skill beats this method wherever one fits — it is built for that shape and usually goes deeper. Pick from the rows below; **they compose, they do not exclude each other.**
+Finding a null check does not prove that an object is safe to dereference. Trace the object from its source to every relevant use and determine whether a dereference can occur before the check.
 
-| the request | instrument |
-|---|---|
-| find defects in a diff / PR / branch of CODE | the harness review command (`/code-review`), at the depth the stakes warrant |
-| security exposure of pending changes | the harness security review (`/security-review`) |
-| "does it actually work when run" | the harness runtime verification (`/verify`) — observation at the running surface, not a diff read |
-| code is correct, make it cleaner | the harness cleanup command (`/simplify`) |
-| a skill owns this workflow (review checkpoints inside its own loop) | follow that skill for WHEN to review; still pick the instrument from the rows above for HOW deep |
-| a CODE diff **and** the question is what is MISSING | **both, in this order** — the instrument over the changed lines, then §3 P1 over the requirement set for the absence layer |
-| any admission condition below holds | §1–§6 — on its own, or as the second layer over an instrument |
+## §6 Related guidance
 
-A named instrument absent from this harness → treat its row as unmatched and fall through. The command set varies by harness version; a row that cannot be run routes nowhere.
+This guide governs how findings are established. `bug-report-format.md` governs the information needed to communicate those findings. An owning skill decides when review occurs within its workflow; the selected instrument and required evidence determine what the review can establish.
 
-§1–§6 is admitted when at least one holds:
+Use `orchestration-policy.md` §4 to preserve task state and §7 when an independent perspective is needed. A clean result is limited to the scope and evidence actually examined.
 
-- the artifact is **not code** — a spec, a design doc, a rule file, a config
-- the scope is **not a diff** — audit an existing module, review something never committed as a change, or build a checklist to hand to someone else
-- the hunt is for the **absence defect** — what should exist and does not
-- the user **supplied a checklist** — §3 P3 runs on it whatever the artifact is; the hunt, confirmation and precision discipline are exactly what a handed-over checklist does not carry (§3, line after the phase table)
+## §7 Select the review instrument
 
-The third condition is why the rows compose rather than exclude. A diff-scoped instrument sees what changed; it structurally cannot see what was never written. So "code diff" and "hunt the absence" are both true at once often enough to be the common case, and the answer is both layers, never one instead of the other.
+Inspect the capabilities available in the current environment and select the one suited to the question. A code-diff review evaluates changed code. Runtime verification evaluates observed behavior. Security review investigates exposure and access paths. Cleanup changes maintainability and is not a substitute for finding correctness defects.
 
-<rules section="NEVER">
-- hand a non-code artifact to a code-diff review instrument and call the result an audit
-- skip §7 and start building a checklist when an instrument already covers the request
-- let a skill's review checkpoint decide the DEPTH — it decides the timing, the instrument decides the depth
-- treat an instrument's clean verdict on a diff as coverage of the absence layer — it never was
-</rules>
+Use this guide directly for non-code artifacts, for work outside a diff, for a supplied checklist, or for finding required behavior that was never implemented. A code-diff instrument and an absence investigation can both be necessary; a clean diff review cannot establish that an unwritten requirement was implemented.
 
-<critical_recap>
-0. pick the instrument (§7) before anything else — the rows compose: a code diff plus an absence hunt takes the instrument AND §3 P1, never one instead of the other.
-1. every item = a bug hypothesis to prove EXISTS, gated by a real candidate site — never a "verify correct" item, never a siteless accusation.
-2. run the absence sweep FIRST on fresh attention — that is where the AI's worst misses (missing validation/branch/requirement) live.
-3. confirmation is honest: `traced`/`executed` → may be `present` with an evidence span; `inferred` → capped at `suspected`. Reject regex-satisfiable surface checks.
-4. base rate = most hypotheses are `absent`; every `present`/`suspected` survives a steelman rebuttal before shipping.
-5. severity is confirmed only after reachability is shown; output flows into bug-report-format.
-</critical_recap>
+If a named review command is unavailable, use the applicable method without pretending the command ran. Do not submit a non-code artifact to a code-only instrument and describe the result as complete coverage.

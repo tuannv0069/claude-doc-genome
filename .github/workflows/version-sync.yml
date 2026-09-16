@@ -1,8 +1,4 @@
-name: version-sync
-
-# Fails the build when the canonical version (skills/init-project/VERSION) is
-# out of sync with the plugin manifests or the README badge.
-# Fix locally with: node scripts/sync-version.mjs sync
+name: genome-checks
 
 on:
   pull_request:
@@ -14,7 +10,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - run: node scripts/sync-version.mjs check
+      - run: node scripts/doc-lint.mjs
+      - run: node --test scripts/test-deployment.mjs
+      - name: Check portable tool behavior
+        run: |
+          python .agent-workspace/tooling/test_scan_rule_health.py
+          python .agent-workspace/tooling/test_trigger_kinds.py
+          python .agent-workspace/tooling/test_verify_decision_log.py
+          python .agent-workspace/tooling/test_verify_lesson_router.py
+          python .agent-workspace/tooling/test_verify_role_files.py
+          python .agent-workspace/tooling/test_verify_wiki.py
+      - name: Check project data
+        run: |
+          python .agent-workspace/tooling/verify_lesson_router.py
+          python .agent-workspace/tooling/verify_role_files.py
+          python .agent-workspace/tooling/verify_decision_log.py
+          python .agent-workspace/tooling/verify_wiki.py

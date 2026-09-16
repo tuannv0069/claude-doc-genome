@@ -2,144 +2,48 @@
 scope: portable
 ---
 
-<critical>
-scope: root cause analysis (RCA) for bug / artifact defect (code, doc, config).
-core: answer 2 question groups | G2 skippable when G1 covers it | each why = falsifiable.
-forbidden: free-form bullet RCA | stop at symptom | force fixed why count.
-output language: final RCA report → Vietnamese; this guidance file → English.
-</critical>
+# Root cause analysis
 
-## §1 when to apply
+Use this guide to investigate an artifact defect and determine whether the working method or governing instructions also need to change.
 
-| situation | apply |
-|---|---|
-| user asks "5 why" / "root cause" / "RCA" / "tại sao" / "vì sao" / "nguyên nhân" / "tìm lý do" / "phân tích nguyên nhân" | mandatory |
-| debugging artifact AI just produced (code/doc/config) | mandatory |
-| bug outside AI scope (3rd-party lib, infra) | G1 only |
-| trivial fix (< 5 lines, not recurring) | skip RCA |
+## §1 When this applies
 
-## §2 two question groups
+Apply root cause analysis when the user asks for it, when a defect recurs, or when an apparent local fix leaves the cause uncertain. An isolated correction whose cause and remedy are already established does not need a ceremonial chain of questions.
 
-| group | question | output |
-|---|---|---|
-| G1 — Root + Fix | What is the actual root cause? What is the fix? | root location + fix patch/diff |
-| G2 — Rule + Prevention | Which rule/guideline (`.agent-workspace/guide/**`, `.claude/` rule/skill/agent, or `CLAUDE.md`) caused the root? How to amend so agent does not repeat? | rule §ID + rule diff, OR "gap — no rule covers" |
+When the defect lies entirely in an external system, investigate that system's cause and the appropriate response. Do not invent a genome-rule cause merely to complete a second part of the analysis.
 
-<rules section="ALWAYS">
-- G1 mandatory
-- G2 mandatory when root lives inside AI artifact (code/doc agent produced) or inside a genome rule tier — `.agent-workspace/guide/**`, `.claude/` (rule/skill/agent), or `CLAUDE.md`
-- G1 already answers G2 (e.g. fix = rule fix in one step, or root unrelated to any rule) → skip G2, write a one-line reason
-- each why = one falsifiable hypothesis (cite `file:line` | `§ID` | observable behavior)
-- G2 finds no rule → record `gap — no rule covers <topic>` + propose location
-- G2 fix targets skill/agent workflow → evaluate fix at both generative layer (implement: produce correct output) AND detective layer (verify: catch wrong output); propose both
-- G2 rule edit → user confirms before apply
-</rules>
+## §2 Two questions to investigate
 
-<rules section="NEVER">
-- emit free-form bullet list instead of §4 template
-- stop G1 at symptom (`"code wrong at line X"` is not a root)
-- stop G2 at `"AI misunderstood"` — must cite rule §ID or declare gap
-- force 5 whys when fix converged earlier
-- exceed 7 whys per group → decompose
-</rules>
+The first question, G1, concerns the artifact: what causes the observed defect, and what change would remove that cause? Establish the triggering conditions, trace the mechanism, and identify the location that needs to change.
 
-## §3 stop condition
+The second question, G2, concerns prevention: did an instruction, missing check, or working method contribute to the defect? Investigate it when the defect arose in an AI-produced artifact or in the genome itself. Cite the instruction and stable section when one exists. When no instruction covers the failure, describe the gap and identify an appropriate owner for a proposed remedy.
 
-```
-G1: next why → fix unchanged → stop
-G2: rule §ID cited → stop
-    OR grep confirms no rule → stop (gap)
-    OR G1 outcome already contains the rule fix → skip G2 with reason
-```
+If G1 already resolves G2, do not duplicate the analysis. If a proposed workflow change affects how an artifact is produced, also examine how verification would detect the same mistake. Prevention and detection protect different parts of the process.
 
-## §4 output template (rendered in Vietnamese)
+Apply changes within the authorization already given for the task. If a remedy would change a separate policy or exceed that authorization, explain the proposed change before requesting the additional decision.
 
-````md
-## RCA: <bug name>
+## §3 When to stop
 
-**Symptom**
-`file:line` — <observed behavior in Vietnamese>
+Continue asking why while the next answer could change the diagnosis or remedy. Stop when further questions add no useful causal distinction. If the investigation branches into independent causes, investigate those branches separately.
 
----
+Do not force a fixed number of questions. An unresolved hypothesis should remain unresolved rather than becoming a conclusion because the analysis has reached a planned length.
 
-### G1 — Root cause & Fix
+## §4 The analysis record
 
-1. <Question 1>?
-   → <Answer 1 @ file:line>
+Preserve the observed symptom, the evidence supporting the causal explanation, the proposed correction, and the way the correction will be checked. Record any prevention change and the authority needed to apply it.
 
-2. <Question 2>?
-   → <Answer 2>
+Use the task's reporting requirements for the resulting artifact. These information needs do not require fixed headings, tables, separators, field labels, or a particular output language.
 
-3. Convergence
-   → <reason fix unchanged> ⇒ **stop**
+### §4.1 (retired)
 
-| field  | value |
-|--------|-------|
-| Root   | `<location>` — <one-line cause> |
-| Fix    | <patch / diff> |
-| Verify | <test cmd \| repro> |
+## §5 Falsifiable explanations
 
----
+Each causal explanation must connect to evidence that could show it to be wrong. A source location, stable rule section, observed result, or reproducible condition can provide that evidence.
 
-### G2 — Rule in `.agent-workspace/guide/` / `.claude/` / `CLAUDE.md` & Prevention
+“AI misunderstood the task” does not identify a mechanism that can be checked. A stronger explanation might establish that an agent inferred a field name from a neighboring example instead of opening the defining schema. The investigation can then test whether the schema lookup would prevent the demonstrated failure.
 
-1. Which rule/guideline caused the G1 root?
-   → `<rule path §ID>` — <excerpt>   *(or ⇒ **gap**)*
+A proposed detector alone does not repair the method that creates the defect. If a writer invents schema names, examine both the writer's source lookup and the comparison between the completed artifact and the schema.
 
-2. Convergence
-   → **stop** | **gap**
+## §6 Related procedures
 
-| field          | value |
-|----------------|-------|
-| Root           | `<rule §ID>` — <excerpt \| "gap — no rule covers <topic>"> |
-| Fix (generate) | <rule diff for implement/produce phase — correct from the start \| n/a> |
-| Fix (detect)   | <rule diff for verify/check phase — safety net \| n/a> |
-| Confirm        | awaiting user approval |
-````
-
-G2 skippable → keep heading `### G2 — Rule in .agent-workspace/guide/ / .claude/ / CLAUDE.md & Prevention`, body = one line: `skip — G1 already covers it (<short reason>)`. Do not delete heading → grep `### G2` to audit format-complete RCAs.
-
-### §4.1 element rules
-
-| element | rule |
-|---|---|
-| numbered why | `<n>. <Q>?` line 1; `   → <A>` line 2 (3-space indent) |
-| blank line | between whys; between Symptom→G1; between G1→G2 |
-| `---` separator | before each `### G<n>` |
-| Outcome table | 3 rows: Root / Fix / Verify (G1) or Root / Fix / Confirm (G2) |
-| `` `file:line` `` / `` `§ID` `` | backtick every falsifiable ref |
-| decoration | none — no emoji |
-| narrative language | Vietnamese for questions/answers/cell text; backticked refs and field labels stay literal |
-
-## §5 falsifiable why
-
-<example type="why">
-❌ "AI misunderstood context" — abstract, not falsifiable
-✅ "agent read `frontend/patterns/null-safety.md` §2 — no ❌/✅ pair for optional chain → rule ignored" — cites §ID, grep-verifiable
-
-❌ Group-merge: Root = "code emitted wrong HTTP method"; Fix = "change GET → POST"
-✅ G1 Root: `UserController.cs:42` uses `[HttpGet]`; Fix: change attribute
-✅ G2 Root: `patterns/response-convention.md` §3 shows only GET examples → agent defaults to GET when the report spec is ambiguous; Fix: add §3.1 "HTTP method read from report spec §endpoints, no default"
-</example>
-
-<example type="g2_two_layer_fix">
-❌ G2 Fix = only detect layer → "add verify check for field name mismatch"
-   (skips the generative layer — bug still gets produced, only caught later)
-
-✅ G2 Fix (generate) = `report-section-writer §X`: when the report spec uses abstract/opaque field names,
-   read the actual upstream data schema before writing the section
-   G2 Fix (detect)   = `report-reviewer §Y`: compare section field names against upstream schema field names;
-   REJECT if they diverge
-</example>
-
-## §6 relation
-
-before acting → `.claude/rules/critical-thinking.md` (challenge direction). after defect → this file. before applying the G1 fix → `fix-impact-analysis.md` (scope the blast radius — a root-correct fix is not automatically safe to apply). all may apply same turn.
-
-<critical_recap>
-1. answer exactly the 2 question groups, no free-form
-2. G2 skippable when G1 covers it — state reason, keep heading
-3. each why = falsifiable hypothesis (cite file:line | §ID)
-4. G2 rule fix → user confirms before apply
-5. guidance file in English; final RCA report rendered in Vietnamese
-</critical_recap>
+Use `.claude/rules/critical-thinking.md` to check assumptions before acting. Use `fix-impact-analysis.md` §3 before applying the remedy, because a correct diagnosis does not establish that a change is safe for its dependents. Record a repeatable method failure under `lesson-capture.md` §2.

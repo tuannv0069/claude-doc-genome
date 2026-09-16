@@ -2,68 +2,22 @@
 scope: portable
 ---
 
-<rules section="file_reading">
+# Reading project sources
 
-## NEVER
+## §1 Identify the relevant source
 
-- Read full file when grep/glob can locate target
-- cat/less/full Read without offset on file > 200 lines
-- re-read file unchanged since last read in current context
-- sequential Read when files independent (use parallel calls)
-- glob a shared dir when the task owns a named subset (tests, scripts, configs)
-- report a result from outside the task's scope as the task's result
+Define the files or subsystem needed for the task before searching a shared directory. When the location is unknown, use a filename search to find candidates, then search their content for the relevant definitions and callers. Prefer a targeted search to loading unrelated material.
 
-## ALWAYS
+Inspect a file's size and structure before requesting a large reading. Read the relevant ranges together with the surrounding context needed to understand them. Read the whole file when the task requires its full meaning and the result can be retained without truncation. If a tool truncates output, retrieve the missing ranges before treating the source as fully read.
 
-- file edited since last read → re-read affected range (stale context = bugs)
-- unknown file size → `wc -l` before Read
-- exploration → small-output cmds (grep, head, wc, tail)
-- heavy research (10+ files, deep search) → delegate to Task subagent
-- shared dir holds several subsystems → name the members the task owns; the roster lives in that subsystem's standard
+## §2 Preserve evidence across readings
 
-## conditional
+Do not repeat an unchanged reading that is still available in the current context. After a file changes, read its affected ranges again before relying on the previous interpretation. Treat a cached summary as a navigation aid, not as a substitute for a definition that may have changed.
 
-| situation                           | action                              |
-| ----------------------------------- | ----------------------------------- |
-| unknown file location               | Glob/find                           |
-| known file, > 200 lines (~2000 tok) | grep -n → Read(offset, limit)       |
-| known file, < 200 lines             | Read direct                         |
-| multiple files needed               | parallel Read calls, not sequential |
-| file just edited                    | re-read changed range               |
-| 10+ files exploration               | Task subagent (isolated context)    |
+Batch independent searches and readings where the tools permit it. Keep dependent readings in order: finding a caller or interpreting a returned value may determine which source must be opened next.
 
-## examples
+## §3 Keep the investigation within its scope
 
-<example type="large_file_search">
-input: find getUserById in user.service.ts (800 lines)
-❌ output: Read("user.service.ts")  # dumps 800 lines into context
-✅ output:
-  1. grep -n "getUserById" user.service.ts  → line 234
-  2. Read("user.service.ts", offset=230, limit=40)
-</example>
+When several subsystems share a directory, use the relevant subsystem's file or test roster. Do not run an unrelated suite merely because a wildcard reaches it, and do not present results from a different subsystem as evidence about the requested change.
 
-<example type="parallel_reads">
-input: need to read config.ts, types.ts, utils.ts
-❌ output: Read(config.ts) → wait → Read(types.ts) → wait → Read(utils.ts)
-✅ output: Read(config.ts) + Read(types.ts) + Read(utils.ts)  # one round-trip
-</example>
-
-<example type="post_edit_read">
-input: edited auth.ts at line 50, now need line 50 content for next edit
-❌ output: reference prior Read output  # stale, edit not reflected
-✅ output: Read("auth.ts", offset=45, limit=15)  # current state
-</example>
-
-<example type="shared_dir_glob">
-input: run the test suite of subsystem A; its dir also holds subsystem B's tests
-❌ output: `for t in tests/*.py` → B's pre-existing failure lands in the report, then a turn is spent proving it is unrelated
-✅ output: run A's named roster; B's file is never executed, so its state never enters the result
-</example>
-
-<example type="heavy_exploration">
-input: trace all usages of UserContext across codebase
-❌ output: Glob → Read 15 files → main context polluted
-✅ output: Task("trace UserContext usages, return summary")  # isolated
-</example>
-
-</rules>
+Choose delegation according to `.agent-workspace/guide/general/orchestration-policy.md` §2. A separate agent can keep a large independent investigation out of the main context, but the number of files alone does not justify duplicating an investigation that is already understood. Persist evidence and findings when the task needs to survive a handoff or loss of context.

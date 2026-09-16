@@ -1,0 +1,7 @@
+{
+  "returncode": 0,
+  "is_error": false,
+  "model": "claude-opus-4-6",
+  "permission_denials": [],
+  "plugins": []
+}

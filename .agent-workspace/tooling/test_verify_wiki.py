@@ -1,11 +1,9 @@
-"""Test verify_wiki against FAKE tiers.
+"""Exercise wiki parsing and evidence checks with temporary source trees.
 
-The real tier must be green, so running the gate on it only proves it does not cry wolf. The
-other half - does the gate catch a real defect - is built by mutation: each case breaks exactly
-one rule and must go red with THAT rule message - red for another reason does not count as
-checked. The GREEN cases are real cases too: a gate that cries wolf on a legal auxiliary table
-is broken exactly as badly as one that silently swallows a mistyped edge table.
-"""
+The cases cover both valid evidence and deliberately broken inputs. Assertions
+name the intended failure, so a failure from another cause cannot stand in for
+the behavior under test. Some fixtures create temporary Git history to test
+whether a claim identifier survives a merge."""
 import subprocess
 import sys
 import tempfile

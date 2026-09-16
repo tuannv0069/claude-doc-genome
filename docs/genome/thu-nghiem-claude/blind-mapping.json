@@ -1,0 +1,32 @@
+[
+  [
+    "narration",
+    1,
+    "old"
+  ],
+  [
+    "narration",
+    2,
+    "new"
+  ],
+  [
+    "client_document",
+    1,
+    "new"
+  ],
+  [
+    "client_document",
+    2,
+    "old"
+  ],
+  [
+    "conversation",
+    1,
+    "old"
+  ],
+  [
+    "conversation",
+    2,
+    "new"
+  ]
+]

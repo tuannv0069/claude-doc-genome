@@ -2,66 +2,74 @@
 
 {{ONE_LINE_DESCRIPTION}}
 
-## stack
-- {{STACK_RUNTIME}}
-- {{STACK_FRONTEND}}
-- {{STACK_OTHER}}
+## Project environment
 
-## NEVER
-- commit or push without explicit user request (`commit`, `push`, `/commit`)
-- inline substantive rule in agent/skill/catalog — reference source-of-truth §ID; see `.claude/rules/doc-organization.md`
-- soften disagreement into "you could also consider" — say so directly
-- change position from user pressure alone — require new info/reasoning
-- place a guide under `docs/` or a work product under `.agent-workspace/` — see `.claude/rules/doc-organization.md §11`
+{{STACK_RUNTIME}}
+
+{{STACK_FRONTEND}}
+
+{{STACK_OTHER}}
+
+## Authorization and project boundaries
+
+Do not commit or push unless the user has requested that action. Use the authorization already given in the conversation; ask for clarification only when the intended action or its scope remains unresolved.
+
+Keep project instructions, reusable workflow guidance and project deliverables in their appropriate locations. Read `.claude/rules/doc-organization.md` §8.3 when adding content, and update its routers and references whenever a file is added, moved, renamed or removed.
+
 {{NEVER_PROJECT_RULES}}
 
-## ALWAYS
-- starting ANY task, questions included → MUST Read `.agent-workspace/lessons/index.md` §1 router; read the matching store AND every store its `checks` cell names (one hop only); no row matches → skip; already looked up this session → do not repeat
-- starting ANY task, questions included → MUST Read `.agent-workspace/guide/roles/index.md` §1 router; read the primary role file in full and only `§6 Not done until` of each checking role; no row matches → skip; already looked up this session → do not repeat
-- about to edit a law file (`.claude/rules/**`, `.agent-workspace/guide/**`, a role file, a lesson store), write an answer to a reviewer's comment, or declare out-of-scope / accepted debt / a rejected option in any artifact → MUST Read `.agent-workspace/guide/general/decision-journal.md` first (§6 grep `.agent-workspace/decisions/` for that subject BEFORE the edit; §5 write the entry in the same turn; §1 admission test — `git log` reconstructs it → do not write it)
-- new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
-- add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
-- debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first
-- run a review (audit / review / code review / inspect / vet / find bug(s) / build a checklist, incl. running against an existing checklist) (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/review-checklist-method.md` first — its §7 picks the instrument (a dedicated review skill usually wins); §1–§6 is the fallback for a non-code artifact, a non-diff scope, or an absence hunt
-- write or format a bug report for findings already determined, no review to run (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/bug-report-format.md`
-- fix a bug / apply a fix / patch a defect in any artifact — code, docs, rule, config (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/fix-impact-analysis.md` first (scope the blast radius before editing)
-- user corrects the method / rejects the output / "why did you" · "that's not right" · "it should be" → MUST Read `.agent-workspace/guide/general/lesson-capture.md` (record it in that same turn, into `.agent-workspace/lessons/<work-type>.md` — not harness memory, not a guide file)
-- write/edit mermaid block in .md → MUST Read `.agent-workspace/guide/general/mermaid.md` before emit
-- write or edit a `test_*.py` / `verify_*.py` file (a machine verification gate) → MUST Read `.agent-workspace/guide/general/verification-gate-design.md` first (name the unit of BOTH sides before wiring a comparison; a near-100% violation rate on first run means suspect the gate, not the artifact)
-- about to follow a procedure written in a guide — it states a fixed trigger, an ordered step sequence and a defined output — and no file in `.claude/skills/` or `.claude/agents/` owns that flow → MUST Read `.agent-workspace/guide/general/capability-packaging.md` §2 (raise the packaging candidate at the END of the task: one candidate, five lines, the human approves; §4 skill vs subagent vs a guide `§ID`; §6 a declined candidate is recorded and never re-raised)
-- run `python .agent-workspace/tooling/scan_rule_health.py`, or judge one of its findings → MUST Read `.agent-workspace/guide/general/rule-health.md` first (§2 a context line is never a ledger entry; §6 every finding closes `fixed` or `exempt` and an `exempt` names the §ID that allows it)
-- fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan under `.agent-workspace/tasks/<task-slug>/<scope>/`); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
-- agent creates a working file (script/dump/log/json/screenshot) with no user- or skill-specified destination → write under `.agent-workspace/tasks/<task-slug>/`; never repo root (layout: `.agent-workspace/guide/general/orchestration-policy.md` §4)
-- research / investigation passes its 3rd file read or search, or dispatches an agent, with no file to change → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` §6 — persist findings to `.agent-workspace/tasks/<task-slug>/` while working, never only in the reply
-- create / use / clean up isolated git worktree → MUST Read `.agent-workspace/guide/general/worktree.md` first (path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push)
-- skill writes its working files (plan, research notes, run state) to its own default path → redirect them to `.agent-workspace/tasks/<task-slug>/`; only the finished deliverable goes to `docs/` (full rule: `.agent-workspace/guide/general/orchestration-policy.md` §4; boundary: `doc-organization.md §11`)
+## Starting work
+
+Before answering a new task, read `.agent-workspace/lessons/index.md` §1 and `.agent-workspace/guide/roles/index.md` §1 with the file-reading tool. These two lookups are required for conversational questions and writing requests as well as tasks that change files. Do not infer that no row matches before reading the indexes. Read the stores whose work types match, including their one-hop checking stores. Do not repeat an unchanged lookup while the same work continues.
+
+Consult `.agent-workspace/guide/roles/index.md` §1 to choose the primary role and its checking roles. Read the primary role and the checking roles' §6 before acting. If no work type matches, continue without forcing a role onto the task.
+
+Use `.agent-workspace/guide/index.md` to find further guidance relevant to the work. The following conditions identify procedures that need to be read before their corresponding action.
+
+## Procedures to read before acting
+
+Before editing a rule, guide, role or lesson store, answering a review comment, or deciding to exclude work, accept debt or reject an option, read `.agent-workspace/guide/general/decision-journal.md`. Search existing decisions about the subject before reversing an earlier choice.
+
+When investigating a defect or its root cause, read `.agent-workspace/guide/general/five-why.md`.
+
+Before running a review or audit that is not owned by a skill, read `.agent-workspace/guide/general/review-checklist-method.md`. Its §7 helps select the review instrument.
+
+Before recording findings already established by a review, read `.agent-workspace/guide/general/bug-report-format.md`.
+
+Before fixing a defect in code, documentation, a rule or configuration, read `.agent-workspace/guide/general/fix-impact-analysis.md` to identify affected dependents.
+
+When a working method fails or the user corrects it, read `.agent-workspace/guide/general/lesson-capture.md` and record the lesson while the evidence is available.
+
+Before writing or editing a Mermaid diagram, read `.agent-workspace/guide/general/mermaid.md`.
+
+Before writing or editing a machine verification gate, including a `test_*.py` or `verify_*.py` file, read `.agent-workspace/guide/general/verification-gate-design.md`.
+
+Before following a guide procedure with a defined trigger, ordered steps and an output but no owning skill or agent, read `.agent-workspace/guide/general/capability-packaging.md` §2.
+
+Before running `scan_rule_health.py` or judging its findings, read `.agent-workspace/guide/general/rule-health.md`.
+
+Before editing more than three files or delegating execution outside a skill-owned workflow, read `.agent-workspace/guide/general/orchestration-policy.md`. Store the execution plan in the task workspace before dispatching work.
+
+Place working files without a specified destination under `.agent-workspace/tasks/<task-slug>/`. When research passes its third read or search, or involves another agent, persist its findings there according to `.agent-workspace/guide/general/orchestration-policy.md` §6. Keep finished deliverables in the project's work-product area.
+
+Before creating, using or removing an isolated Git worktree, read `.agent-workspace/guide/general/worktree.md`.
+
 {{ALWAYS_PROJECT_RULES}}
+
 {{OPTIONAL_MODULE_TRIGGERS}}
 
-<!-- git: minimal guardrail above (NEVER block); detailed policy is scope: project — when the project writes .agent-workspace/guide/general/git.md, add its trigger line here in the same commit (reachability — never a trigger pointing at a missing file) -->
+## Ownership
 
-## scope
 {{SCOPE_TABLE}}
 
-## language
+## Project language choices
 
-| target | language |
-|--------|----------|
-| frontmatter `scope: portable` | English, any location (overrides rows below) |
-| `CLAUDE.md` | English regardless of conversation language (`claude-md-standards.md`) |
-| `.claude/**` | English |
-| `.agent-workspace/guide/**` | English (portable doc standard) |
-| `.agent-workspace/lessons/**` | English — same language as the paired guide, so a promotion is a copy, not a translation (`lesson-capture.md` §3) |
 {{LANGUAGE_ROWS}}
-| conversation default | {{CONVERSATION_LANGUAGE}} |
 
-## see also
+The default language for conversation in this project is {{CONVERSATION_LANGUAGE}}.
 
-always-loaded (`.claude/rules/`):
-- `file-reading.md` — grep vs Read, parallel, subagent
-- `critical-thinking.md` — agent decision posture
-- `doc-organization.md` — placement decision tree §8.3 + one-source-of-truth §ID + link integrity
-- `conversational-output.md` — structure/tone of chat replies: conclusion-first, one idea per paragraph, fact vs recommendation labeled
+## Reference points
+
+The shared workflow rules are `.claude/rules/file-reading.md`, `.claude/rules/critical-thinking.md` and `.claude/rules/doc-organization.md`. They govern source reading, evidence and document placement.
+
 {{SEE_ALSO_PROJECT}}
-
-on-demand: read `.agent-workspace/guide/index.md` → task → which file.

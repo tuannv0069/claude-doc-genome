@@ -2,210 +2,114 @@
 scope: portable
 ---
 
-<critical>
-scope: organization + placement of agent doc system — rules tier, on-demand guide tree (`.agent-workspace/guide/`), skills, agents, catalogs/index files, project work-product docs.
-core: substantive rule lives in ONE source-of-truth file — agents/skills/catalogs reference via §ID, never inline | new content placed via decision tree §8.3 | every file reachable via trigger/router (§10).
-forbidden: copy-paste canonical code | duplicated ❌/✅ snippets | embedded fix templates | duplicated prop lists across files | content file outside an area | dead links.
-</critical>
+# Ownership and placement of instructions
 
----
+This rule governs the project's instruction network: its rules, guides, skills, agents, routers and records. Each shared requirement has one authoritative source, and the assistant must be able to reach that source before using it.
 
-<rules section="NEVER">
-- inline substantive rule (canonical code shape, prop list, ❌/✅ snippet, fix template, naming spec) in agent/skill/catalog/index
-- restate a rule's content when a pointer suffices
-- create rule content without a stable `§ID` anchor (downstream references break on re-numbering)
-- reference a rule by file-path only (no §ID) — section ordering changes silently
-- duplicate the same rule across multiple source-of-truth files — pick one canonical home, leave pointer-only stub in the other (exceptions: §4)
-- commit a link whose target does not exist (dead pointer — file path or §ID)
-</rules>
+## §1 Classify the responsibility
 
-<rules section="ALWAYS">
-- substantive rule → one source-of-truth file with stable `§ID`
-- agent/skill/catalog/index → pointer-only (`see <file> §X.Y`)
-- always-loaded guardrail file → terse reminder + pointer to full source
-- operational logic (agent workflow, abort, output format, tool whitelist) → local to that agent (NOT cross-cut)
-- routing description (frontmatter) → local to that agent (NOT cross-cut)
-- topic has no source-of-truth file → create `.agent-workspace/guide/<area>/<topic>.md` with §1 anchor before referencing
-- renumber `§ID` → update every referrer atomically in the same commit
-- add/rename/move/delete a content file → update every linking node (router/index, hub, trigger line, §ID pointer) in the same commit
-- rename/move → grep old path repo-wide after fixing referrers: 0 hits
-- delete → remove its router/hub/trigger entries + resolve each remaining referrer (fix or delete per context)
-</rules>
+Before adding content, determine what it owns. A substantive rule defines a condition that work must satisfy, such as a data contract or validation requirement. Operational instructions describe how a particular skill or agent performs its work. Routing metadata determines when that capability is selected. A detection catalog identifies symptoms and points to the rule that explains them. An always-loaded guardrail establishes an obligation that must be known before the task can be routed.
 
----
+Keep a shared substantive rule in its canonical guide or standard. Skills, agents and catalogs refer to that source rather than maintaining their own copies. Keep a capability's own procedure and routing metadata with the capability that uses them. This distinction prevents a change to a shared rule from leaving several incompatible versions in circulation.
 
-## §1 Content classification
+The genome owns AI workflow and project governance. Requirements for the voice, wording or presentation of a particular product belong to that product's project-owned instructions and are loaded only for work on that product. They do not become general rules of the genome.
 
-Classify each piece of doc content BEFORE choosing where to put it.
+## §2 Refer to stable sections
 
-| class | examples | location |
-|---|---|---|
-| substantive rule | canonical code shape, prop list, ❌/✅ snippet, fix template, naming spec, validation criterion | source-of-truth file (guide tree) — **one** file per topic, stable `§ID` |
-| operational logic | agent phase order, abort condition, output format, escalation, tool whitelist | local to agent/skill that owns the workflow |
-| routing metadata | agent frontmatter `description` / trigger phrases | local to agent (required by harness) |
-| detection signal | symptom string, grep pattern, file marker that flags a violation | catalog file — paired with pointer to fix in source-of-truth |
-| always-loaded guardrail | 3-5 line reminder + pointer | dedicated rules file loaded every turn |
+Use stable section identifiers for references to individual requirements. The reference mechanism and the treatment of retired identifiers are defined in `.agent-workspace/guide/general/doc-system-mechanics.md` §2.
 
-substantive ≠ operational. Substantive describes **what correct artifact looks like**. Operational describes **how this agent runs**.
+## §4 Copies with distinct operational purposes
 
----
+The following uses of repeated material are permitted because they have different owners or loading purposes:
 
-## §2 Reference mechanism — moved
+- An always-loaded reminder may point to a detailed on-demand rule. The detailed source remains authoritative; the reminder establishes when it must be consulted.
+- Routing descriptions belong to their individual skills or agents even when related capabilities use overlapping terminology.
+- An example may illustrate different subjects in separate places if neither copy is presented as the shared rule's authoritative definition.
+- A distribution bundle contains copies of its deployed portable files. The bundle's comparison and promotion process owns their synchronization.
 
-Reference by stable `§ID`, never by line number or section title. Portable `§ID`s are **append-only**: never renumber, retired sections keep their number. Full forms → `doc-system-mechanics.md` §2; worked ❌/✅ pairs for §1 and §4 → its §3.
+Outside these cases, resolve repeated requirements by selecting one owner and replacing the other definitions with references. Do not keep conflicting versions merely because they use different words.
 
----
+## §5 Check the instruction network
 
-## §4 When duplication IS allowed
+Use the authoring, review and automated checks in `.agent-workspace/guide/general/doc-system-mechanics.md` §5 to find duplicate requirements and broken references.
 
-- **Always-loaded guardrail vs full source.** Terse reminder in always-loaded file + full content in the guide tree is intentional caching (loaded into every turn vs on-demand read). Pointer mandatory; content stays terse + non-authoritative.
-- **Routing metadata.** Each agent's `description` frontmatter is local and may overlap conceptually with another agent — harness needs distinct strings to route.
-- **Identical examples used as illustration in 2 unrelated contexts** — allowed if each is clearly an illustrative example, not the source of the rule.
-- **Packaged source vs deployed instance.** A distribution bundle (e.g. an init skill) carries canonical copies of `scope: portable` files; the live tree is deployed instance #1. Intentional duplication — drift detected by the bundle's `check` mode, consolidated via `promote`.
+## §6 Apply the classification
 
-Outside these four: duplication = drift risk.
+Use §1 to identify the content's responsibility and §8.3 to choose its location. `.agent-workspace/guide/general/doc-system-mechanics.md` §6 explains how those decisions interact when a file contains several kinds of information.
 
----
+## §7 Organize guides by the work they serve
 
-## §5 Enforcement — moved
+Every guide belongs to an area and is reachable from the guide router. Areas group a shared activity, artifact type or subsystem; `general/` contains guidance that crosses those areas or has not developed a separate grouping. Read `.agent-workspace/guide/general/doc-system-mechanics.md` §7 before creating, moving or renaming a guide.
 
-Five layers catch a duplicated or inlined rule: reviewer, audit script, pointer-rot linter, writer agent, rule author. Detail → `doc-system-mechanics.md` §5.
+## §8 Choose where instructions are loaded
 
----
+### §8.1 Design principles
 
-## §6 Content-class flow — moved
+The network is organized around relevant loading, bounded navigation, growth from actual work, preventive checks and the transfer of proven improvements. These principles are developed in `.agent-workspace/guide/general/doc-system-mechanics.md` §8.1.
 
-The same five classes as §1, walked as a branching flow. §1's table is the operative form and stays here; the flow → `doc-system-mechanics.md` §6. File/tier placement is a different question — §8.3.
+### §8.2 Loading mechanisms
 
----
+A rule without `paths:` in its frontmatter belongs to the always-loaded set. Use that set for obligations needed before a task's file or specialized guide is known. A rule with `paths:` applies to the declared file patterns. Use the guide tree for instructions selected by a task router or trigger.
 
-## §7 On-demand guide tree — moved
+Choose the loading mechanism from the work's needs, not from a file's length. Keep project identity and routing in `CLAUDE.md` under `claude-md-standards.md` §1. Inspect the installed environment when a change relies on how these mechanisms load; do not infer runtime loading solely from where a file was placed.
 
-Shape of the tree the decision tree (§8.3) places files into: **area = one axis of work** (a stack layer is one shape among several — an artifact type, an activity, or a subsystem count too); every content file lives in exactly one area and is reachable from the router; `general/` holds what cross-cuts, and stays flat when no axis is there.
+### §8.3 Placement decisions
 
-Full laws — area model §7.1, taxonomy §7.2, router laws §7.3 → `doc-system-mechanics.md` §7. Read it before creating, moving, or renaming any file in the guide tree.
+Evaluate the following destinations in order and use the first that matches the content's responsibility.
 
----
+1. A reusable workflow with a trigger, dependent operations and a verifiable result belongs in a skill under `skill-md-standards.md` §1.
+2. A specialist that runs as a separate agent belongs in an agent definition under `subagent-standards.md` §1.
+3. An obligation needed in every task belongs in the always-loaded rule set, with a reference to detailed guidance when needed.
+4. A standard that applies when working on a particular file type belongs in a path-scoped rule.
+5. A record of a failed working method belongs in the relevant lesson store under `.agent-workspace/guide/general/lesson-capture.md` §1. An incident does not become a guide merely because it is useful to read later.
+6. Reusable project guidance selected by task belongs in the guide tree. Register it according to §10.
+7. A finished project work product belongs in the project's work-product area under §11. Established claims about subject material may belong in the optional wiki under `wiki-tier.md` §1; that tier has its own evidence contract.
+8. A navigation entry belongs in the router or project entry point that selects the target. It does not need a second content file.
 
-## §8 Placement — load tiers, decision tree
+Temporary plans, evidence and intermediate files belong in the task workspace under `.agent-workspace/guide/general/orchestration-policy.md` §4. Move durable deliverables to their project-owned destination when they are ready.
 
-### §8.1 Philosophy (network model) — moved
+## §9 Separate portable guidance from project data
 
-Files are neurons, links are synapses; a file without links is dead content. Five principles — P1 context economy, P2 bounded conduction, P3 growth from evidence, P4 two-layer self-healing, P5 heredity → `doc-system-mechanics.md` §8.1.
+Rules and guides declare `scope: portable` or `scope: project` in frontmatter. Portable content must remain applicable when copied to another project. Project content may contain that project's identities, source locations, tooling choices and operating values.
 
-### §8.2 Load tiers
+Keep instance-specific data in project-owned configuration or routers. Paths that are part of the genome's deployed structure, such as `.agent-workspace/guide/`, are shared conventions and may appear in portable guidance. A dependency on an optional tool or service must be identified as optional and checked before use; do not assume that another project has the author's integrations installed.
 
-Mechanism = harness; this law decides WHICH tier.
+A skill or agent uses the metadata its platform supports. Its membership in the portable distribution is recorded by the bundle map rather than by adding unsupported fields to its frontmatter. If portability has not been established, keep the content project-owned until it has been evaluated.
 
-| tier | mechanism | entry criterion | constraint |
-|---|---|---|---|
-| always-loaded | rules file without `paths:` frontmatter | guardrail needed BEFORE the decision point, not predictable by path: safety, scope ownership, placement | terse + pointer; total budget per project data (§10) |
-| path-scoped | rules file with `paths:` frontmatter | standard needed only when touching matching file type | full content allowed |
-| on-demand | guide tree (`.agent-workspace/guide/`) | task-routed knowledge, reached via router/trigger | §7 |
+Portable section identifiers remain stable because other projects may reference them. Project section identifiers may change only when every affected reference is updated in the same change. Language choices for a project or deliverable belong to that project; they are not imposed by portability metadata.
 
-The project index file (CLAUDE.md equivalent) is NOT a tier — it is an index + minimal guardrail surface: pointers and ≤ 1-line rules only (per `claude-md-standards.md`).
+## §10 Maintain identity, reachability and links
 
-### §8.3 Placement decision tree
+Use a stable file identity that describes its subject. Extend the existing canonical source when the subject already has one. Give a new source a stable section identifier before other files depend on it. Each documentation tree uses `index.md` as its router; a repository `README.md` remains its human entry point.
 
-New content goes through this tree; first matching branch wins.
+Register every on-demand content file in its router, directly or through the permitted hub structure in `.agent-workspace/guide/general/doc-system-mechanics.md` §7.3. Add an always-loaded trigger only when the assistant could otherwise act incorrectly before consulting that router. This interception test asks what decision would be missed, when it occurs and why an existing route does not already reach the guidance.
 
-```
-new content
-├─ 1. workflow with trigger + steps + defined output?
-│     → skill (per skill-md-standards.md)
-├─ 2. persona running standalone in a subagent?
-│     → agent definition (per subagent-standards.md)
-├─ 3. guardrail that must hold EVERY turn?
-│     → rules, always-loaded: terse + pointer to source-of-truth
-├─ 4. meta-standard needed only when touching a specific file type?
-│     → rules, path-scoped (paths: matching that file type)
-├─ 5. record of a working method that failed — an incident, not yet distilled law?
-│     → lesson store `.agent-workspace/lessons/<work-type>.md` per lesson-capture.md
-│       (NEVER the guide tree — records are append-only, guides are curated)
-├─ 6. project knowledge read per task?
-│     → guide tree <area>/ per §7 (stack-layer area | artifact area | general/)
-├─ 7. pure project work product (spec/design/research/review/wiki)?
-│     → docs/<category>/ per §11
-└─ 8. just a pointer/index?
-      → project index file (≤ 1 line per rule, per claude-md-standards.md)
-```
+There are three kinds of observable trigger. Their conditions are evaluated at different points:
 
-Branch 5 sits before 6 on purpose: a lesson IS read per task, so branch 6 would swallow it and the guide would accumulate incident history. A lesson enters the guide only after it recurs and is distilled into law (`lesson-capture.md` §4).
+| Trigger kind | Information used to decide whether it applies |
+|---|---|
+| Message-triggered | A keyword, tool name, code symbol, file pattern or other explicit signal in the user's message. |
+| Work-state | A count or state the assistant can observe while performing the work. |
+| Action-triggered | The operation about to be performed and its concrete object, evaluated before the tool call. |
 
-Branch 6: router entry unconditional; always-loaded trigger decided via interception test + user confirm → §10.
+A trigger must identify a condition the assistant can decide before the required reading. Labels such as a complex task, a multi-step task or work that needs deep analysis do not supply an observable condition by themselves. For an action trigger, name both the action and the class of artifact or resource involved. The trigger's wording may vary; its decision input and target must remain unambiguous.
 
-For content classes WITHIN rule docs (substantive vs operational vs routing vs detection) → §6.
+Record the interception test and the reason for adding or omitting a trigger when that decision requires a journal entry. Act within the user's existing authorization. Ask for a decision only when the proposed change exceeds that authority or requires information the assistant cannot establish; do not require another confirmation for routine routing work already delegated.
 
-## §9 Portability axis
+When adding, renaming, moving or deleting a content file, update its router entries, triggers, links and section references in the same change. Search for the old identity after a move or deletion. Resolve every operational reference; historical evidence may retain the old path when it is clearly part of the record rather than an instruction to read that file now.
 
-Every file in the rules tier and the on-demand guide tree declares frontmatter `scope:` — 2 values:
+The guide router records project placement data in its §1, including any unresolved migration entries and their intended destinations. A migration entry is tracked work to complete, not a permanent exemption from ownership or reachability.
 
-| `scope:` | definition | extra law |
-|---|---|---|
-| `portable` | true for any project; copied verbatim | §ID append-only — never renumber, retired sections keep their number (§2); English regardless of location |
-| `project` | meaningful only in this project | free to evolve; renumber allowed if every referrer updates atomically |
+## §11 Keep work products separate from guidance
 
-- **Portable-pure law:** a `scope: portable` file contains no *per-instance* project value (specific task-id, port number, budget value, project name) — those live on the project side, concretely the root router (`index.md`, always `scope: project`) per §10. **`.agent-workspace/` paths ARE allowed** (`.agent-workspace/guide/`, `.agent-workspace/lessons/`, `.agent-workspace/tasks/`, …): init creates that root in every project it deploys to, so it is an invariant of the genome itself — not a project value. References to genome files (`CLAUDE.md`, `.claude/**` standard files) are likewise not project-specific.
-- **Substrate-naming law:** a `scope: portable` file MAY name a command the harness itself ships (`/code-review`, `/verify`) — the genome is a plugin of that harness, so those exist wherever it deploys. It MUST NOT name a bolt-on skill set or external system that may be absent (that is what makes a rule dangle). Bolt-on integrations are named only on the project side: an optional module in the init skill, which writes its trigger when a scan confirms the thing is installed.
-- Skills/agents: default `project`; portable exceptions are declared by explicit list in the distribution bundle map — NOT via `scope:` frontmatter in skill/agent files (harness owns that schema).
-- Unclassifiable file → tag `project` (safe default — never copied out), note for later audit.
+The guide tree explains how the assistant performs work. The project's work-product area holds finished specifications, designs, research and reports. Do not turn a work-product directory into another shared rule tree, or store deliverables among operational guides.
 
-## §10 Placement laws
+Use an existing work-product category when it fits. If a new category is needed, register it in `docs/index.md` in the same change. That router identifies categories rather than maintaining a list of every delivered file; categories may use their own index or discovery convention.
 
-- **Naming:** kebab-case; topic-based names, no version/date suffixes (`cache.md`, not `cache-v2.md`); the router file of a doc tree is always `index.md` — never `README.md` as router (README = human landing page of repo root only); path already describes — don't repeat folder name in file name.
-- **New-file-vs-extend:** topic already has a source-of-truth file → extend it with a new §ID; new topic → new file with §1 anchor from the first commit.
-- **Always-loaded budget:** total lines of rules files without `paths:` ≤ budget declared in the project's placement data; project index file excluded (own budget per `claude-md-standards.md`). Over budget → demote least-used file to path-scoped or split terse+pointer.
-- **Reachability:** every on-demand content file MUST have a router entry (`doc-system-mechanics.md` §7.3); a behavior-affecting file (per interception test) additionally needs a trigger line at the always-loaded surface (project index file or an always-loaded rule): `cond → MUST Read <file>`. File with neither router entry nor trigger = dead content — audit must flag.
-- **Interception test (router-only default):** on-demand file defaults to router entry ONLY. It is *behavior-affecting* (earns an always-loaded trigger) only if WITHOUT the trigger the agent starts the task and acts wrong BEFORE it would consult the router — task self-signals nothing to read a guide, and is not already reached via an existing trigger/hub. Pass → trigger candidate; fail → router-only.
-- **Trigger-decision confirm:** on-demand file → router entry written unconditionally (mechanical); always-loaded trigger NEVER self-decided — run interception test, present result + recommendation (add | skip), ask user, write/skip per user. Confirm in BOTH outcomes.
-- **Recognizable trigger:** a **message-triggered** condition = an observable signal binary-decidable from the user message — user keywords, tool names, code symbols, file patterns — never abstract task classification (`multi-step task`, `complex task`) or intent interpretation (`when X is needed`). Observable test: can the agent decide YES/NO by scanning the user message alone, with no classification judgment? A **countable work-state signal** is equally admissible — the Nth file read, an agent dispatched, N files edited: counted, not judged. The ban is on classification (`non-trivial`, `complex`), not on where the signal is read from. Message-scan signals fire at intake; work-state signals fire mid-task, which is the only shape that works for a rule that must act before the work finishes. The *action + concrete object* signal is a third kind — the next bullet, not this one. Wording canon: `claude-md-standards.md <trigger_lines>`.
-- **Trigger kinds — three, with different tests.** A *message-triggered* condition is decided by scanning the user message alone (the test above). A *work-state* condition is decided by a count the agent keeps of its own work (also above). An **action-triggered** condition is decided **before the tool call the agent is about to make** — the observable signal is the agent's own next action and its concrete object: about to search or read a named class of the project's material, or about to write into a named class of artifact. Its test: can the agent name that next action and its concrete object, and decide YES/NO immediately before making the call, with no classification judgment? Abstract task classification and intent interpretation (`multi-step task`, `complex task`, `when X is needed`) fail all three tests and remain forbidden. An action-triggered obligation is reached the same way as any other on-demand content — router entry unconditional, always-loaded trigger line only per the confirm rule above.
-- **Link integrity:** add/rename/move/delete propagates to every linking node in the same commit — full law in ALWAYS section (top).
-- **Project placement data:** the root router (`index.md`) carries the project's placement data in §1: (a) always-loaded budget value, (b) migration ledger — files not yet at their standard location, each with target area; end state = empty ledger; no permanent exemptions.
+The optional wiki and temporary task workspace serve different purposes and follow their own procedures. Their presence does not make every file under `.agent-workspace/` a finished project deliverable.
 
-## §11 Project work-product layer (docs/)
+## §12 Remove requirements that no longer apply
 
-The guide tree (`.agent-workspace/guide/`) answers *"how to do it right"*; `docs/` holds the project's **work product** — spec, design, research, review, wiki. The two never mix: no guide under `docs/`, no work product under `.agent-workspace/`.
+When a rule is narrowed or retired, remove the superseded instructions from the active source. Keep a retired portable section's identifier with a `(retired)` marker when existing references require the identifier to survive. Do not reuse it for an unrelated requirement.
 
-<rules section="ALWAYS">
-- new work product → existing category; no matching category → new category + register in the docs router (`docs/index.md`) in the same commit
-- docs router stops at CATEGORY level — 1 line per category; file-level discovery = naming convention (e.g. functionId) + optional per-category `index.md`
-</rules>
-
-<rules section="NEVER">
-- list individual files in the docs router (work-product volume outgrows any hand-kept list)
-- place a work product in the guide tree or a guide in a work-product category
-</rules>
-
-Category list = `scope: project`; the laws of this layer = portable. Content-writing rules for work products are owned by the project's documentation standard — out of placement scope.
-
----
-
-## §12 A narrowed or retired law leaves no text behind
-
-A file states the law **as it stands**; git holds what it said before. The two are different
-records and the file must not try to be both.
-
-<rules section="ALWAYS">
-- law retired or narrowed → **delete** the old text in the same commit that narrows it
-- a `scope: portable` `§ID` slot that must survive keeps its number with a bare `(retired)` marker — no date, no reason (§2, §9)
-- the narrowing commit message carries the why; the file carries only the rule now in force
-</rules>
-
-<rules section="NEVER">
-- leave the superseded sentence beside the new one — the next reader cannot tell which binds
-- write change history into a rule, guide or standard body; the record files (`.agent-workspace/decisions/`, `.agent-workspace/lessons/`) are the exception and own that job
-</rules>
-
-A file that has never deleted a line is the measurable form of this violation, and it is what
-the `growth` signal of the rule-health scan reports (`.agent-workspace/guide/general/rule-health.md` §5).
-
----
-
-<critical_recap>
-1. substantive rule → ONE source-of-truth file, stable §ID; portable files = append-only §ID
-2. agent/skill/catalog → pointer-only, NEVER inline canonical content
-3. new content → decision tree §8.3; on-demand tree: area + router laws §7
-4. always-loaded only for pre-decision guardrails (budget-capped); everything else = trigger line + on-demand — on-demand trigger to always-loaded surface = interception test + user confirm (both outcomes), router entry stays unconditional
-5. every file change maintains its links same-commit; audit hunts orphans + dead links
-</critical_recap>
+Record the reason for a qualifying rule change in the decision journal under `.agent-workspace/guide/general/decision-journal.md` §2. Git and the record stores preserve history; the active rule describes the obligations that apply now. A lack of deleted lines may prompt a review, but it is not by itself proof that a rule should be removed.

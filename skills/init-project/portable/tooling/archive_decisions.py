@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
-"""Hot/cold cut of the decision journal — `guide/general/decision-journal.md` §9.
+"""Move superseded decisions into the journal archive.
 
-Moves into `archive/YYYY/` exactly the entries a LATER entry has superseded. A standing entry
-stays where it is however old it gets: it is still the current answer for its subject. A
-renamed subject does NOT end an entry's life (§9).
-
-The operation is hard to undo, so it prints the list and asks before moving; `--yes` skips
-the question.
-"""
+Only an entry named by another entry's supersedes field is eligible. An old
+standing decision stays in its shard. The command lists its candidates and
+asks before moving them; --yes records the caller's choice to proceed directly.
+The journal workflow is defined in guide/general/decision-journal.md, section 9."""
 from __future__ import annotations
 
 import argparse

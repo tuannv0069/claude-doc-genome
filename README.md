@@ -1,101 +1,67 @@
-# claude-doc-genome — Claude Code plugin
-
-> One-shot **Claude Code plugin** that bootstraps an AI-agent documentation system — `CLAUDE.md` + `.claude/rules/` + `.agent-workspace/` — then lets the project self-maintain.
+# claude-doc-genome
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-4.0.0-blue.svg)](CHANGELOG.md)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](https://docs.claude.com/en/docs/claude-code)
-[![Marketplace](https://img.shields.io/badge/marketplace-claude--doc--genome-555.svg)](#install)
+[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
 
-<!-- Demo: drop a GIF here once recorded, e.g. ![demo](docs/demo.gif) -->
+`claude-doc-genome` is a Claude Code plugin that gives a project a documentation system for AI work. It installs project instructions, reusable workflow rules, guides that are read when needed, and tools that check the relationships between them.
 
-`claude-doc-genome` deploys a battle-tested documentation standard for AI agents — the `CLAUDE.md` + `.claude/rules/` + `.agent-workspace/` trio — plus the `document-writer` skill. After the one-time seed, the project grows its own documentation using the deployed standard. `init` runs once; later you can opt into `update` to pull newer portable files from the bundle — a safe 3-way merge that never overwrites your local edits.
+The project owns its requirements, domain knowledge and deliverables. The genome provides the procedures for finding instructions, working from evidence, managing changes and carrying useful lessons forward. It does not prescribe a shared writing style for conversations, scripts or documents.
 
-Keywords: Claude Code plugin · AI agent documentation · CLAUDE.md scaffolding · agent rules · prompt/skill standards.
+## Install and initialize
 
-## Requirements
+Add the marketplace and install the plugin in Claude Code:
 
-- Claude Code, a recent version with plugin/marketplace support.
-- A git repository for the target project (recommended; the skill writes into it).
-
-## Install
-
-```
+```text
 /plugin marketplace add tuannv0069/claude-doc-genome
 /plugin install claude-doc-genome@claude-doc-genome
 ```
 
-## Use
+In the target project, run:
 
-```
+```text
 /init-project
 ```
 
-The skill scans the project's stack, interviews for unscannable values, copies the portable bundle, renders the templates, generates optional module rules, writes a manifest, and verifies the result.
+The skill inspects the project, resolves the required settings, copies the portable files, merges project indexes and verifies the deployment. Existing project instructions are preserved during the merge. Node.js is needed for maintenance scripts; the portable verification tools use Python and its standard library. Git provides history and supports the worktree and conservation checks.
 
-## Modes
+## Working with the genome
 
-| command | runs where | action |
+| Command | Where to use it | What it does |
 |---|---|---|
-| `/init-project` | a new project | deploy the standard (one-shot seed) |
-| `/init-project check` | the bundle's home repo | report drift between the bundle and the live files |
-| `/init-project promote` | the bundle's home repo | consolidate proven live changes back into the bundle |
-| `/init-project update` | an initialized project | pull newer portable files from the bundle (safe 3-way merge; skips local edits) |
+| `/init-project` | A new project | Establishes the documentation system. |
+| `/init-project update` | An initialized project | Reviews and applies changes from a newer bundle. |
+| `/init-project check` | This source repository | Compares the live genome with its portable bundle. |
+| `/init-project promote` | This source repository | Copies reviewed live improvements into the bundle. |
 
-## Updating
+Initialization happens once. Later changes use the update procedure, which compares the new bundle, the current files and the hashes recorded at deployment. It preserves conflicting local edits. An unchanged retired genome file can be removed when the manifest proves its ownership. Project-owned indexes and instructions are merged separately; they are not overwritten by the updater.
 
-`init` seeds once; the project then evolves on its own. When the bundle ships newer portable files, opt into them:
+The updater reports changed template sources until their changes have been reviewed and acknowledged. It does not report a completed new version while conflicts or unacknowledged templates remain. See the [init skill](skills/init-project/SKILL.md) for the complete procedure.
 
-```
-/init-project update
-```
+## What is installed
 
-It compares the bundle against your files three ways (manifest ↔ live ↔ bundle): missing files are added, untouched files are updated, and any file you edited locally is reported as a **conflict and left untouched** — promote your change upstream or merge it by hand. Rendered files (`CLAUDE.md`, `index.md`, project-authored guides) are never overwritten.
-
-## Philosophy
-
-The documentation system is modeled as a **neural network**: files are neurons, links (triggers, router entries, `§ID` pointers) are synapses, and a file with no links is dead content. Five principles drive the design:
-
-- **Context economy** — only pre-decision guardrails load every turn; everything else is one trigger line away, read on demand.
-- **Growth from evidence** — no directory tree is pre-built; structure grows from real stimulus.
-- **Bounded conduction** — knowledge routes through `router → hub → file`; work products route by naming convention.
-- **Self-healing** — link-integrity on every change plus periodic orphan/dead-link audit.
-- **Heredity** — the portable bundle is a genome seeded once per project; proven patterns are promoted back into the genome.
-
-## What gets deployed
-
-Everything the agent owns lands in one root, `.agent-workspace/` — the guide tree, the lesson store, per-task working state, and shared tooling. `docs/` stays what it should be: the project's own work product.
-
-```
-.agent-workspace/
-├── guide/        on-demand guide tree (router: index.md)
-├── lessons/      raw records of working techniques that failed
-├── tasks/        per-task plan + state (gitignored)
-├── worktrees/    isolated git checkouts for parallel work (gitignored)
-└── tooling/      shared agent scripts, one subfolder per purpose
-```
-
-| group | live target | content |
+| Content | Destination | Purpose |
 |---|---|---|
-| rules | `.claude/rules/` | `doc-organization`, `critical-thinking`, `file-reading`, `conversational-output`, `claude-md-standards`, `skill-md-standards`, `rule-writing-standards`, `subagent-standards`, `wiki-tier` |
-| guide | `.agent-workspace/guide/general/` | `bug-report-format`, `doc-system-mechanics`, `five-why`, `fix-impact-analysis`, `lesson-capture`, `markdown`, `mermaid`, `orchestration-policy`, `review-checklist-method`, `task-planning`, `worktree`, `harness-adapter` |
-| skills | `.claude/skills/` | `document-writer` |
-| templates | rendered per project | `CLAUDE.md`, `guide/index.md`, `docs/index.md`, `lessons/index.md` |
-| codex-rules | `.codex/rules/` | `agents-md-standards`, `codex-agents-standards` |
-| Codex set | generated by `render_codex.py` | `AGENTS.md`, `.codex/config.toml`, mirrored `.codex/rules/*.md`, `.agents/skills/`, `.codex/agents/` |
+| Workflow rules | `.claude/rules/` | Establish source reading, evidence, placement and component contracts. |
+| General guides | `.agent-workspace/guide/general/` | Describe planning, review, verification, lessons, decisions and related procedures. |
+| Roles | `.agent-workspace/guide/roles/` | Provide working perspectives and completion checks. |
+| Verification tools | `.agent-workspace/tooling/` | Check the genome's data and references. |
+| Optional skills and agents | `.claude/skills/`, `.claude/agents/` | Hold reusable workflows or delegates that the bundle explicitly includes. |
+| Project instructions and indexes | `CLAUDE.md` and the appropriate workspace indexes | Connect shared guidance to the actual project. |
+
+Lessons, decisions and optional wiki claims live under `.agent-workspace/`. Temporary task state and worktrees are ignored by Git. Finished project documents live in the project's work-product area, usually `docs/`.
+
+## How the design works
+
+Each substantive requirement has one source. Routers and references make that source reachable without copying its text into every workflow. Guidance needed before an action is connected to that action; other guidance is read when the task reaches its subject.
+
+Portable files contain reusable procedures. Templates supply the project-specific information and routing that cannot be copied unchanged. A useful improvement is first verified in the live project, then promoted into the bundle when it is appropriate for other projects.
+
+The current rewrite's [design](docs/genome/thiet-ke-goc.md) and [plan](docs/genome/ke-hoach-viet-lai.md) explain the source architecture and the rewrite. The [implementation report](docs/genome/ket-qua-viet-lai.md) records the completed checks and the remaining limits.
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for source ownership, verification and release procedures. Changes are recorded in [CHANGELOG.md](CHANGELOG.md).
 
-## Changelog
+## Author and license
 
-See [CHANGELOG.md](CHANGELOG.md).
-
-## Author
-
-**Tuấn Nguyễn** — author of the skill and its documentation-architecture philosophy.
-
-## License
-
-[MIT](LICENSE) © 2026 Tuấn Nguyễn
+Tuấn Nguyễn created the skill and its documentation architecture. The project is distributed under the [MIT License](LICENSE).

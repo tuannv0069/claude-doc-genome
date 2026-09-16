@@ -2,58 +2,32 @@
 scope: portable
 ---
 
-<critical>
-scope: isolated git worktree lifecycle — create, symlink, use, cleanup.
-core: one path convention | pass realpath to child agents | symlink only what the workflow uses | cleanup only after push verified
-note: §ID append-only (portable) — never renumber; retired sections keep their number.
-</critical>
+# Working in an isolated Git worktree
 
-# Isolated git worktree
+A worktree provides a separate checkout while sharing repository history. Use it when isolation protects concurrent work or lets a task build, test, or edit without disturbing the user's current checkout.
 
-## §1 when to use
+## §1 When isolation is useful
 
-Create an isolated worktree when:
-- parallel-safe build/test/edit without touching the user's main working tree
-- a skill or agent must run isolated from concurrent changes in the main tree
+Create a worktree when the task or owning workflow requires an independent checkout. A single task can remain in the current checkout when that is safe and no isolation requirement applies.
 
-Skip when single-thread work where modifying the main tree is safe.
+Before creation, identify the branch or starting revision the task is authorized to use. Do not invent a requested branch name or include unrelated local changes without understanding the intended starting state.
 
-## §2 setup
+## §2 Setup
 
-1. Resolve branch:
-   - exists on remote → `git fetch origin <branch>` + checkout (resume)
-   - missing → `git fetch origin <base-branch>` + create from `origin/<base-branch>`
-2. Worktree path: `.agent-workspace/worktrees/<ID>-<TAG>-<SESSION>/` — `<TAG>` = workflow tag (e.g. `FS`, `BE`); `<SESSION>` = unique caller run id (prevents collision across reruns).
-3. `git worktree add <worktree-path> <branch>`
-4. Symlink non-tracked config (`.env`, runtime settings, credentials) the workflow needs — only items it will actually use.
-5. Resolve absolute path once: `WORKTREE_ABS=$(realpath <worktree-path>)`. Child agents do NOT inherit CWD — pass `WORKTREE_ABS` explicitly so they `cd` into the same tree.
+1. Inspect the repository and existing worktrees. Resolve the intended branch and starting revision from the task. Fetch the required remote reference when it is needed to establish that state.
+2. Choose a task-specific path beneath `.agent-workspace/worktrees/`. Include a unique session identifier so another run cannot reuse the same directory accidentally.
+3. Create the worktree with `git worktree add` using the resolved path and branch or revision. If creation fails, stop before adding dependent configuration or starting work in an assumed checkout.
+4. Provide only the untracked configuration the task actually needs. Use platform-appropriate links or another supported mechanism, and do not expose credentials in logs or reports.
+5. Resolve the checkout's absolute path and pass it explicitly to every agent or command that works there. Do not assume a child process or subagent shares the coordinator's working directory.
 
-Edge cases:
+Inspect an existing directory before reusing it. The presence of a path does not prove that it belongs to the current task.
 
-| situation | action |
-|---|---|
-| path already present from prior run | new `<SESSION>` differs → no conflict |
-| main tree has uncommitted changes | unaffected (worktrees are independent) |
-| `git worktree add` fails | fail-fast, abort, create nothing else |
+## §3 Cleanup
 
-## §3 cleanup
+Before removing a worktree, verify that its work has been accepted, integrated, or otherwise preserved at a recoverable location. Inspect both tracked and untracked changes. An uncommitted result can remain in the worktree until the user decides what to do with it.
 
-Idempotent; each line tolerates prior failure. Guard removal on a verified push.
+Do not commit or push merely to satisfy a cleanup condition. Those actions require the user's authorization independently of the decision to create an isolated checkout.
 
-```bash
-# precondition: code committed AND pushed (commit_sha non-null).
-# commit_sha null → SKIP removal, print:
-#   "WARN: commit_sha missing — worktree preserved at <path>"
-cd <root>
-git worktree remove -f <worktree-path> 2>/dev/null || true
-rm -rf <worktree-path>
-git worktree prune
-```
+Use Git's worktree removal for a checkout that is safe to remove, and inspect any failure instead of following it with unconditional recursive deletion. Resolve and verify the exact absolute target before a destructive filesystem operation. Preserve the checkout when ownership or recovery is uncertain, and report what remains.
 
-Never remove a worktree whose code was not pushed — preserve it so work is recoverable.
-
-<critical_recap>
-1. worktree path: `.agent-workspace/worktrees/<ID>-<TAG>-<SESSION>/`; pass `realpath` abs to child agents
-2. symlink only non-tracked config the workflow will actually use
-3. cleanup removes worktree ONLY after commit pushed — else preserve + warn
-</critical_recap>
+Prune stale worktree metadata only after the actual checkout state has been established. Cleanup is complete when the intended disposable checkout is gone and the task's useful work remains recoverable.

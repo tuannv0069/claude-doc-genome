@@ -1,7 +1,5 @@
 # Authors
 
-Author of the `init-project` skill and its documentation-architecture philosophy (the agent doc-system genome: neural-network model, context economy, growth-from-evidence, heredity via promote):
+Tuấn Nguyễn created the `init-project` skill and its documentation architecture, including the model of connected guidance and the process for promoting project improvements into a reusable bundle.
 
-- **Tuấn Nguyễn**
-
-Skill-level attribution only — intentionally not placed in `portable/` so deployed projects stay author-agnostic (portable-pure law, `doc-organization.md §9`).
+Attribution is maintained here at the skill level. It is not copied into the portable files deployed to other projects.

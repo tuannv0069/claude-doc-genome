@@ -1,64 +1,50 @@
 # Contributing
 
-Thanks for your interest in improving `claude-doc-genome`.
+## Report a problem
 
-## Report an issue
+Describe the command or workflow you used, the expected behavior and the result you observed. Include the relevant error or verification output and enough project context to reproduce the problem without exposing private information.
 
-Open a GitHub issue with:
+## Work in the correct source
 
-- what you ran (`/init-project`, `check`, or `promote`) and on what kind of project;
-- what you expected vs. what happened;
-- relevant output (the manifest, the verify step, or any error).
+This repository uses the same genome that it distributes. Portable rules are authored in `.claude/rules/`, guides and roles in `.agent-workspace/guide/`, and verification tools in `.agent-workspace/tooling/`. Edit the live file first, verify it, then synchronize it into the corresponding group under `skills/init-project/portable/`.
 
-## Local setup
+The bundle and live copy are intentionally separate deployment copies. Project-owned additions are not automatically portable. Check that a candidate contains reusable instructions rather than project-specific values before promoting it.
 
-Enable the pre-commit hook once per clone (CI enforces the same checks on every PR):
+Edit `skills/init-project/SKILL.md`, the templates, repository scripts and repository documentation directly. A rendered project index must not be copied back into a template with its project values still present.
+
+When removing or renaming content, update the routers, triggers, section references and migration behavior in the same change. Historical decisions remain available as records; active guidance should describe the current workflow.
+
+## Verify a change
+
+Enable the local hook after cloning:
 
 ```sh
 git config core.hooksPath .githooks
 ```
 
-It blocks two things: version fields out of sync (`scripts/sync-version.mjs check`) and a broken
-documentation network — dead trigger, orphan guide, dead `§ID` (`scripts/doc-lint.mjs`). Run either
-by hand at any time.
+The hook checks version synchronization and the documentation network. Run the tests for any changed tool as well. Before handing off a portable change, compare every affected live file with its bundle copy; a clean updater report is useful evidence but does not replace checking routing and project-owned templates.
 
-## Propose a change
+For changes to deployment behavior, use temporary project fixtures to check additions, updates, retirement, local edits and template handling. Do not use another person's working project as a test fixture. For changes to guidance, read the complete result and verify that its required behavior remains clear and reachable.
 
-1. Fork the repository and create a branch from `main`.
-2. Make your change in the right copy. This repo is **deployed instance #1** of its own standard, so a portable rule, guide, skill, or agent exists twice on purpose (`doc-organization.md` §4): the live copy under `.claude/` and `.agent-workspace/guide/`, and the packaged copy under `skills/init-project/portable/`. Edit the **live** copy — that is the one the agent actually reads — then mirror it into the bundle with `/init-project promote`. If you cannot run the skill, copy the file across by hand and say so in the PR. Either way `node scripts/update.mjs --project .` must end with `conflict: 0` before you open it. Keep the bundle generic — no project-specific names, paths, or values.
-   Everything else (`SKILL.md`, `templates/`, `scripts/`, the repo's own docs) has one copy and is edited directly.
-3. Log your change under `## [Unreleased]` in `CHANGELOG.md`. Do **not** bump the version — the maintainer cuts versions at release time (see [Releasing](#releasing)).
-4. Open a pull request describing the change and the reasoning.
+Record user-visible changes in the Unreleased section of `CHANGELOG.md`. A pull request should describe the problem, the resulting behavior and the validation actually performed.
 
-## Releasing
+## Prepare and publish a release
 
-The version means something to anyone who runs `/init-project update`, so it follows SemVer **for the bundle**:
+Version changes follow the compatibility of the bundle. Removing or renaming a portable contract, or changing a template slot contract, requires a major version. Compatible additions require a minor version. Wording corrections that preserve those contracts require a patch version.
 
-| bump | meaning | effect on `update` |
-|---|---|---|
-| MAJOR | breaks an initialized project: a portable file referrers depend on is removed/renamed, or a template slot contract changes | may need manual migration |
-| MINOR | additive: a new portable rule/guide/skill, a new `§ID` (append-only), or a new mode | safe to update |
-| PATCH | wording/typo/clarification inside an existing portable file; no `§ID` or structure change | safe to update |
+The canonical version is `skills/init-project/VERSION`. Use the synchronizer when preparing a release:
 
-Commits follow [Conventional Commits](https://www.conventionalcommits.org/) so the changelog stays derivable.
+```sh
+node scripts/sync-version.mjs set X.Y.Z
+node scripts/sync-version.mjs check
+```
 
-Cut a release (maintainer, on `main` after merge):
+The synchronizer updates the plugin metadata, marketplace metadata and README badge. Do not edit the version mirrors independently. Version preparation does not publish the change.
 
-1. `node scripts/sync-version.mjs set X.Y.Z`
-2. Add a `## [X.Y.Z] - YYYY-MM-DD` section to `CHANGELOG.md`, plus a `[X.Y.Z]: …/releases/tag/vX.Y.Z` link line.
-3. Commit: `release: vX.Y.Z`.
-4. Tag and push: `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main --tags`.
-5. (Optional) Publish a GitHub Release from the tag, pasting the changelog section.
+After the maintainer authorizes a release and the checks pass, move the relevant Unreleased notes into a dated version section, commit the release, create its `vX.Y.Z` tag, push the authorized branch and tag, and publish the corresponding GitHub Release. Ensure the changelog's release link uses that tag. Do not commit, push or publish merely because a wording or maintenance task was requested.
 
-Every released version MUST have a matching `vX.Y.Z` git tag — the `CHANGELOG.md` links resolve to `releases/tag/vX.Y.Z`.
+## Design responsibilities
 
-## Design principles
+Keep one source for each substantive workflow requirement and maintain stable references to it. Keep project data out of portable content. The project or the workflow that owns a deliverable also owns any requirements specific to that deliverable.
 
-This plugin treats the documentation set as a living network (see the README "Philosophy" section). Two rules matter most for contributions:
-
-- **One source of truth.** A substantive rule lives in exactly one file with a stable `§ID`; everything else references it. Never inline a copy.
-- **Portable-pure bundle.** Files under `portable/` are copied verbatim into every project, so they must contain no project-specific name, path, or value.
-
-## License
-
-By contributing, you agree that your contributions are licensed under the [MIT License](LICENSE).
+Contributions are licensed under the repository's [MIT License](LICENSE).

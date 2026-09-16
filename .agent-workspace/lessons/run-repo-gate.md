@@ -26,3 +26,15 @@ Procedure for recording / escalating / reading back: `.agent-workspace/guide/gen
 - ✅ generated artifact added → exclude it from the scan's corpus in the same change set.
 - evidence — 17 `dup` findings pairing `AGENTS.md` against `CLAUDE.md`; fixed by adding the Codex surface to `FROZEN` in `scan_rule_health.py`, with two cases in `test_scan_rule_health.py`.
 - seen — 1
+
+### Resolve output paths against their owning workspace
+
+The situation occurs when a probe runs in an isolated project but stores its evidence in the source repository. In this task, the first probe command used a relative output path while its current directory was the isolated fixture. The write failed because that task directory existed only in the source repository.
+
+Use an absolute path for evidence owned by a different workspace, and establish the output file before starting the dependent command. The corrected command used the source repository's absolute task path. The subsequent Claude invocation reached the service and reported a usage limit, which is a separate environmental result. This method failure has been observed once.
+
+### Exercise the host encoding when a verifier reads Git history
+
+The first integrated rule-health run failed on Windows even though its parser fixtures passed. Git returned UTF-8 text, while a subprocess decoded it with the host's default Windows-1252 codec. The decoding error left the history comparison without valid text.
+
+Use explicit UTF-8 decoding for Git text and include a history fixture with non-ASCII content under a different preferred host encoding. The new fixture also verifies that a later target revision reopens an earlier resolved drift finding. Parser-only success does not establish that the tool can read real history on the host. This failure has been observed once.

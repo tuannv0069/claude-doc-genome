@@ -2,152 +2,64 @@
 scope: portable
 ---
 
-<critical>
-scope: output format for any free-form audit / review / find-bug request not owned by a skill's own output contract.
-core: every finding carries 4 lobe fields | expand only when a field adds info | report leads with verdict + counts.
-forbidden: free-form prose findings | merged "problem/fix" cell | preamble/closing filler | pasting code back | splitting one cause into N findings.
-precedence: a skill that defines its own report/finding schema wins — this file governs only un-owned, free-form requests.
-output language: final report → conversation language; this guidance file → English.
-</critical>
+# Reporting review findings
 
-## §1 finding schema
+This guide defines the evidence needed to make a review finding actionable. It applies when a skill or project does not already define the reporting contract. It does not prescribe a document layout or writing style.
 
-Every finding carries exactly these **4 lobe fields** — nothing less makes it actionable, nothing more is mandatory:
+## §1 Information a finding needs
 
-| field | content |
+A finding needs a severity, a location, a description of the problem, and a proposed correction. The problem identifies the defect; the correction identifies the change that would address it. Keep both meanings identifiable in the report.
+
+Use a location that lets the recipient inspect the evidence, such as a file and line, a stable section, or a reproducible screen state. When one cause appears at several locations, describe that cause once and identify the affected locations.
+
+### §1.1 Additional information
+
+Include the cause when the defect alone does not explain how it arose, and the impact when it is needed to justify severity. Identify the governing requirement or other source when the reader needs it to evaluate the conclusion. Give findings stable identifiers when later work needs to refer to them.
+
+Distinguish a confirmed finding from an unverified possibility. A conclusion based only on inference remains suspected; do not present it as confirmed because a reporting template has no uncertainty field.
+
+## §2 Severity
+
+Assess severity from the demonstrated effect and the reachable conditions that trigger it.
+
+| Severity | Meaning |
 |---|---|
-| Severity | one value from §2 |
-| Location | `file:line` (clickable) — list multiple sites on one finding if same cause |
-| Problem | what is wrong (the defect itself) |
-| Fix | one actionable direction to correct it |
+| Blocker | The defect prevents a build, deployment, or core workflow, or causes data loss or corruption. |
+| Critical | The system remains usable, but the defect produces a wrong business result or exposes a security vulnerability. |
+| High | The defect affects a real path without a safe workaround, or violates a requirement with a demonstrated substantial consequence. |
+| Medium | The defect is localized, has a workable alternative, or introduces a contained maintenance risk. |
+| Low | The issue has no demonstrated behavioral impact, such as unused code or a cosmetic defect. |
 
-**Problem and Fix are always separate fields — never merged.** Problem = "what is wrong"; Fix = "what to do". One states the defect, the other the correction.
+For a non-software artifact, assess the consequence within the project's domain. A broken factual claim can affect the artifact's purpose even when there is no executable behavior.
 
-### §1.1 optional expansion fields
+## §3 Reporting the review outcome
 
-Add a field ONLY when it carries information beyond the 4 lobes. Default-off:
+State what was examined, what evidence was available, and what conclusion that evidence supports. The project's reporting requirements determine how this information is presented. A count of findings describes the report; it does not establish the depth or completeness of the review.
 
-| field | add when |
-|---|---|
-| ID (`BUG-01`) | report has >1 finding (needed to reference) — single finding: omit |
-| Cause | root cause is NOT obvious from Problem (a defect deep enough to warrant `five-why`) |
-| Impact | needed to justify a severity that looks surprising for the Problem |
-| Source | the defect comes from a named rule / viewpoint / checklist item |
-| Status | label `suspected` only when unverified; `confirmed` is the default and stays silent |
+### §3.1 (retired)
 
-## §2 severity
+### §3.2 (retired)
 
-| severity | criterion |
-|---|---|
-| Blocker | blocks build / deploy / a core flow; data loss or corruption |
-| Critical | wrong business result or security hole, but the app still runs |
-| High | incorrect behavior on a real path with no safe workaround; a rule violation that will bite |
-| Medium | localized defect or edge case with a workaround; maintainability risk that is real but contained |
-| Low | cosmetic, dead code, style, magic value — no behavioral impact |
+## §4 Scaling the report
 
-## §3 report skeleton
+The information required by §1 is the same for a small review and a broad audit. Expand the evidence when a recipient would otherwise have to guess why a finding is valid or how to act on it.
 
-```
-Verdict: <PASS | ISSUES FOUND> — N findings: <count per severity, high→low>
+If no findings survive verification, identify the inspected scope and any limits of the review. An absence of demonstrated findings is not a guarantee that the artifact has no defects.
 
-<findings — table if ≥3, inline blocks if ≤2>
+## §5 Example
 
-<Expanded detail: — only findings that use an optional field (§1.1)>
-```
+Suppose saving an item succeeds but the visible list still shows its old value. A useful finding identifies the mutation handler, explains that the list query is not refreshed after the save, and proposes refreshing the query when the mutation succeeds. If the stale list can cause a user to submit the same operation twice, that consequence helps justify severity.
 
-### §3.1 findings table (≥3 findings) — 5 columns, fixed order
+A statement that the cache might be wrong lacks a concrete condition and demonstrated consequence. It belongs in the investigation until the evidence supports a finding.
 
-| ID | Sev | Location | Problem | Fix |
-|----|-----|----------|---------|-----|
-| BUG-01 | Blocker | `path:line` | what is wrong | what to do |
+## §6 Review integrity
 
-Sort rows by severity descending. Below the table, an **Expanded detail** list carries only the findings that need an optional field — each as `BUG-0N — Cause: … / Impact: … / Source: … / suspected`.
+Report distinct defects rather than inflating the count by splitting one cause into several entries. Before declaring a finding confirmed, check that its evidence supports both the triggering condition and the claimed consequence.
 
-### §3.2 inline (≤2 findings)
+A proposed correction should address the demonstrated defect. When it changes a shared contract, identify the affected consumers and use `fix-impact-analysis.md` §3 before applying it. Reporting a possible fix does not prove that it has been implemented or verified.
 
-One block per finding: `[Severity] file:line — Problem → Fix`, optional fields appended only as needed. No table, no ID required.
+## §7 Explaining a proposed correction
 
-## §4 scaling (quick vs deep)
+Explain the meaning of a condition, formula, or unfamiliar identifier when that meaning is necessary to judge the correction. Check the expression itself, including boundary and missing-value cases, before proposing it.
 
-One schema, self-scaling by request depth:
-
-| request | shape |
-|---|---|
-| quick check (≤2 findings) | inline blocks per §3.2; still carry all 4 lobe fields |
-| audit / deep review (≥3) | summary table per §3.1, expand only findings that need it |
-| 0 findings | `Verdict: PASS` + one line naming what was inspected — never a bare "no bugs" |
-
-## §5 example
-
-<example type="report">
-❌ "I reviewed the service carefully and noticed a few things. First, the API path
-   seems hardcoded which might cause issues, here is the code: [20-line paste]. Also
-   the cache could be stale. In conclusion there are some bugs to fix."
-   — prose, narration, code paste, merged problem/fix, no severity, no location, filler conclusion.
-
-✅ Verdict: ISSUES FOUND — 3 findings: 1 Critical · 1 High · 1 Low
-
-   | ID | Sev | Location | Problem | Fix |
-   |----|-----|----------|---------|-----|
-   | BUG-01 | Critical | `useItem.ts:54` | mutation does not invalidate the list query → stale rows shown after save | invalidate the query key in `onSuccess` |
-   | BUG-02 | High | `item.service.ts:71` | status compared as raw string `"1"` instead of enum | use `StatusType.Active` |
-   | BUG-03 | Low | `Item.tsx:7` | unused `useMemo` import | remove import |
-
-   Expanded detail:
-   - BUG-01 — Impact: user sees the old row, assumes save failed, re-saves → overwrite/duplicate. Source: cache-invalidation checklist.
-</example>
-
-## §6 output discipline
-
-Each line is a binary check the writer can self-verify.
-
-<rules section="ALWAYS">
-- lead with the verdict line (verdict + count per severity), then findings — no preamble
-- sort findings by severity descending
-- one real problem = one finding; same cause at N sites → one finding listing N locations
-- cite `file:line`; quote ≤1 line of code only when the defect is invisible without it
-- Fix = one actionable direction; paste a snippet only when the fix is a trivial one-liner
-- confident voice for `confirmed`; hedge only on `suspected`
-- every finding must be actionable without a follow-up question — location precise, fix concrete
-- 0 findings → PASS + one line naming what was inspected
-</rules>
-
-<rules section="NEVER">
-- prose/bulleted findings instead of the §3 skeleton
-- merge Problem and Fix into one cell
-- paste a code block to describe a defect that a `file:line` already pinpoints
-- split one root cause into multiple findings to inflate the count
-- closing paragraph that restates the verdict
-</rules>
-
-## §7 explanation clarity — Fix and Cause fields
-
-A Fix or Cause is read to be acted on; a reader who cannot follow it cannot act. Clarity ≠ length — a terse fix stays terse, it just carries no undefined token. The reader of a bug report does not implement this component.
-
-<rules section="ALWAYS">
-- every symbol / formula / identifier in a Fix or Cause → self-evident OR glossed inline (what it is · what value · why)
-- framework/domain jargon (prop, forward down, controlled, desync, blur, superRefine) → plain-language gloss on first use when the reader may not build this layer
-- mechanism fix (not a value swap) → state the chain: current behavior → why wrong → what changes → why the defect is gone
-- fix that is a condition/formula → give the literal expression AND its meaning in prose; verify its logic (sign, branch, null case) before writing — a plausible-but-wrong formula is worse than prose alone
-</rules>
-
-<rules section="NEVER">
-- emit a bare expression (`min >= 0`, `?? -1`) with no statement of what it decides
-- assume the reader codes this component
-- impose a fixed template (`current→why→fix→result`) on a value swap that needs one sentence
-</rules>
-
-<example type="fix_clarity">
-❌ Fix: forward `allowNegative = (min >= 0)` down.
-   — undefined jargon ("forward down"), bare formula, no meaning stated, and the formula is sign-inverted (a field with `min:0` would end up permitting negatives).
-✅ Fix: add prop `allowNegative` (`true` = permit negatives; default `true` to keep existing fields unchanged). The factory that builds the input computes it from config — a field declaring `min ≥ 0` → `allowNegative=false` (block negatives); no `min`, or `min < 0` → stays `true`. Expression: `allowNegative = (min ?? -1) < 0`.
-</example>
-
-<critical_recap>
-1. 4 lobe fields per finding: Severity · Location · Problem · Fix — Problem and Fix never merged
-2. optional fields (ID / Cause / Impact / Source / Status) added only when they add info
-3. report leads with verdict + severity counts; findings sorted severity-desc
-4. self-scaling: ≤2 inline, ≥3 table + selective expansion, 0 → PASS + scope line
-5. skill-owned output contract wins; this file governs only un-owned free-form requests
-6. Fix/Cause carry no undefined token — gloss jargon, expand + verify any formula, explain a mechanism as a chain (§7)
-</critical_recap>
+For example, a formula that allows negative values based on a configured minimum needs a correct comparison and a defined meaning for an absent minimum. Expose those assumptions so the recipient can judge the logic. This does not require a fixed wording pattern.

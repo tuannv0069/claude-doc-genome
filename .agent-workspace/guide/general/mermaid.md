@@ -2,214 +2,60 @@
 scope: portable
 ---
 
-<critical>
-scope: creating or editing any Mermaid diagram
-rendering: GitHub, VS Code Markdown Preview, mermaid.live
-companion: `.agent-workspace/guide/general/markdown.md` — nested code block wrapping rules
-</critical>
+# Creating and checking Mermaid diagrams
 
-<rules section="NEVER">
-- use experimental diagram types (`C4Context`, `zenuml`) without explicit approval
-- leave labels containing `()`, `,`, `:`, `{}`, Unicode, or reserved words unquoted
-- reuse a subgraph ID as a node ID within the same diagram
-- use `\n` in labels — use `<br>` instead
-- use `->` in sequence diagrams (legacy syntax)
-- use deprecated `stateDiagram`
-- apply saturated/vivid colors — pastel only
-- put emoji inside diagram nodes
-</rules>
+This guide covers diagram syntax, references and rendering. It does not assign a common palette, layout direction, label length or visual style to the project's outputs.
 
-<rules section="ALWAYS">
-- wrap diagrams in ` ```mermaid ` fenced blocks
-- first line inside block = diagram type keyword
-- `flowchart`: declare direction immediately (`TD` | `LR` | `BT` | `RL`)
-- declare all `sequenceDiagram` participants before message flow
-- `TD` for vertical phase/process flows; `LR` for pipeline/layer diagrams
-- quote edge labels: `|"text"|`
-- keep all subgraph IDs and node IDs globally unique within diagram
-</rules>
+## §M1 Declare the diagram
 
-## supported diagram types
+For a Markdown renderer with Mermaid support, place the diagram in a fenced code block identified as `mermaid`. Begin its source with the declaration for the diagram type being used. A flowchart declaration includes its direction, for example `flowchart LR`; the direction is a property of that diagram rather than a required convention for a kind of document.
 
-| type | keyword | use case | max nodes |
-|------|---------|----------|-----------|
-| Flowchart | `flowchart` | process flows, decision trees | 15 |
-| Sequence | `sequenceDiagram` | component interactions, API calls | 10 |
-| Class | `classDiagram` | object models, interfaces | 12 |
-| State | `stateDiagram-v2` | state machines, lifecycle | 8 |
-| ER | `erDiagram` | DB schemas, entity relationships | 10 |
-| Gantt | `gantt` | project timelines | 20 |
-| Pie | `pie` | proportional data | 6 |
-| Git Graph | `gitGraph` | branching strategies | 15 |
-| User Journey | `journey` | UX flows | 10 |
-| Mindmap | `mindmap` | topic hierarchies | 3 levels |
-| Timeline | `timeline` | chronological sequences | 10 events |
+Verify that the target renderer supports the chosen diagram type and syntax. The [Mermaid syntax reference](https://mermaid.js.org/intro/syntax-reference.html) identifies the available types, but an application's bundled version may differ from the current documentation.
 
-## §M1 block declaration
+## §M2 Keep labels separate from syntax
 
-- first line inside ` ```mermaid ` block: diagram type keyword
-- `flowchart`: declare direction immediately (`TD`, `LR`, `BT`, `RL`)
+Use the label syntax appropriate to the diagram type. In a flowchart, quoted label text can protect punctuation or words that the parser would otherwise interpret as structure. Check escaping and line breaks in the target renderer; a literal backslash followed by `n`, HTML line breaks and Markdown strings do not have interchangeable behavior in every context.
 
-## §M2 quoting labels
+For example, `entry["Review (requested)"]` gives the node the identifier `entry` and a separate label. The [flowchart documentation](https://mermaid.js.org/syntax/flowchart.html) explains quoted text, links and supported label forms.
 
-Quote node, edge, and subgraph labels containing: `()`, `,`, `:`, `{}`, Unicode, reserved words (`end`, `and`, `or`).
-Edge labels: `|"text"|`. Multi-line labels: `<br>`.
+## §M3 Use identifiers consistently
 
-<example type="quoted_labels">
-✅
-```mermaid
-flowchart TD
-    start["Bắt đầu (Init)"] -->|"Edit (from search)"| edit["Edit"]
-    edit -->|"Change status"| confirm{"Confirm?"}
-    confirm -->|"Yes"| done["end of process"]
-```
-❌ Unquoted labels with `()`, Unicode, or `end` cause parse errors.
-</example>
+Assign distinct identifiers to distinct nodes and subgraphs. Reusing an identifier refers to the same graph object; it does not create an unrelated object with the same name. In particular, do not make a subgraph its own child by using its identifier for an enclosed node.
 
-## §M3 subgraph ID uniqueness
+When renaming an identifier, update the edges, styling references and other diagram statements that use it. A visible label can change without changing the identity of the object.
 
-Never reuse a subgraph ID as a node ID — causes cycle parse error.
+## §M4 Represent sequence interactions accurately
 
-<example type="subgraph_id">
-✅ subgraph `Phase3`; node inside: `collect["Thu thập kết quả"]`
-❌ subgraph `Phase3`; node inside: `Phase3["Thu thập kết quả"]`
-</example>
+In a sequence diagram, participants identify the actors and messages connect them. Explicit participant declarations can control the displayed names and order. Select arrow syntax according to the interaction being represented and verify its meaning in the [sequence diagram reference](https://mermaid.js.org/syntax/sequenceDiagram.html).
 
-## §M4 sequence diagrams
+Do not infer application behavior from a visual convention alone. A solid or dashed arrow does not prove whether a real operation is synchronous, complete or successful; the source evidence must establish that meaning.
 
-- declare all participants with `participant` before any message flow
-- `->>` for synchronous calls; `-->>` for return messages
+## §M5 Check entity relationship cardinality
 
-<example type="sequence_diagram">
-✅
-```mermaid
-sequenceDiagram
-    participant FE as Frontend
-    participant BE as Backend
-    FE ->> BE: POST /api/orders
-    BE -->> FE: 201 Created
-```
-</example>
+For an entity relationship diagram, verify both ends of every relationship against the underlying data model. The cardinality markers describe whether the relationship allows zero, one or many instances. Reversing the endpoints can produce valid syntax with the wrong meaning.
 
-## §M5 ER diagrams — cardinality notation
+Consult the [entity relationship syntax](https://mermaid.js.org/syntax/entityRelationshipDiagram.html) for the exact markers and relationship forms supported by the renderer. Validate the relationship against the schema as well as checking that the diagram parses.
 
-| symbol | meaning |
-|--------|---------|
-| `\|\|` | Exactly one |
-| `o\|` | Zero or one |
-| `\|\{` | One or more |
-| `o\{` | Zero or more |
+## §M6 Check state transitions
 
-## §M6 state diagrams
+Use state-diagram syntax supported by the target renderer; `stateDiagram-v2` is one documented declaration. Verify the states, transitions and transition labels against the behavior being described. Initial and terminal markers must correspond to actual lifecycle boundaries rather than merely making the diagram look complete. The [state diagram reference](https://mermaid.js.org/syntax/stateDiagram.html) describes the syntax.
 
-Use `stateDiagram-v2`. Transitions: `-->`. Transition labels: `: label`.
+## §M7 (retired)
 
-## §M7 visual style
+### §M7.1 (retired)
 
-### §M7.1 principles
+### §M7.2 (retired)
 
-| principle | rule |
-|-----------|------|
-| colors | pastel only — no saturated/vivid fills |
-| semantic consistency | same color = same meaning across all diagrams |
-| labels | max 6 words per line; `<br>` to break long labels |
-| emoji | only in prose, not inside nodes |
-| direction | `TD` for process flows; `LR` for pipeline/layer |
-| minimal color | apply only when ≥5 nodes or semantic distinction needed |
+### §M7.3 (retired)
 
-### §M7.2 semantic color palette
+## §2 Validate syntax and meaning
 
-| role | fill | stroke | meaning |
-|------|------|--------|---------|
-| `process` | `#e8f4fd` | `#5ba3c9` | normal processing step |
-| `decision` | `#fefce8` | `#c9a83c` | branch / condition |
-| `terminal` | `#edfaf1` | `#5ab07a` | start / end / success |
-| `warning` | `#fff4e6` | `#c97a3c` | warning — processing continues |
-| `error` | `#fdf0f0` | `#c96060` | error — blocks processing |
-| `external` | `#f5f5f5` | `#aaaaaa` | external actor / system |
+Render the diagram with the intended application's Mermaid version. Inspect any parse error at the referenced statement, then check related identifiers, label delimiters and the diagram declaration. A successful parse is only the syntax check.
 
-`warning` (orange) and `error` (red) are distinct severities — keep them visually separate, never collapse into one color.
+Compare the rendered objects and connections with the source material. Confirm that no required actor, branch, relationship or state is missing and that every displayed relationship is supported. If a dependency on unsupported syntax remains, report that limitation and use a supported representation within the task's scope.
 
-### §M7.3 implementation
+## §3 Diagnose a rendering failure
 
-Global baseline via `%%{init}%%` at diagram top:
+An error mentioning a node's parent can indicate an identifier collision between a node and its subgraph. An unexpected token near a label can indicate that text was parsed as Mermaid syntax. A feature that works in a current editor but fails in the destination application can indicate a version or configuration difference.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#e8f4fd', 'primaryBorderColor': '#5ba3c9', 'primaryTextColor': '#1a3a4a', 'lineColor': '#5ba3c9', 'background': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
-```
-
-Flowchart — semantic colors via `classDef`:
-
-```mermaid
-flowchart TD
-    classDef process  fill:#e8f4fd,stroke:#5ba3c9,color:#1a3a4a
-    classDef decision fill:#fefce8,stroke:#c9a83c,color:#4a3a00
-    classDef terminal fill:#edfaf1,stroke:#5ab07a,color:#1a3a28
-    classDef warning  fill:#fff4e6,stroke:#c97a3c,color:#4a2800
-    classDef error    fill:#fdf0f0,stroke:#c96060,color:#4a1a1a
-    classDef external fill:#f5f5f5,stroke:#aaaaaa,color:#444444
-```
-
-Apply with `:::className` — e.g., `A["Validate"]:::process`, `B{"OK?"}:::decision`.
-
-Flowchart — node shapes:
-
-| shape | syntax | use |
-|-------|--------|-----|
-| Rectangle | `["label"]` | process step |
-| Stadium | `(["label"])` | start / end / terminal |
-| Diamond | `{"label"}` | decision / condition |
-| Cylinder | `[("label")]` | database / storage |
-| Subroutine | `[["label"]]` | subprocess / linked flow |
-
-Flowchart — arrows:
-
-| arrow | syntax | use |
-|-------|--------|-----|
-| Solid | `-->` | main flow |
-| Dashed | `-.->` | optional / async / side path |
-| Labeled | `-->|"label"|` | branch condition |
-
-Subgraph backgrounds:
-
-| type | fill | stroke |
-|------|------|--------|
-| Phase | `#f0f7ff` | `#7ab3d4` |
-| Layer | `#f7f0ff` | `#9b7abf` |
-| External | `#fafafa` | `#bbbbbb` |
-
-## §2 checklist
-
-- [ ] diagram type: supported, not experimental (§M1)
-- [ ] special-char labels: quoted (§M2)
-- [ ] no node ID same as enclosing subgraph ID (§M3)
-- [ ] sequence: participants declared first (§M4)
-- [ ] ER: official cardinality notation (§M5)
-- [ ] `stateDiagram-v2` not deprecated `stateDiagram` (§M6)
-- [ ] colors: pastel only (§M7.1)
-- [ ] same role = same color throughout (§M7.2)
-- [ ] labels: max 6 words, no emoji in nodes (§M7.1)
-- [ ] direction: `TD` process, `LR` pipeline/layer (§M7.1)
-- [ ] `classDef` only when ≥5 nodes or semantic distinction needed (§M7.3)
-
-## §3 common parse errors
-
-| error | cause | fix |
-|-------|-------|-----|
-| `Expecting..., got 'PS'` | unquoted edge label | `-->|"label"|` |
-| `Unexpected token \n` | `\n` in label | use `<br>` |
-| `Unexpected token end` | reserved word unquoted | `["end"]` or rename |
-| `Parse error on line X` | invalid ID or syntax | check ID format; quote labels |
-| `Setting X as parent of X` | node ID = subgraph ID | rename node (§M3) |
-
-## scope exclusions
-
-code comments, config files (YAML/JSON), user-provided content, tool output/logs.
-
-<critical_recap>
-1. quote all labels containing `()`, `,`, `:`, `{}`, Unicode, or reserved words
-2. never reuse subgraph ID as node ID within the same diagram
-3. declare all participants before message flow in sequence diagrams
-4. pastel colors only; same semantic role = same color throughout
-5. `TD` for process flows, `LR` for pipeline/layer; `stateDiagram-v2` not `stateDiagram`
-</critical_recap>
+Treat those patterns as investigation leads. Reproduce the failing diagram, identify the concrete statement and test the correction in the destination renderer. Do not claim a universal cause from an error message alone. For Markdown fence or embedding problems, use `markdown.md` §2.

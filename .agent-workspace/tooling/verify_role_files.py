@@ -1,19 +1,9 @@
 #!/usr/bin/env python3
-"""Gate for the role set `.agent-workspace/guide/roles/`.
+"""Check role routing and the section read by checking roles.
 
-Law enforced: the four role-file rules from `guide/general/role-selection.md` §3, and the
-router table format from `guide/general/role-selection.md` §6. The gate scans
-`.agent-workspace/guide/roles/**` only.
-
-Four rules:
-1. every role named in the router has a file on disk
-2. every role handed to in a role file's §7 appears in the router
-3. every role file carries §1..§7 — no missing number, no number outside the frame
-4. §1, §3 and §5 of every role file carry at least one ✅ line and one ❌ line
-
-Built-in limit: rule 4 counts the PRESENCE of the ✅/❌ pair; it cannot read whether that pair
-actually illustrates the clause above it. The gate is a floor, not a ceiling — the backstop is
-a human reading `role-selection.md` §3 (`verification-gate-design.md` §1).
+The gate verifies that registered roles exist, that optional handoff references
+resolve, and that each role exposes its checking criteria in section 6. It does
+not impose a document length, a fixed section count, or a style for examples.
 """
 from __future__ import annotations
 
@@ -27,9 +17,8 @@ ROLES = Path(".agent-workspace/guide/roles")
 HEADER_CELLS = ["work type", "primary role", "checking roles"]
 ROLE_NAME = re.compile(r"^[a-z][a-z0-9-]*$")
 BACKTICKED = re.compile(r"`([a-z][a-z0-9-]*)`")
-SECTION = re.compile(r"^## §(\d+)\b", re.M)
-REQUIRED = [1, 2, 3, 4, 5, 6, 7]
-PAIR_SECTIONS = [1, 3, 5]
+SECTION = re.compile(r"^#{1,6}\s+§(\d+)\b", re.M)
+REQUIRED = [6]
 
 
 def parse_router(index_path: Path) -> tuple[list[dict], list[str]]:
@@ -89,22 +78,13 @@ def sections(text: str) -> dict[int, str]:
 
 
 def check_file(path: Path, known: set[str]) -> list[str]:
-    """Rules 3 and 4 on one role file; rule 2 as well when `known` is non-empty."""
+    """Check the role section contract and any declared handoff targets."""
     problems: list[str] = []
     text = path.read_text(encoding="utf-8")
     secs = sections(text)
     for n in REQUIRED:
         if n not in secs:
             problems.append(f"{path}: §{n} missing")
-    for n in sorted(secs):
-        if n not in REQUIRED:
-            problems.append(f"{path}: has §{n}, outside the fixed §1-§7 frame")
-    for n in PAIR_SECTIONS:
-        body = secs.get(n, "")
-        if not body:
-            continue
-        if "✅" not in body or "❌" not in body:
-            problems.append(f"{path}: §{n} has no ✅/❌ pair")
     if known:
         for target in BACKTICKED.findall(secs.get(7, "")):
             if target not in known:
@@ -152,7 +132,7 @@ def main(argv: list[str]) -> int:
         for p in problems:
             print("  -", p)
         return 1
-    print(f"OK - {label}: all 4 rules hold")
+    print(f"OK - {label}: role routing and checking sections are valid")
     return 0
 
 

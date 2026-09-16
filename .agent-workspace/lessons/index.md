@@ -2,35 +2,24 @@
 scope: project
 ---
 
-<critical>
-scope: store of agent working-technique lessons — raw records, append-only, never auto-loaded.
-never: paste a record into a guide file | store a project fact here (→ `docs/` work product) | store user identity or preference here (→ harness memory)
-always: read the work type's file AND every store its `checks` cell names, BEFORE starting that work | record in the same turn as the correction | write records to `.claude/rules/rule-writing-standards.md` — this folder is inside its `paths:`
-</critical>
+# Lesson index
 
-Procedure for recording / escalating / reading back: `.agent-workspace/guide/general/lesson-capture.md` (§7 = the dispatch law this file implements, §8 = which store a record belongs to).
+This area records working methods that failed and what was learned from them. Recording and maintaining lessons follows `.agent-workspace/guide/general/lesson-capture.md`. Project facts and user preferences belong to their own sources rather than lesson stores.
 
-## §1 router — work type → file
+## §1 Lesson router
 
-Lookup protocol — CLAUDE.md sends a task here, and this table is the only dispatch point:
+Before starting work, match the action to the work types below. Read every matching store and the stores named in its `checks` cell. Follow those checking links for one hop only. If nothing matches, proceed without inventing a match. Repeat the lookup when the work type changes, not while continuing the same work with unchanged stores.
 
-1. name the work about to start as an ACTION (reading source, reviewing content, building a gate, answering a review comment, …)
-2. scan the `work type` column → the matching row's file, **plus every store its `checks` cell names**, are read before the first substantive step — one hop only, never the `checks` of those
-3. two rows match → read BOTH; a narrower row never cancels a broader one, because missing a store is the failure this router exists to prevent
-4. **no row matches → skip and proceed.** A forced near-match costs a read and plants irrelevant caution — worse than no read
-5. already looked up in this session and the work type has not changed → do not look up again
-6. dispatching the work to a subagent → pass the matched file path AND every path in its `checks` cell in the dispatch prompt; the subagent may not inherit CLAUDE.md (`lesson-capture.md` §7)
+When delegating the work, pass the relevant store paths to the delegate. The delegate may not receive this project's root instructions. These lookup responsibilities are defined in `.agent-workspace/guide/general/lesson-capture.md` §7.
 
 | file | work type | paired guide | checks |
 |---|---|---|---|
-| `verify-context-rule-change.md` | about to verify that an edit to `CLAUDE.md` / `.claude/rules/*` changed agent behaviour | — | — |
-| `run-repo-gate.md` | about to run a script or gate under `.agent-workspace/tooling/` | — | — |
-| `establish-external-platform-fact.md` | about to state a path, filename or config key of an external tool the project integrates with | — | — |
+| `verify-context-rule-change.md` | Verifying whether an edit to CLAUDE.md or a shared rule changed agent behavior | — | — |
+| `run-repo-gate.md` | Running a script or gate under .agent-workspace/tooling/ | — | — |
+| `establish-external-platform-fact.md` | Establishing an external tool's path, filename or configuration key | — | — |
 
-Add / rename / delete a store file → update this table **and** the pointer line at the top of its paired guide in the same commit (`lesson-capture.md` §5). This table is the **only** router a store is registered in — never add a second entry elsewhere (`lesson-capture.md` §7).
+Register a store here when creating it, and keep its paired guide reference consistent according to `.agent-workspace/guide/general/lesson-capture.md` §5. The router and store metadata are validated by `.agent-workspace/tooling/verify_lesson_router.py`. A new project with no store rows or store files is valid.
 
-The gate `.agent-workspace/tooling/verify_lesson_router.py` reads this table as a contract: the header row, four cells per row, `checks` targets that exist, no cycle, one row per store, and a `<critical>` block in every store declaring `scope:` and `phase:`.
+## §2 Stores without a paired guide
 
-## §2 store file with no paired guide
-
-A work type without its own guide holds the store file alone — register it in §1 with the guide column blank. That row is the whole cost: no CLAUDE.md trigger of its own, no row in `.agent-workspace/guide/index.md`, because the unconditional lookup already reaches it (`lesson-capture.md` §7).
+A store does not need a new guide merely to hold its lessons. Leave the paired-guide cell empty when no guide owns that subject. The lookup in §1 already makes the store reachable, as explained in `.agent-workspace/guide/general/lesson-capture.md` §7.

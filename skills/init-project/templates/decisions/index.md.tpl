@@ -3,43 +3,24 @@ scope: project
 cap: {{DECISION_CAP}}
 ---
 
-<critical>
-scope: router of the decision journal — where an entry lives, its shape, how to query it.
-never: list entries here | edit or delete an entry | record what `git log` reconstructs
-always: one decision one file | read the law before writing an entry — `.agent-workspace/guide/general/decision-journal.md`
-</critical>
-
 # Decision journal
 
-git holds what changed. This journal holds what a diff cannot reconstruct: the option not taken, the scope call, the debt accepted on purpose, the law that turned out wrong.
+This journal records reasons and choices that a diff cannot reconstruct. Read `.agent-workspace/guide/general/decision-journal.md` before creating or interpreting an entry.
 
-## §1 What is admitted
+## §1 Admission
 
-Five classes, admission test, entry shape → `guide/general/decision-journal.md` §1-§3.
-
-`cap:` in the frontmatter is this project's per-shard entry ceiling — the gate reads that line (§9). Above it the gate warns: entries are recording what git already holds.
+The admission test, decision classes and entry schema are defined in `.agent-workspace/guide/general/decision-journal.md` §1, §2 and §3. The project's `cap` value is a review threshold for the number of entries in a shard, as described in that guide's §9; it is not a limit on the length of a decision.
 
 ## §2 Layout
 
-```
-YYYY-MM/YYYY-MM-DD-<class>-<slug>.md   standing entries
-archive/YYYY/                          entries a later entry superseded
-```
+Store active entries under `YYYY-MM/YYYY-MM-DD-<class>-<slug>.md`. Archived entries live under `archive/YYYY/`. Use the lifecycle in `.agent-workspace/guide/general/decision-journal.md` §8 to identify which decisions have been superseded.
 
 ## §3 Queries
 
-| question | command |
-|---|---|
-| decision history of a file or a law | `rg -l "subject: <path>" .agent-workspace/decisions --glob '!archive/**'` |
-| every decision of one class | `rg -l "^class: rule" .agent-workspace/decisions` |
-| what overturned this entry | `rg -l "supersedes: <id>" .agent-workspace/decisions` |
-| current state of a subject | grep the subject, read backwards, stop at the first entry nothing supersedes |
+Search a subject with `rg -l "subject: <path>" .agent-workspace/decisions`. Search `supersedes: <id>` to find entries that overturn an earlier decision. Read the resulting chain to determine the current choice; a later date alone does not supersede another entry.
 
-## §4 Gate
+## §4 Tools
 
-```
-python .agent-workspace/tooling/verify_decision_log.py
-python .agent-workspace/tooling/archive_decisions.py --year YYYY
-```
+Run `python .agent-workspace/tooling/verify_decision_log.py` to validate the journal. Use `python .agent-workspace/tooling/archive_decisions.py --year YYYY` for the archive procedure defined in `.agent-workspace/guide/general/decision-journal.md` §9.
 
-A seeded journal — this router alone, no shard directory — passes with zero entries. An entry is written when a decision is made, never upfront (`decision-journal.md` §5).
+A newly initialized journal contains this router and no entries. Create an entry when there is an actual decision to record.

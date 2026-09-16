@@ -2,56 +2,48 @@
 scope: project
 ---
 
-<critical>
-scope: map task → which `.agent-workspace/guide/` file to read on-demand.
-never: auto-load any guide file | duplicate content from sub-files
-always: read explicitly when task in column matches
-</critical>
+# Guide index
 
-## §1 placement data (per `doc-organization.md §10`)
+Use this index to find the guidance relevant to the task. The procedures live in the linked files; this index provides their routing information.
 
-| key | value |
-|---|---|
-| always-loaded budget | 600 lines — total of `.claude/rules/*.md` without `paths:`. The three rules the genome deploys are the floor (330 lines at v2.0.0); everything above that is this project's headroom for its own always-loaded rules. Over budget → demote the least-used file to path-scoped, or split it into terse + pointer (`doc-organization.md §10`). |
+## §1 Placement data
 
-Migration ledger — top-level files not yet at standard location (target = empty ledger, no permanent exemption):
+This project records pending moves below. Resolve each entry by moving the file and updating its references according to `.claude/rules/doc-organization.md` §10.
 
 | file | target area | move at |
 |---|---|---|
-| _(none — fresh init)_ | | |
+| _(none)_ | | |
 
-## §2 router
+## §2 Router
 
-### general (`.agent-workspace/guide/general/`)
+### General guidance
 
-| file (`.agent-workspace/guide/`) | read when |
+The paths in this table are relative to `.agent-workspace/guide/`.
+
+| file | read when |
 |---|---|
-| `general/five-why.md` | RCA / "5 why" / "root cause" request; debug bug in AI-produced artifact (code/doc) |
-| `general/review-checklist-method.md` | run a free-form review / build a review checklist — §7 picks the instrument first (dedicated review skill usually wins); §1–§6 = the method for a non-code artifact, a non-diff scope, or an absence hunt |
-| `general/doc-system-mechanics.md` | create / move / rename a file in this guide tree, or write a `§ID` pointer — area model + folder taxonomy + router laws (§7), reference mechanism (§2), enforcement layers (§5), design principles (§8.1). `doc-organization.md` decides WHERE content goes; this describes HOW the tree is built |
-| `general/capability-packaging.md` | running a procedure that no skill and no agent owns — decide whether it becomes a skill, a subagent, or stays a guide `§ID`, and propose it to the human; §2 the detector read out of the guide itself (trigger + ordered steps + defined output + no owner), §3 the on-request sweep (threshold 3, grouped by kind of work), §4 which form, §5 the five-line proposal, §6 a declined candidate is recorded |
-| `general/bug-report-format.md` | audit / review / find-bug request not owned by a skill — standard bug report format (finding schema, severity, skeleton) |
-| `general/fix-impact-analysis.md` | fix a bug in any artifact (code/docs/rule/config) not owned by a skill — determine impact scope/blast radius before editing (probe dependents, map regression surfaces, verify the radius) |
-| `general/lesson-capture.md` | agent was just corrected on method / same failure class recurred — record the working-technique lesson into the store `.agent-workspace/lessons/` (own router: `lessons/index.md`); §1 the three-store boundary, §4 escalation record → rule → machine check, §7 read-back by router lookup (§5 = secondary entrance) |
-| `general/markdown.md` | edit any `*.md` (GFM rules) |
-| `general/mermaid.md` | create/edit Mermaid diagram |
-| `general/orchestration-policy.md` | fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) — delegate Edit/Write, inline ≤3 files or warm context, escalate hard-reasoning, plan persistence; research/grep/read = orchestrator inline, but §6 persists its findings to a file past the 3rd read |
-| `general/decision-journal.md` | writing or reading a decision entry under `.agent-workspace/decisions/` — §1 the admission test (`git log` reconstructs it → do not write it), §2 the five classes, §3 entry shape, §5 when to write, §6 grep before reversing a law, §8 supersede lifecycle, §9 cap and archive |
-| `general/worktree.md` | create / use / clean up an isolated git worktree — path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push |
-| `general/task-planning.md` | plan/execute any artifact-changing task (not a pure question) — scale rigor by size §2.1, task-type→form §2.2, plan-before-execute, design verification, genome-rule per sub-task, loop-back/off-ramp; small task → §2.1 inline exit |
-| `general/verification-gate-design.md` | design or write a machine verification gate (a `test_*.py` / `verify_*.py` check that says pass/fail on an artifact) — §1 name the unit of both sides before comparing, §2 a gate proving "nothing extra" does not prove "nothing missing" |
-| `general/rule-health.md` | judging a finding from `python .agent-workspace/tooling/scan_rule_health.py` — §2 finding vs context (only a finding enters the ledger), §3 judging `dup`, §4 judging `dead` (`sid_missing` · `path_missing` · `target_empty` · `paths_no_match` · `naming_prefix`), §5 `drift` and `growth`, §6 every finding closes `fixed` or `exempt` with an `allowed_by` §ID, §7 what the tool cannot see |
-| `general/harness-adapter.md` | deploying or maintaining the genome on more than one agent harness (Claude Code, Codex) — §2 the slot map (which genome slot binds to which path per harness), §3 the Codex deltas that change behaviour rather than paths (no always-loaded tier under a 32 KiB `AGENTS.md` cap · `paths:` degrades to directory scoping · `.codex/rules/` is shell-command policy, not a rule tier), §4 the one-source law, §5 the generated surface and its two-direction gate, §6 adding a third harness |
-| `general/role-selection.md` | choose the working role for a task, or write / edit a role file — §2 matching rule, §3 the seven-section skeleton, §4 subagent role-handoff, §5 adding a role, §6 the router table format the gate reads, §7 a role clause losing to a project rule |
+| `general/five-why.md` | Read this when investigating a defect or its root cause. |
+| `general/review-checklist-method.md` | Read this before a review or audit to select an instrument and determine how to inspect the evidence. |
+| `general/doc-system-mechanics.md` | Read this when creating or reorganizing the guide tree, maintaining a router, or adding a section reference. |
+| `general/capability-packaging.md` | Read this when a repeatable guide procedure has no owning skill or agent, or when assessing packaging candidates. |
+| `general/bug-report-format.md` | Read this when recording findings whose evidence has already been established. |
+| `general/fix-impact-analysis.md` | Read this before fixing a defect so that affected dependents are included in the work. |
+| `general/lesson-capture.md` | Read this when a working method fails, when the user corrects it, or when maintaining lesson stores. |
+| `general/markdown.md` | Read this when editing Markdown and checking its syntax or links. |
+| `general/mermaid.md` | Read this before creating or changing a Mermaid diagram. |
+| `general/orchestration-policy.md` | Read this before delegating execution or editing more than three files outside a skill-owned workflow. Its §6 also covers research persistence. |
+| `general/decision-journal.md` | Read this when a decision needs to be recorded, when interpreting an earlier decision, or before reversing a rule. |
+| `general/worktree.md` | Read this before creating, using or removing an isolated Git worktree. |
+| `general/task-planning.md` | Read this when planning work that changes an artifact and deciding how to verify its outcome. |
+| `general/verification-gate-design.md` | Read this before writing a machine verification gate or evaluating whether its checks prove the intended requirement. |
+| `general/rule-health.md` | Read this before running the rule-health scanner or judging its findings. |
+| `general/role-selection.md` | Read this when selecting roles, adding a role, or maintaining the role router. |
 
-### roles (`.agent-workspace/guide/roles/`)
 
-Role set — one file per role, same seven-section skeleton. Enter through the hub, never read a role file directly.
+### Roles
 
-| file (`.agent-workspace/guide/`) | read when |
+| file | read when |
 |---|---|
-| `roles/index.md` | starting any task — look up work type → primary role + checking role(s); `CLAUDE.md` points here (`general/role-selection.md` §2) |
+| `roles/index.md` | Consult this at the start of a task to select the primary role and the checking roles. |
 
-Lesson stores (`.agent-workspace/lessons/`) are **not** registered here — their own router `lessons/index.md` §1 is the only one (`general/lesson-capture.md` §7).
-
-<!-- areas (frontend/, backend/, bd/, dd/, ...) grow per doc-system-mechanics.md §7 as the project accumulates content; register each new file here in the same commit -->
+Lesson stores have their own router at `.agent-workspace/lessons/index.md` §1. Register them there, following `general/lesson-capture.md` §7. When the guide tree gains a new area, register its content according to `general/doc-system-mechanics.md` §7.

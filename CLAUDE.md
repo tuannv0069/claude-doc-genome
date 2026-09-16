@@ -1,107 +1,83 @@
 # claude-doc-genome
 
-Claude Code documentation genome — portable rules, guides, skills, agents, and templates for the `claude-doc-genome` plugin. This repo is also **deployed instance #1** of its own standard (`doc-organization.md §4`).
+This repository develops the Claude Code documentation genome and uses the same workflow rules that it distributes to other projects.
 
-## stack
-- Node.js (scripts: `sync-version.mjs`, `update.mjs`, `doc-lint.mjs`, `init-manifest.mjs`)
-- Claude Code plugin (`.claude-plugin/`)
-- SemVer versioning via `skills/init-project/VERSION` (canonical)
+## Project environment
 
-## NEVER
-- commit or push without explicit user request (`commit`, `push`, `/commit`)
-- edit `skills/init-project/portable/**` directly — edit the live tier, then `/init-project promote` (see scope table)
-- add project-specific names, paths, or values to `skills/init-project/portable/` (portable-pure law)
-- renumber `§ID` in `scope: portable` files (append-only; retired sections keep their number)
-- push without completing the full release workflow (version bump + tag + GitHub Release)
-- edit VERSION or version mirrors manually — use `node scripts/sync-version.mjs set X.Y.Z`
-- commit with version drift (pre-commit hook enforces `sync-version.mjs check`)
-- commit with a broken doc network — dead trigger, orphan guide, dead `§ID` (pre-commit hook enforces `doc-lint.mjs`)
-- commit with a stale Codex set (pre-commit hook enforces `render_codex.py --check`)
-- hand-edit a file carrying the `render_codex.py` generated marker — edit its Claude Code source and re-render
-- let either platform set name a path of the other — `.claude/**` and `.codex/**` are peers (`harness-adapter.md` §4)
-- write prose into a `*.rules` file — that extension is Codex command-approval policy, not a rule tier
-- inline substantive rule in agent/skill/catalog — reference source-of-truth §ID; see `.claude/rules/doc-organization.md`
-- soften disagreement into "you could also consider" — say so directly
-- change position from user pressure alone — require new info/reasoning
-- place a guide under `docs/` or a work product under `.agent-workspace/` — see `.claude/rules/doc-organization.md §11`
+The maintenance scripts use Node.js. The portable verification tools use Python and its standard library.
 
-## ALWAYS
-- enable hooks after clone: `git config core.hooksPath .githooks`
-- change a portable rule/guide/skill/agent → edit the **live** copy, run `/init-project check` to see the drift, then `/init-project promote` (live → bundle + version bump) in the same change set
-- release workflow (ALL 5 steps mandatory, in order):
-  1. `node scripts/sync-version.mjs set <X.Y.Z>` — bumps VERSION + mirrors (plugin.json, marketplace.json, README badge)
-  2. commit: `release: vX.Y.Z` — list changed files in body
-  3. `git tag vX.Y.Z`
-  4. `git push origin main --tags`
-  5. `gh release create vX.Y.Z --title "vX.Y.Z" --notes "<changelog>"` — GitHub Release mandatory, not optional
-- starting ANY task, questions included → MUST Read `.agent-workspace/lessons/index.md` §1 router; read the matching store AND every store its `checks` cell names (one hop only); no row matches → skip; already looked up this session → do not repeat
-- starting ANY task, questions included → MUST Read `.agent-workspace/guide/roles/index.md` §1 router; read the primary role file in full and only `§6 Not done until` of each checking role; no row matches → skip; already looked up this session → do not repeat
-- about to edit a law file (`.claude/rules/**`, `.agent-workspace/guide/**`, a role file, a lesson store), write an answer to a reviewer's comment, or declare out-of-scope / accepted debt / a rejected option in any artifact → MUST Read `.agent-workspace/guide/general/decision-journal.md` first (§6 grep `.agent-workspace/decisions/` for that subject BEFORE the edit; §5 write the entry in the same turn; §1 admission test — `git log` reconstructs it → do not write it)
-- new doc content → place via `.claude/rules/doc-organization.md §8.3` decision tree
-- add/rename/move/delete a content file → update every linking node (router, trigger, §ID pointer) in the same commit
-- debug / root cause / RCA / "why" / "root cause" → MUST Read `.agent-workspace/guide/general/five-why.md` first
-- run a review (audit / review / code review / inspect / vet / find bug(s) / build a checklist, incl. running against an existing checklist) (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/review-checklist-method.md` first — its §7 picks the instrument (a dedicated review skill usually wins); §1–§6 is the fallback for a non-code artifact, a non-diff scope, or an absence hunt
-- write or format a bug report for findings already determined, no review to run (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/bug-report-format.md`
-- fix a bug / apply a fix / patch a defect in any artifact — code, docs, rule, config (free-form, not a skill-owned flow) → MUST Read `.agent-workspace/guide/general/fix-impact-analysis.md` first (scope the blast radius before editing)
-- user corrects the method / rejects the output / "why did you" · "that's not right" · "it should be" → MUST Read `.agent-workspace/guide/general/lesson-capture.md` (record it in that same turn, into `.agent-workspace/lessons/<work-type>.md` — not harness memory, not a guide file)
-- write/edit mermaid block in .md → MUST Read `.agent-workspace/guide/general/mermaid.md` before emit
-- write or edit a `test_*.py` / `verify_*.py` file (a machine verification gate) → MUST Read `.agent-workspace/guide/general/verification-gate-design.md` first (name the unit of BOTH sides before wiring a comparison; a near-100% violation rate on first run means suspect the gate, not the artifact)
-- about to follow a procedure written in a guide — it states a fixed trigger, an ordered step sequence and a defined output — and no file in `.claude/skills/` or `.claude/agents/` owns that flow → MUST Read `.agent-workspace/guide/general/capability-packaging.md` §2 (raise the packaging candidate at the END of the task: one candidate, five lines, the human approves; §4 skill vs subagent vs a guide `§ID`; §6 a declined candidate is recorded and never re-raised)
-- run `python .agent-workspace/tooling/scan_rule_health.py`, or judge one of its findings → MUST Read `.agent-workspace/guide/general/rule-health.md` first (§2 a context line is never a ledger entry; §6 every finding closes `fixed` or `exempt` and an `exempt` names the §ID that allows it)
-- fan-out Edit/Write across >3 files / dispatch subagent for execution (no skill owns flow) → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` first (delegate Edit/Write to implementer model, inline ≤3 files or warm context, escalate hard-reasoning; persist plan under `.agent-workspace/tasks/<task-slug>/<scope>/`); research/grep/read/analyze = orchestrator inline; skill-driven flow excluded
-- agent creates a working file (script/dump/log/json/screenshot) with no user- or skill-specified destination → write under `.agent-workspace/tasks/<task-slug>/`; never repo root (layout: `.agent-workspace/guide/general/orchestration-policy.md` §4)
-- research / investigation passes its 3rd file read or search, or dispatches an agent, with no file to change → MUST Read `.agent-workspace/guide/general/orchestration-policy.md` §6 — persist findings to `.agent-workspace/tasks/<task-slug>/` while working, never only in the reply
-- create / use / clean up isolated git worktree → MUST Read `.agent-workspace/guide/general/worktree.md` first (path convention, symlink non-tracked config, pass realpath to child agents, cleanup only after verified push)
-- skill writes its working files (plan, research notes, run state) to its own default path → redirect them to `.agent-workspace/tasks/<task-slug>/`; only the finished deliverable goes to `docs/` (full rule: `.agent-workspace/guide/general/orchestration-policy.md` §4; boundary: `doc-organization.md §11`)
+The Claude Code plugin metadata lives in `.claude-plugin/`.
 
-<!-- git: minimal guardrail above (NEVER block) + release workflow (ALWAYS block); detailed policy is scope: project — when the project writes .agent-workspace/guide/general/git.md, add its trigger line here in the same commit (reachability — never a trigger pointing at a missing file) -->
+The canonical bundle version is `skills/init-project/VERSION`. Use `node scripts/sync-version.mjs set X.Y.Z` when preparing a version change; the script updates all version mirrors.
 
-## scope
+## Authorization and project boundaries
 
-| area | path | status |
-|------|------|--------|
-| bundle (genome) | `skills/init-project/portable/` | **promote-only** — never hand-edit; written by `/init-project promote` from the live tier |
-| live tier (deployed instance #1) | `.claude/rules/`, `.claude/skills/`, `.claude/agents/`, `.agent-workspace/guide/general/` | implement — this is where a portable rule/guide/skill/agent is edited |
-| Codex set — generated (deployed instance #1) | `AGENTS.md`, `.codex/config.toml`, `.codex/rules/*.md` carrying the marker, `.agents/skills/`, `.codex/agents/` | generated — `render_codex.py` owns every byte, composed from the Claude Code set (`harness-adapter.md` §5) |
-| Codex set — authored | `.codex/rules/agents-md-standards.md`, `.codex/rules/codex-agents-standards.md` | implement — each describes a mechanism only Codex has, so it is written here and mirrored from nowhere (`harness-adapter.md` §4) |
-| templates (phenotype) | `skills/init-project/templates/` | implement — `{{slot}}` rendering; not covered by check/promote |
-| skill body | `skills/init-project/SKILL.md`, `VERSION` | implement |
-| scripts | `scripts/` | implement |
-| plugin manifest | `.claude-plugin/**`, README version badge | generated — `sync-version.mjs` owns every version field |
-| repo docs | `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `LICENSE` | implement |
-| this project's own phenotype | `CLAUDE.md`, `.agent-workspace/guide/index.md`, `.agent-workspace/lessons/` | implement — rendered once at init, then hand-maintained |
+Do not commit or push unless the user has requested that action. Use the authorization already given in the conversation; ask for clarification only when the intended action or its scope remains unresolved.
 
-`/init-project check` is the drift gate between the first two rows: a mismatch means live moved and the bundle has not caught up. `render_codex.py --check` is the drift gate between the Claude Code set and the Codex set — it also fails on a file of either set naming a path of the other.
+Keep project instructions, reusable workflow guidance and project deliverables in their appropriate locations. Read `.claude/rules/doc-organization.md` §8.3 when adding content, and update its routers and references whenever a file is added, moved, renamed or removed.
 
-## language
+Do not edit portable bundle copies as their primary source. Edit the live file, verify it, and then synchronize it into the bundle. Keep project-specific values out of portable content.
 
-| target | language |
-|--------|----------|
-| frontmatter `scope: portable` | English, any location (overrides rows below) |
-| `CLAUDE.md` | English regardless of conversation language (`claude-md-standards.md`) |
-| `.claude/**` | English |
-| `AGENTS.md`, `.agents/**`, `.codex/**` | English |
-| `.agent-workspace/guide/**` | English (portable doc standard) |
-| `.agent-workspace/lessons/**` | English — same language as the paired guide, so a promotion is a copy, not a translation (`lesson-capture.md` §3) |
-| `skills/**`, `scripts/**` | English |
-| `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md` | English (public-facing) |
-| conversation default | Vietnamese; switch to English if user does |
+## Starting work
 
-## conventions
+Before answering a new task, read `.agent-workspace/lessons/index.md` §1 and `.agent-workspace/guide/roles/index.md` §1 with the file-reading tool. These two lookups are required for conversational questions and writing requests as well as tasks that change files. Do not infer that no row matches before reading the indexes. Read the stores whose work types match, including their one-hop checking stores. Do not repeat an unchanged lookup while the same work continues.
 
-| domain | rule |
-|--------|------|
-| commit | conventional commits (`release:`, `feat:`, `fix:`, `chore:`, `docs:`) |
-| version bump | MAJOR = breaking (rename/remove portable file), MINOR = additive (new rule/guide/§ID), PATCH = wording/typo |
-| changelog | update `## [Unreleased]` in CHANGELOG.md; maintainer cuts version sections at release |
-| portable files | `scope: portable` frontmatter, English only, §ID append-only |
+Consult `.agent-workspace/guide/roles/index.md` §1 to choose the primary role and its checking roles. Read the primary role and the checking roles' §6 before acting. If no work type matches, continue without forcing a role onto the task.
 
-## see also
+Use `.agent-workspace/guide/index.md` to find further guidance relevant to the work. The following conditions identify procedures that need to be read before their corresponding action.
 
-always-loaded (`.claude/rules/`):
-- `file-reading.md` — grep vs Read, parallel, subagent
-- `critical-thinking.md` — agent decision posture
-- `doc-organization.md` — placement decision tree §8.3 + one-source-of-truth §ID + link integrity
-- `conversational-output.md` — structure/tone of chat replies: conclusion-first, one idea per paragraph, fact vs recommendation labeled
+## Procedures to read before acting
 
-on-demand: read `.agent-workspace/guide/index.md` → task → which file.
+Before editing a rule, guide, role or lesson store, answering a review comment, or deciding to exclude work, accept debt or reject an option, read `.agent-workspace/guide/general/decision-journal.md`. Search existing decisions about the subject before reversing an earlier choice.
+
+When investigating a defect or its root cause, read `.agent-workspace/guide/general/five-why.md`.
+
+Before running a review or audit that is not owned by a skill, read `.agent-workspace/guide/general/review-checklist-method.md`. Its §7 helps select the review instrument.
+
+Before recording findings already established by a review, read `.agent-workspace/guide/general/bug-report-format.md`.
+
+Before fixing a defect in code, documentation, a rule or configuration, read `.agent-workspace/guide/general/fix-impact-analysis.md` to identify affected dependents.
+
+When a working method fails or the user corrects it, read `.agent-workspace/guide/general/lesson-capture.md` and record the lesson while the evidence is available.
+
+Before writing or editing a Mermaid diagram, read `.agent-workspace/guide/general/mermaid.md`.
+
+Before writing or editing a machine verification gate, including a `test_*.py` or `verify_*.py` file, read `.agent-workspace/guide/general/verification-gate-design.md`.
+
+Before following a guide procedure with a defined trigger, ordered steps and an output but no owning skill or agent, read `.agent-workspace/guide/general/capability-packaging.md` §2.
+
+Before running `scan_rule_health.py` or judging its findings, read `.agent-workspace/guide/general/rule-health.md`.
+
+Before editing more than three files or delegating execution outside a skill-owned workflow, read `.agent-workspace/guide/general/orchestration-policy.md`. Store the execution plan in the task workspace before dispatching work.
+
+Place working files without a specified destination under `.agent-workspace/tasks/<task-slug>/`. When research passes its third read or search, or involves another agent, persist its findings there according to `.agent-workspace/guide/general/orchestration-policy.md` §6. Keep finished deliverables in the project's work-product area.
+
+Before creating, using or removing an isolated Git worktree, read `.agent-workspace/guide/general/worktree.md`.
+
+Enable the repository hooks after cloning with `git config core.hooksPath .githooks`. Before handing off a change, run the relevant checks and confirm that portable live files match their bundle copies. Record changes under Unreleased in `CHANGELOG.md`. Follow `CONTRIBUTING.md` for release work only when a release has been authorized.
+
+
+
+## Ownership
+
+| Area | Source and responsibility |
+|---|---|
+| Portable rules | Edit `.claude/rules/`, then synchronize into `skills/init-project/portable/rules/`. |
+| Portable guides and roles | Edit `.agent-workspace/guide/general/` and `.agent-workspace/guide/roles/`, then synchronize their portable files. Routers belong to this project. |
+| Portable tooling | Edit `.agent-workspace/tooling/`, then synchronize the genome tools into `skills/init-project/portable/tooling/`. |
+| Optional skills and agents | Edit the live source under `.claude/skills/` or `.claude/agents/`. Promote only components intentionally owned by the genome. |
+| Templates and init workflow | Edit `skills/init-project/templates/` and `skills/init-project/SKILL.md` directly. |
+| Repository tooling | Edit `scripts/`, hooks and CI directly. |
+| Project records | Maintain this file, routers, lessons, decisions and repository documentation as project-owned content. |
+
+## Project language choices
+
+Author the distributed genome and public repository documentation in English. The design, rewrite plan and implementation report under `docs/genome/` are in Vietnamese for this work. These are this repository's language choices.
+
+The default language for conversation in this project is Vietnamese, unless the user requests another language.
+
+## Reference points
+
+The shared workflow rules are `.claude/rules/file-reading.md`, `.claude/rules/critical-thinking.md` and `.claude/rules/doc-organization.md`. They govern source reading, evidence and document placement.
+
+The human-facing overview is `README.md`; contribution and release procedures are in `CONTRIBUTING.md`. The current rewrite design and plan are under `docs/genome/`.

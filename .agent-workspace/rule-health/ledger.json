@@ -1,61 +1,785 @@
 {
-  "entries": {},
+  "entries": {
+    "0445b4c729870faf": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".agent-workspace/guide/general/five-why.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `five-why.md` §2 when the record cannot yet explain the failed method. Use `.claude/rules/doc-organization.md` §1 to distinguish a record from a rule or project fact, and its §8.3 when promoting new guidance.",
+      "status": "fixed",
+      "target_sha256": "5c2c89aecc7e7301aebfa8268a33893a2282f08b1188250bcc52153a55b64f80"
+    },
+    "07ef103e9ffe6fe2": {
+      "paths": [
+        ".agent-workspace/guide/general/doc-system-mechanics.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "The classification of content and the location of a file are separate decisions. A file's folder does not make every statement inside it a rule, and a copied rule does not become routing metadata because it appears in an index. Use `.claude/rules/doc-organization.md` §8.3 for the destination after ownership is clear.",
+      "status": "fixed",
+      "target_sha256": "a270638bbc3c1564e6b21b158ac85f65af93544ee7abf3fa1aabde6bab4301ad"
+    },
+    "0941427999cb2e38": {
+      "paths": [
+        ".agent-workspace/guide/general/markdown.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "When a heading, file path or section identifier changes, find its incoming links and references and update them in the same change. For instruction references, use the stable identifiers described in `doc-system-mechanics.md` §2.",
+      "status": "fixed",
+      "target_sha256": "90975666367d1c98c70a4fc4fda7e16e0ebd6bb7e9c0397718f3543616df2852"
+    },
+    "1ccc3ebd9ffb136f": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".agent-workspace/lessons/index.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use one store per work type, named for the action it protects. Register the store in `.agent-workspace/lessons/index.md` §1 when it is created.",
+      "status": "fixed",
+      "target_sha256": "cf0e41da02a3cbb68f5c0629380d5a7b0e136faa7a543b570accea4b19d59503"
+    },
+    "203aca5e814fb903": {
+      "paths": [
+        ".claude/rules/subagent-standards.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Describe how each granted tool supports the workflow, including any restrictions on side effects. A list of tool names alone does not establish when they should be used. Follow `.agent-workspace/guide/general/orchestration-policy.md` §2 for the choice between local work and delegation.",
+      "status": "fixed",
+      "target_sha256": "5942d6bf791cd8b619bf62a98f59f5a2536f05ac41451d128383d129d182ceed"
+    },
+    "221c7461deb1cb25": {
+      "paths": [
+        ".agent-workspace/guide/index.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "This project records pending moves below. Resolve each entry by moving the file and updating its references according to `.claude/rules/doc-organization.md` §10.",
+      "status": "fixed",
+      "target_sha256": "75a0d11c064401e4737cab352391faf3453148f0a2bfacd68b208c52a415c8dc"
+    },
+    "23758a750b7b6d28": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use §1 to identify the content's responsibility and §8.3 to choose its location. `.agent-workspace/guide/general/doc-system-mechanics.md` §6 explains how those decisions interact when a file contains several kinds of information.",
+      "status": "fixed",
+      "target_sha256": "ebf5702190203bcfa22d69c7ce044761d9afc5a0a439d78c5de083fdc487d5e7"
+    },
+    "2a947ac605c681b7": {
+      "paths": [
+        ".agent-workspace/guide/general/doc-system-mechanics.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Relevant loading keeps instructions available at the moment of decision without making every task carry every guide. Bounded navigation gives the assistant a predictable route from a task to its source. Work-product discovery uses the different category model in `.claude/rules/doc-organization.md` §11 because a growing collection of deliverables cannot depend on a hand-maintained global list of files.",
+      "status": "fixed",
+      "target_sha256": "6ed0c4f718ecf87d99639d486168c2fe0f841be00da0a0a6054bcf3587230ab7"
+    },
+    "2b65e0f6b24c9a16": {
+      "paths": [
+        ".agent-workspace/guide/general/capability-packaging.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Placement of a workflow follows `.claude/rules/doc-organization.md` §8.3. Learning from repeated failures follows `lesson-capture.md` §4. The skill and agent standards govern the artifacts after the capability has been authorized.",
+      "status": "fixed",
+      "target_sha256": "a270638bbc3c1564e6b21b158ac85f65af93544ee7abf3fa1aabde6bab4301ad"
+    },
+    "2be3ca1fb7cfb29b": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Do not promote a lesson directly into the always-loaded tier merely because it recurred. Placement still follows `.claude/rules/doc-organization.md` §8.2 and §8.3.",
+      "status": "fixed",
+      "target_sha256": "75f1e34993f549dba31852ca4efaca917c96dca1e9a2e0523df45d992302f543"
+    },
+    "31047dd139fdf5e6": {
+      "paths": [
+        ".agent-workspace/lessons/index.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "A store does not need a new guide merely to hold its lessons. Leave the paired-guide cell empty when no guide owns that subject. The lookup in §1 already makes the store reachable, as explained in `.agent-workspace/guide/general/lesson-capture.md` §7.",
+      "status": "fixed",
+      "target_sha256": "1567add384fe9f513f075bb85a1126859eb22a756dc6340512cd3824c58f5e03"
+    },
+    "314593484387c70b": {
+      "paths": [
+        ".agent-workspace/guide/general/bug-report-format.md",
+        ".agent-workspace/guide/general/fix-impact-analysis.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "A proposed correction should address the demonstrated defect. When it changes a shared contract, identify the affected consumers and use `fix-impact-analysis.md` §3 before applying it. Reporting a possible fix does not prove that it has been implemented or verified.",
+      "status": "fixed",
+      "target_sha256": "4d4c9e2546240a580cc2675a51b1f59601267f9ad10228ed9bacc5dc02affa54"
+    },
+    "3ca5ee89cc2cf8b6": {
+      "paths": [
+        "CLAUDE.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Keep project instructions, reusable workflow guidance and project deliverables in their appropriate locations. Read `.claude/rules/doc-organization.md` §8.3 when adding content, and update its routers and references whenever a file is added, moved, renamed or removed.",
+      "status": "fixed",
+      "target_sha256": "a270638bbc3c1564e6b21b158ac85f65af93544ee7abf3fa1aabde6bab4301ad"
+    },
+    "458a32bd5c52599c": {
+      "paths": [
+        ".agent-workspace/lessons/index.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Register a store here when creating it, and keep its paired guide reference consistent according to `.agent-workspace/guide/general/lesson-capture.md` §5. The router and store metadata are validated by `.agent-workspace/tooling/verify_lesson_router.py`. A new project with no store rows or store files is valid.",
+      "status": "fixed",
+      "target_sha256": "d8aac57ea4b29958a2ec89c3e90c922a56280b46d7990deee0a190911843cdfc"
+    },
+    "45d51b5eca3ccf50": {
+      "paths": [
+        ".agent-workspace/guide/index.md",
+        ".agent-workspace/lessons/index.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Lesson stores have their own router at `.agent-workspace/lessons/index.md` §1. Register them there, following `general/lesson-capture.md` §7. When the guide tree gains a new area, register its content according to `general/doc-system-mechanics.md` §7.",
+      "status": "fixed",
+      "target_sha256": "cf0e41da02a3cbb68f5c0629380d5a7b0e136faa7a543b570accea4b19d59503"
+    },
+    "461fedffb4706011": {
+      "paths": [
+        ".agent-workspace/guide/general/five-why.md",
+        ".agent-workspace/guide/general/fix-impact-analysis.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `.claude/rules/critical-thinking.md` to check assumptions before acting. Use `fix-impact-analysis.md` §3 before applying the remedy, because a correct diagnosis does not establish that a change is safe for its dependents. Record a repeatable method failure under `lesson-capture.md` §2.",
+      "status": "fixed",
+      "target_sha256": "4d4c9e2546240a580cc2675a51b1f59601267f9ad10228ed9bacc5dc02affa54"
+    },
+    "47d8ae2f5d3a093c": {
+      "paths": [
+        ".agent-workspace/guide/general/review-checklist-method.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `orchestration-policy.md` §4 to preserve task state and §7 when an independent perspective is needed. A clean result is limited to the scope and evidence actually examined.",
+      "status": "fixed",
+      "target_sha256": "759cbbf19563a36b61a52787b57b59cd1eb51b08f5389bc4423fbbac9c6f225e"
+    },
+    "4b0c636dcb5b417f": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "A lesson about how to perform work belongs in `.agent-workspace/lessons/<work-type>.md`. A fact about the project belongs in the project's work-product area under `.claude/rules/doc-organization.md` §11. A user identity or preference that outlives the project belongs in the memory mechanism available for that purpose.",
+      "status": "fixed",
+      "target_sha256": "6ed0c4f718ecf87d99639d486168c2fe0f841be00da0a0a6054bcf3587230ab7"
+    },
+    "4ba3e9f760c627a9": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `five-why.md` §2 when the record cannot yet explain the failed method. Use `.claude/rules/doc-organization.md` §1 to distinguish a record from a rule or project fact, and its §8.3 when promoting new guidance.",
+      "status": "fixed",
+      "target_sha256": "7b72caef2845cdd7284a0929790b86da5d5437700c8014f05e12b4ab89fe5853"
+    },
+    "4c68cac41ac812c0": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".claude/rules/wiki-tier.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "7. A finished project work product belongs in the project's work-product area under §11. Established claims about subject material may belong in the optional wiki under `wiki-tier.md` §1; that tier has its own evidence contract.",
+      "status": "fixed",
+      "target_sha256": "d7c3d1f07328115876e913df63ac0ccb0705b4e1da871044443a781b134a6687"
+    },
+    "53f814b839579023": {
+      "paths": [
+        ".agent-workspace/guide/index.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Lesson stores have their own router at `.agent-workspace/lessons/index.md` §1. Register them there, following `general/lesson-capture.md` §7. When the guide tree gains a new area, register its content according to `general/doc-system-mechanics.md` §7.",
+      "status": "fixed",
+      "target_sha256": "1567add384fe9f513f075bb85a1126859eb22a756dc6340512cd3824c58f5e03"
+    },
+    "568ca21326ca7b65": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Register every on-demand content file in its router, directly or through the permitted hub structure in `.agent-workspace/guide/general/doc-system-mechanics.md` §7.3. Add an always-loaded trigger only when the assistant could otherwise act incorrectly before consulting that router. This interception test asks what decision would be missed, when it occurs and why an existing route does not already reach the guidance.",
+      "status": "fixed",
+      "target_sha256": "97d8997972054597a84a61846b8976caa7c0380c762e876b6b79b2edcd3945a3"
+    },
+    "58a9301169301e03": {
+      "paths": [
+        ".claude/rules/claude-md-standards.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "For each required reading, identify the condition and the target file. Use the observable trigger kinds in `doc-organization.md` §10. A trigger may depend on the user's message, a countable work state or the action about to be taken; it must be possible to evaluate the condition before the guidance is needed.",
+      "status": "fixed",
+      "target_sha256": "75a0d11c064401e4737cab352391faf3453148f0a2bfacd68b208c52a415c8dc"
+    },
+    "5919d549176597ea": {
+      "paths": [
+        ".agent-workspace/guide/general/capability-packaging.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Record the declined candidate and the reason that should prevent an identical future proposal. Use the store selected by `lesson-capture.md` §8 and preserve the decision's evidence.",
+      "status": "fixed",
+      "target_sha256": "35b060f3b0b3af566c7c7d09624f05f07c24ae44b44b553b3df96077d169bca2"
+    },
+    "5b59eac07df6b993": {
+      "paths": [
+        ".agent-workspace/guide/general/doc-system-mechanics.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `.claude/rules/doc-organization.md` §1 to classify information within a file. If it combines a shared requirement, a capability's own procedure and a navigation entry, identify the owner of each part before deciding whether to split it. Keep the references that connect those parts so the resulting workflow remains executable.",
+      "status": "fixed",
+      "target_sha256": "7b72caef2845cdd7284a0929790b86da5d5437700c8014f05e12b4ab89fe5853"
+    },
+    "5d8626ac53ee36d2": {
+      "allowed_by": ".claude/rules/doc-organization.md §8.2",
+      "paths": [
+        ".agent-workspace/wiki/**"
+      ],
+      "reason": "This path-scoped standard is distributed for an optional skill, agent or wiki area. This source project currently has no instance of that optional area. No active trigger points to a missing content file.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dead",
+      "source_text": ".agent-workspace/wiki/**",
+      "status": "exempt"
+    },
+    "5dd786e42eefe835": {
+      "paths": [
+        ".agent-workspace/guide/general/rule-health.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "When the scanner identifies the same requirement in several locations, establish the canonical source and replace unnecessary copies with references under `.claude/rules/doc-organization.md` §4 and §10.",
+      "status": "fixed",
+      "target_sha256": "484612e7ddb40b6757c7a5b67d09f2788ce27acedbe4fb7e73ca48ddbd0511bb"
+    },
+    "60adcb3936184315": {
+      "paths": [
+        ".agent-workspace/guide/general/capability-packaging.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Placement of a workflow follows `.claude/rules/doc-organization.md` §8.3. Learning from repeated failures follows `lesson-capture.md` §4. The skill and agent standards govern the artifacts after the capability has been authorized.",
+      "status": "fixed",
+      "target_sha256": "0962e5380231a934a2c7f0f85412dc1e6d0ae968f616f54ffa9ddfbc614a8e52"
+    },
+    "66f4c3ef742099c9": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use the authoring, review and automated checks in `.agent-workspace/guide/general/doc-system-mechanics.md` §5 to find duplicate requirements and broken references.",
+      "status": "fixed",
+      "target_sha256": "71bc836adfe471e294fc58a3bbcc438cb8be4b039438b5dc6519483f7b41be07"
+    },
+    "6ca3640a3e350da6": {
+      "paths": [
+        ".agent-workspace/lessons/index.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "When delegating the work, pass the relevant store paths to the delegate. The delegate may not receive this project's root instructions. These lookup responsibilities are defined in `.agent-workspace/guide/general/lesson-capture.md` §7.",
+      "status": "fixed",
+      "target_sha256": "1567add384fe9f513f075bb85a1126859eb22a756dc6340512cd3824c58f5e03"
+    },
+    "6cf875ec1902489e": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "The network is organized around relevant loading, bounded navigation, growth from actual work, preventive checks and the transfer of proven improvements. These principles are developed in `.agent-workspace/guide/general/doc-system-mechanics.md` §8.1.",
+      "status": "fixed",
+      "target_sha256": "7b02bccc04f4b654a03fa2ea5896e50f7047f0164705bfa46c0c0403a2702eb7"
+    },
+    "6db3faa32f06282e": {
+      "paths": [
+        ".claude/rules/claude-md-standards.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `doc-organization.md` §8.3 to decide whether information belongs in the project entry point, a path-scoped rule, a guide, a skill or another project record. The entry point should expose the obligations needed before a task can be routed. Detailed guidance belongs with the work that uses it.",
+      "status": "fixed",
+      "target_sha256": "a270638bbc3c1564e6b21b158ac85f65af93544ee7abf3fa1aabde6bab4301ad"
+    },
+    "70010402ecc8b9ab": {
+      "allowed_by": ".claude/rules/doc-organization.md §4",
+      "paths": [
+        ".agent-workspace/lessons/establish-external-platform-fact.md",
+        ".agent-workspace/lessons/run-repo-gate.md"
+      ],
+      "reason": "These are routing references to one canonical procedure. The root pre-action reminder and on-demand router have distinct loading purposes; repeated lesson pointers likewise introduce no second substantive requirement.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dup",
+      "source_text": "Procedure for recording / escalating / reading back: `.agent-workspace/guide/general/lesson-capture.md`.",
+      "status": "exempt"
+    },
+    "71315ad3a5cb78dd": {
+      "paths": [
+        ".claude/rules/skill-md-standards.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Keep the skill's own orchestration in its body. Shared rules belong at the source identified by `doc-organization.md` §1 and are referenced by stable section identifiers. A skill must not become a second authoritative copy of project conventions or shared domain rules.",
+      "status": "fixed",
+      "target_sha256": "7b72caef2845cdd7284a0929790b86da5d5437700c8014f05e12b4ab89fe5853"
+    },
+    "73cfcc298316be5c": {
+      "allowed_by": ".claude/rules/doc-organization.md §4",
+      "paths": [
+        ".agent-workspace/guide/index.md",
+        "CLAUDE.md"
+      ],
+      "reason": "These are routing references to one canonical procedure. The root pre-action reminder and on-demand router have distinct loading purposes; repeated lesson pointers likewise introduce no second substantive requirement.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dup",
+      "source_text": "| `general/five-why.md` | Read this when investigating a defect or its root cause. |",
+      "status": "exempt"
+    },
+    "85aabdfef3e50368": {
+      "paths": [
+        ".agent-workspace/guide/general/task-planning.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Select the destination and discovery point before creating an artifact. Use `.claude/rules/doc-organization.md` §8.3 for placement.",
+      "status": "fixed",
+      "target_sha256": "a270638bbc3c1564e6b21b158ac85f65af93544ee7abf3fa1aabde6bab4301ad"
+    },
+    "898b03333aac4038": {
+      "paths": [
+        ".agent-workspace/guide/general/review-checklist-method.md",
+        ".agent-workspace/guide/general/bug-report-format.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "6. Report the surviving conclusions with the information in `bug-report-format.md` §1. Assess severity from demonstrated reachability and consequence, rather than from the alarming form of the original hypothesis.",
+      "status": "fixed",
+      "target_sha256": "443f5d0d7793d13a599a1971a557becef3d3f9c28106f732b0337141252aa6c7"
+    },
+    "9a0c4d353f1f810e": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Temporary plans, evidence and intermediate files belong in the task workspace under `.agent-workspace/guide/general/orchestration-policy.md` §4. Move durable deliverables to their project-owned destination when they are ready.",
+      "status": "fixed",
+      "target_sha256": "759cbbf19563a36b61a52787b57b59cd1eb51b08f5389bc4423fbbac9c6f225e"
+    },
+    "9fda558ccc6e8cdf": {
+      "paths": [
+        "CLAUDE.md",
+        ".agent-workspace/lessons/index.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "At the start of a task, consult `.agent-workspace/lessons/index.md` §1. Read the stores whose work types match, including their one-hop checking stores. Do not repeat an unchanged lookup while the same work continues.",
+      "status": "fixed",
+      "target_sha256": "cf0e41da02a3cbb68f5c0629380d5a7b0e136faa7a543b570accea4b19d59503"
+    },
+    "a2f71a95f8798135": {
+      "paths": [
+        ".claude/rules/critical-thinking.md",
+        ".agent-workspace/guide/general/task-planning.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Check assumptions made by both the user and the assistant. When an assumption is false or unsupported, identify the evidence that changes the proposed approach. Consider the effects on related artifacts before beginning a change. Use the planning procedure in `.agent-workspace/guide/general/task-planning.md` §2 for the appropriate level of preparation and verification.",
+      "status": "fixed",
+      "target_sha256": "1615962168898bb2ce46057894e1a3e8420cea7783193801e4b4283cd8496975"
+    },
+    "a8aa8e34601fd4cf": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/doc-system-mechanics.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use stable section identifiers for references to individual requirements. The reference mechanism and the treatment of retired identifiers are defined in `.agent-workspace/guide/general/doc-system-mechanics.md` §2.",
+      "status": "fixed",
+      "target_sha256": "90975666367d1c98c70a4fc4fda7e16e0ebd6bb7e9c0397718f3543616df2852"
+    },
+    "ab00c1ce649e0aed": {
+      "paths": [
+        ".claude/rules/claude-md-standards.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Reference a shared requirement through its canonical source rather than maintaining a second authoritative copy in `CLAUDE.md`. When an instruction is extracted, preserve its reachability under `doc-organization.md` §10. Moving text out of the entry point is incomplete if the assistant can no longer find it before acting.",
+      "status": "fixed",
+      "target_sha256": "75a0d11c064401e4737cab352391faf3453148f0a2bfacd68b208c52a415c8dc"
+    },
+    "adc3a3f6382bc25b": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "5. A record of a failed working method belongs in the relevant lesson store under `.agent-workspace/guide/general/lesson-capture.md` §1. An incident does not become a guide merely because it is useful to read later.",
+      "status": "fixed",
+      "target_sha256": "968ebb452e90496b779761d9c30de7de2c6af5a8980d45e11f3c83f44a6298c1"
+    },
+    "b258b000f4657d2f": {
+      "paths": [
+        ".claude/rules/subagent-standards.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "The body must establish the agent's responsibility, applicable constraints and decision boundaries. It need not prescribe a persona, voice or opening sentence. Shared project rules remain at their canonical sources under `doc-organization.md` §1; pass the relevant sources and task context when the agent cannot be assumed to have loaded them.",
+      "status": "fixed",
+      "target_sha256": "7b72caef2845cdd7284a0929790b86da5d5437700c8014f05e12b4ab89fe5853"
+    },
+    "b622e48ffb43a305": {
+      "paths": [
+        "CLAUDE.md",
+        ".agent-workspace/guide/roles/index.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Consult `.agent-workspace/guide/roles/index.md` §1 to choose the primary role and its checking roles. Read the primary role and the checking roles' §6 before acting. If no work type matches, continue without forcing a role onto the task.",
+      "status": "fixed",
+      "target_sha256": "bef2961f2814ab9ae81d7c115f9796503e4be5315d943cdf97778bb7c79f21d2"
+    },
+    "b7d1c402de84c877": {
+      "paths": [
+        ".claude/rules/file-reading.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Choose delegation according to `.agent-workspace/guide/general/orchestration-policy.md` §2. A separate agent can keep a large independent investigation out of the main context, but the number of files alone does not justify duplicating an investigation that is already understood. Persist evidence and findings when the task needs to survive a handoff or loss of context.",
+      "status": "fixed",
+      "target_sha256": "5942d6bf791cd8b619bf62a98f59f5a2536f05ac41451d128383d129d182ceed"
+    },
+    "bbb9bd3616a441cd": {
+      "paths": [
+        ".agent-workspace/guide/general/role-selection.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Every role keeps §6 for completion criteria because checking-role selection reads that section directly. Existing stable section identifiers remain valid under `.claude/rules/doc-organization.md` §2. Additional sections can be added when they serve the role.",
+      "status": "fixed",
+      "target_sha256": "b0af6df7f6e68a8735da368c775f9633d1405addb0e07cb4f516b638dfbe3850"
+    },
+    "bcb69a433782dd11": {
+      "paths": [
+        ".agent-workspace/guide/general/fix-impact-analysis.md",
+        ".agent-workspace/guide/general/five-why.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "1. Confirm the defect and its cause. Reproduce the behavior when execution is available, or trace the relevant evidence for a non-executable artifact. If the cause remains unclear, use `five-why.md` §2.",
+      "status": "fixed",
+      "target_sha256": "5c2c89aecc7e7301aebfa8268a33893a2282f08b1188250bcc52153a55b64f80"
+    },
+    "bdd9ca94af2bd69a": {
+      "allowed_by": ".claude/rules/doc-organization.md §4",
+      "paths": [
+        ".agent-workspace/guide/index.md",
+        "CLAUDE.md"
+      ],
+      "reason": "These are routing references to one canonical procedure. The root pre-action reminder and on-demand router have distinct loading purposes; repeated lesson pointers likewise introduce no second substantive requirement.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dup",
+      "source_text": "| `general/worktree.md` | Read this before creating, using or removing an isolated Git worktree. |",
+      "status": "exempt"
+    },
+    "c6c917d77e564b01": {
+      "paths": [
+        ".claude/rules/doc-organization.md",
+        ".agent-workspace/guide/general/decision-journal.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Record the reason for a qualifying rule change in the decision journal under `.agent-workspace/guide/general/decision-journal.md` §2. Git and the record stores preserve history; the active rule describes the obligations that apply now. A lack of deleted lines may prompt a review, but it is not by itself proof that a rule should be removed.",
+      "status": "fixed",
+      "target_sha256": "5c4630ead8e64259375b30ea0a2f2d8b8d60998cf5ce5b505e1327336402c474"
+    },
+    "ca1eff711dea157a": {
+      "paths": [
+        ".agent-workspace/guide/general/doc-system-mechanics.md",
+        ".agent-workspace/guide/general/review-checklist-method.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "When a check reports a possible defect, inspect the relevant source and its consumers before changing the rule. A false match in an illustration or historical record does not justify deleting active guidance. Conversely, a passing tool cannot prove that all required behavior exists. Follow `review-checklist-method.md` §3 for review and `rule-health.md` §2 for interpreting scanner results.",
+      "status": "fixed",
+      "target_sha256": "028ddd52fee95285c2c9140be3c60deaa70493c5f4a655eee93b4a07cdf9294f"
+    },
+    "ca3f3d0b58e2443f": {
+      "paths": [
+        ".agent-workspace/guide/general/lesson-capture.md",
+        ".agent-workspace/lessons/index.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "At the start of a task, consult `.agent-workspace/lessons/index.md` §1. Match the action about to be performed against the router's work types. Read every matching store and the stores named in its `checks` cell. Follow only that one additional hop.",
+      "status": "fixed",
+      "target_sha256": "cf0e41da02a3cbb68f5c0629380d5a7b0e136faa7a543b570accea4b19d59503"
+    },
+    "cc419f424f4e7e7b": {
+      "paths": [
+        ".agent-workspace/guide/general/fix-impact-analysis.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "The documentation instance follows `.claude/rules/doc-organization.md` §10, which governs link integrity. `five-why.md` addresses why the defect arose; this guide addresses the consequences of its repair. An owning skill can supply its own fixing workflow, but it still needs to account for the dependencies it changes.",
+      "status": "fixed",
+      "target_sha256": "75a0d11c064401e4737cab352391faf3453148f0a2bfacd68b208c52a415c8dc"
+    },
+    "cdb608b028bc9924": {
+      "allowed_by": ".claude/rules/doc-organization.md §8.2",
+      "paths": [
+        ".claude/skills/**"
+      ],
+      "reason": "This path-scoped standard is distributed for an optional skill, agent or wiki area. This source project currently has no instance of that optional area. No active trigger points to a missing content file.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dead",
+      "source_text": ".claude/skills/**",
+      "status": "exempt"
+    },
+    "d18917a76be2deef": {
+      "paths": [
+        ".agent-workspace/guide/general/five-why.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Use `.claude/rules/critical-thinking.md` to check assumptions before acting. Use `fix-impact-analysis.md` §3 before applying the remedy, because a correct diagnosis does not establish that a change is safe for its dependents. Record a repeatable method failure under `lesson-capture.md` §2.",
+      "status": "fixed",
+      "target_sha256": "eef0f2c2ddf4ebace6be208ccedddf9257c98af8dbc6f651654ebf5703d1374a"
+    },
+    "df8e2f207219601d": {
+      "paths": [
+        "CLAUDE.md",
+        ".agent-workspace/guide/general/capability-packaging.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Before following a guide procedure with a defined trigger, ordered steps and an output but no owning skill or agent, read `.agent-workspace/guide/general/capability-packaging.md` §2.",
+      "status": "fixed",
+      "target_sha256": "88cde1ae2093149ba7763c4eea629be016017b7c34c69ac85be2f8c576bea837"
+    },
+    "e0fb13116700c0c6": {
+      "allowed_by": ".claude/rules/doc-organization.md §8.2",
+      "paths": [
+        ".claude/agents/**"
+      ],
+      "reason": "This path-scoped standard is distributed for an optional skill, agent or wiki area. This source project currently has no instance of that optional area. No active trigger points to a missing content file.",
+      "reviewed_at": "2026-09-16",
+      "signal": "dead",
+      "source_text": ".claude/agents/**",
+      "status": "exempt"
+    },
+    "f3f08c4492e34a8b": {
+      "paths": [
+        ".agent-workspace/guide/roles/index.md",
+        ".agent-workspace/guide/general/role-selection.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "This router selects the working perspectives for a task. The matching procedure is defined in `.agent-workspace/guide/general/role-selection.md` §2. Read the primary role and the checking roles' §6 after selecting a row.",
+      "status": "fixed",
+      "target_sha256": "7f6c0301bf74ff5861566fad1dd777fea728174505853ec00a8449bef6bbf4d3"
+    },
+    "f6d109537dd31cf0": {
+      "paths": [
+        ".agent-workspace/guide/general/orchestration-policy.md",
+        ".claude/rules/doc-organization.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Do not place temporary working state among finished project documents, or inside a disposable worktree whose removal would erase the only copy. Finished work products belong at the location selected under `.claude/rules/doc-organization.md` §11.",
+      "status": "fixed",
+      "target_sha256": "6ed0c4f718ecf87d99639d486168c2fe0f841be00da0a0a6054bcf3587230ab7"
+    },
+    "f7936a84b7c4d4eb": {
+      "paths": [
+        ".claude/rules/critical-thinking.md",
+        ".agent-workspace/guide/general/lesson-capture.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "When a working method proves wrong, whether noticed by the assistant or identified by the user, capture the lesson during the same turn under `.agent-workspace/guide/general/lesson-capture.md` §2. The record must describe how to avoid repeating the failed method, rather than merely noting that the artifact changed.",
+      "status": "fixed",
+      "target_sha256": "eef0f2c2ddf4ebace6be208ccedddf9257c98af8dbc6f651654ebf5703d1374a"
+    },
+    "f9e3aa31c6617c40": {
+      "paths": [
+        "CLAUDE.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "Place working files without a specified destination under `.agent-workspace/tasks/<task-slug>/`. When research passes its third read or search, or involves another agent, persist its findings there according to `.agent-workspace/guide/general/orchestration-policy.md` §6. Keep finished deliverables in the project's work-product area.",
+      "status": "fixed",
+      "target_sha256": "37628e7ea04c796027fd5910ea977d72d69020bc4e689177d51be75685fd5685"
+    },
+    "fd41e8a99554c896": {
+      "paths": [
+        ".agent-workspace/guide/general/review-checklist-method.md",
+        ".agent-workspace/guide/general/orchestration-policy.md"
+      ],
+      "reason": "The referring instruction and the target section were reconciled in the same genome rewrite. The current reference still directs the reader to the responsibility it describes. Review is bound to this target revision; another target change reopens the finding.",
+      "reviewed_at": "2026-09-16",
+      "signal": "drift",
+      "source_text": "2. Look for required behavior that is absent. For each requirement, identify the part of the artifact that establishes it. Give this work fresh attention; use an independent reader for consequential artifacts under `orchestration-policy.md` §7.",
+      "status": "fixed",
+      "target_sha256": "fe07ead4843954e411fd501d320a7f98164a6b9009a75143d0125c9a3a83ea04"
+    }
+  },
   "git_cache": {},
   "last_scanned": {
-    ".agent-workspace/guide/general/bug-report-format.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/capability-packaging.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/decision-journal.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/doc-system-mechanics.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/five-why.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/fix-impact-analysis.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/harness-adapter.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/lesson-capture.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/markdown.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/mermaid.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/orchestration-policy.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/review-checklist-method.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/role-selection.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/rule-health.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/task-planning.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/verification-gate-design.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/general/worktree.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/index.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/business-analyst.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/comtor.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/developer.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/index.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/project-manager.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/qa.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/security.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/guide/roles/tech-lead.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/lessons/index.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".agent-workspace/lessons/verify-context-rule-change.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/agents/skill-writer-auditor.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/rules/agents-md-standards.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/claude-md-standards.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/conversational-output.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/critical-thinking.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/doc-organization.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/file-reading.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/rule-writing-standards.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/skill-md-standards.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/subagent-standards.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/rules/wiki-tier.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/skills/document-writer/README.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/skills/document-writer/SKILL.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    ".claude/skills/skill-designer/README.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-designer/SKILL.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-designer/docs/design-template.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-designer/docs/orchestrator-rules.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-designer/docs/plan-gate-spec.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/README.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/SKILL.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/docs/examples.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/docs/skill-rules-orch.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/docs/skill-rules-quality.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/docs/skill-rules-spec.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    ".claude/skills/skill-writer/docs/skill-rules-workflow.md": "373d4558fcf7aecda4f215f135bef39cf56d2817",
-    "AGENTS.md": "f088ef0852790cdb4ce561fc020153656cf3c516",
-    "CLAUDE.md": "f088ef0852790cdb4ce561fc020153656cf3c516"
+    ".agent-workspace/guide/general/bug-report-format.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/capability-packaging.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/decision-journal.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/doc-system-mechanics.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/five-why.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/fix-impact-analysis.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/lesson-capture.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/markdown.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/mermaid.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/orchestration-policy.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/review-checklist-method.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/role-selection.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/rule-health.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/task-planning.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/verification-gate-design.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/general/worktree.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/index.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/business-analyst.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/comtor.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/developer.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/index.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/project-manager.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/qa.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/security.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/guide/roles/tech-lead.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/lessons/establish-external-platform-fact.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/lessons/index.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/lessons/run-repo-gate.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".agent-workspace/lessons/verify-context-rule-change.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/claude-md-standards.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/critical-thinking.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/doc-organization.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/file-reading.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/skill-md-standards.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/subagent-standards.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    ".claude/rules/wiki-tier.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52",
+    "CLAUDE.md": "13fc9fa26e9e7d54e0cc58c818d196d5b284cd52"
   }
 }

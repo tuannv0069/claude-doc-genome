@@ -3,15 +3,11 @@ scope: project
 source_root: {{WIKI_SOURCE_ROOT}}
 ---
 
-# Wiki tier — router
+# Wiki index
 
-Law of the tier (edge format, R1–R10, extension points): `.claude/rules/wiki-tier.md`.
-Gate: `python .agent-workspace/tooling/verify_wiki.py` — `--new-id <cluster>` allocates an `id`,
-`--merge-check <ref> <ref> [...]` runs the R9 conservation check at merge time (two refs minimum).
+The wiki records established claims about this project's subject material. Its data contracts and evidence requirements are defined in `.claude/rules/wiki-tier.md`.
 
-`source_root` in this file's frontmatter is the project's material root, resolved **relative to the
-directory holding this file** (`.agent-workspace/wiki/`); every `path` of a `located` item is written
-relative to it.
+The `source_root` value is resolved relative to this router's directory, `.agent-workspace/wiki/`. Each `located` evidence item uses a path relative to that source root.
 
 ## §1 Subjects
 
@@ -19,43 +15,38 @@ relative to it.
 |---|---|---|
 {{WIKI_SUBJECTS}}
 
-`growing` — new edges are written into this subject. `frozen` — nothing more is added, existing
-edges still answer. `not opened` — the subject has no edge yet.
+A subject with status `growing` accepts new claims. A `frozen` subject remains available for reading but receives no additions. A subject marked `not opened` has no recorded claims yet.
 
-## §2 Extension points — what this project declares
+## §2 Project configuration
 
-The six `wiki-tier.md` §7 requires:
+Declare the extension points required by `.claude/rules/wiki-tier.md` §7 here.
 
 | extension point | this project declares |
 |---|---|
-| subject list | the table in §1 above |
-| claim classes + the evidence each one requires | §2.1 below — a **closed** list; the `class` cell takes one of those tokens and nothing else |
+| subject list | The subjects are listed in §1. |
+| claim classes and required evidence | The allowed classes and their evidence requirements are listed in §2.1. |
 | subject material | {{WIKI_SUBJECT_MATERIAL}} |
-| search procedure | `source_encodings:` in this file's frontmatter — extra text encodings the locator check must decode besides the default. Material is single-encoding → omit the key entirely |
-| locator root | `source_root:` in this file's frontmatter, resolved relative to the directory holding this router |
+| search procedure | If source files need additional encodings, declare them in the optional `source_encodings` frontmatter field. Otherwise the locator check uses its defaults. |
+| locator root | The `source_root` frontmatter field identifies the material root relative to this router. |
 | conservation checkpoint | {{WIKI_MERGE_CHECKPOINT}} |
 
 ### §2.1 Claim classes
 
-A **closed** list. `required` = R2 will not promote an edge to `sourced` until it carries evidence
-from that source.
+The `class` field of a claim must use a token from this table. An evidence column marked `required` identifies a source that must be present before the claim can be considered sourced.
 
 | class | what the claim states | {{WIKI_EVIDENCE_AXES}} |
-|---|---|---|
+{{WIKI_CLASS_SEPARATOR}}
 {{WIKI_CLAIM_CLASSES}}
 
-Which evidence form carries which source (`wiki-tier.md` §4): source text → `located` · stored data
-→ `stored-data` · running system → `running-system` · a measured absence → `absent`.
+Evidence forms are defined in `.claude/rules/wiki-tier.md` §4. Use `located` for source text, `stored-data` for stored data, `running-system` for runtime evidence, and `absent` for a measured absence.
 
 ## §3 Clusters
 
-A cluster is created at the moment an investigation touches its lookup topic (`wiki-tier.md` §2),
-and registers one row here in the same commit.
-
-A cluster row must be a **markdown link** whose target is the cluster path relative to the `wiki/`
-directory (`<subject>/<cluster>.md`) — the gate reads every `.md` link in this file as one cluster
-declaration. The row's shape lives in `wiki-tier.md` §2: a sample link written here would be read as
-a cluster that does not exist, because the gate's link scan does not honour code fences.
+Create a cluster when an investigation first reaches its lookup topic, following `.claude/rules/wiki-tier.md` §2. Register it below with a Markdown link whose target is relative to `.agent-workspace/wiki/`. The verification tool reads Markdown links here as cluster declarations, so do not add example links to nonexistent clusters.
 
 | subject | cluster | lookup topic |
 |---|---|---|
+
+## §4 Verification
+
+Run `python .agent-workspace/tooling/verify_wiki.py` to validate the wiki. Use `--new-id <cluster>` to allocate an identifier and `--merge-check <ref> <ref>` to check conservation across at least two Git references.

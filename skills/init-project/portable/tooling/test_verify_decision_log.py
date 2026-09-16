@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-"""Test `verify_decision_log.py` against FAKE journals.
+"""Exercise decision metadata, subject history, and recorded decision content.
 
-The real journal must be green, so running the gate on it only proves the gate does not cry
-wolf. The other half — does the gate catch a real defect — is built by mutation: each case
-below breaks exactly one of the shape rules the gate enforces.
-
-Both directions are named on purpose (`verification-gate-design.md` §2): the clean cases check
-"no false alarm", the mutation cases check "nothing missed".
-"""
+Temporary journal entries provide valid examples and specific broken variants.
+Paragraph length and list formatting are intentionally not acceptance criteria."""
 from __future__ import annotations
 
 import sys
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -140,17 +136,17 @@ with tempfile.TemporaryDirectory() as t:
     check(any("body is empty" in p for p in V.check(d, root)[0]),
           "case 16: empty body was not caught")
 
-    d, root = build(tmp, {GOOD: entry(body=["- decided: a"] + [f"- line {i}" for i in range(5)])})
-    check(any("the ceiling is 4" in p for p in V.check(d, root)[0]),
-          "case 17: an over-long body was not caught")
-
-    d, root = build(tmp, {GOOD: entry(body=["- because: it was late", "- decided: a"])})
-    check(any("must be `- decided:`" in p for p in V.check(d, root)[0]),
-          "case 18: a body not opening with `- decided:` was not caught")
-
-    d, root = build(tmp, {GOOD: entry(body=["- decided: a", "loose prose"])})
-    check(any("`- ` bullets only" in p for p in V.check(d, root)[0]),
-          "case 19: a non-bullet body line was not caught")
+    d, root = build(tmp, {GOOD: entry(body=["decided:", "The decision needs a complete explanation."] +
+                                    [f"This is supporting paragraph {i}." for i in range(8)])})
+    check(V.check(d, root)[0] == [], "case 17: multiline decision prose was rejected")
+    d, root = build(tmp, {GOOD: entry(body=["because: It was needed.", "decided: Keep the interface."])})
+    check(V.check(d, root)[0] == [], "case 18: field order imposed an unnecessary restriction")
+    d, root = build(tmp, {GOOD: entry(body=["decided:", "because: There is a reason."])})
+    check(any("nonempty `decided:`" in p for p in V.check(d, root)[0]),
+          "case 19: a reason without a decision was accepted")
+    d, root = build(tmp, {GOOD: entry(body=["because: There is a reason."])})
+    check(any("nonempty `decided:`" in p for p in V.check(d, root)[0]),
+          "a missing decision field was accepted")
 
     # --- cap is a WARNING, never a failure --------------------------------
     many = {f"2026-09/2026-09-0{i}-rule-x{i}.md": entry() for i in range(1, 4)}
@@ -166,6 +162,24 @@ with tempfile.TemporaryDirectory() as t:
           "case 22: a missing journal directory was not reported")
 
 print(f"{len(fails)} failure(s)")
+# Historical subjects remain valid only when Git proves the path once existed.
+with tempfile.TemporaryDirectory() as folder:
+    historical = Path(folder)
+    subject = historical / "retired.md"
+    subject.write_text("A retired rule.\n", encoding="utf-8")
+    def git(*args):
+        subprocess.run(["git", "-c", "core.hooksPath=", *args], cwd=historical,
+                       check=True, capture_output=True)
+    git("init", "-q")
+    git("add", "retired.md")
+    git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+        "commit", "-q", "-m", "Record the historical subject")
+    subject.unlink()
+    check(V.subject_state(historical, "retired.md §1") == "renamed",
+          "a recorded historical subject was rejected after removal")
+    check(V.subject_state(historical, "never-existed.md") == "missing",
+          "a nonexistent subject without historical evidence was accepted")
+
 for f in fails:
     print("  -", f)
 sys.exit(1 if fails else 0)

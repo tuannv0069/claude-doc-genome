@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
-"""Test `verify_lesson_router.py` against FAKE lesson trees.
+"""Exercise lesson-router contracts with temporary stores.
 
-The real tree must be green once the work is done, so running the gate on it only proves
-the gate does not cry wolf. The other half — does the gate catch a real defect — is built
-by mutation: each case below breaks exactly one of the rules the gate enforces.
-
-Both directions are named on purpose (`verification-gate-design.md` §2): the clean-tree
-cases check "no false alarm", the mutation cases check "nothing missed".
-"""
+Valid data must pass regardless of record length or prose style. Each broken
+fixture tests a specific missing link, metadata value, or router field."""
 from __future__ import annotations
 
 import sys
@@ -99,8 +94,8 @@ with tempfile.TemporaryDirectory() as t:
     late = ("---\nscope: project\n---\n\n### a lesson\n- seen — 1\n\n"
             "<critical>\nscope: x\nphase: writing\n</critical>\n")
     d = build(tmp, {"write-doc": late}, [row("write-doc")])
-    check(any("opens AFTER the first ### record" in p for p in V.check(d)),
-          "case 10: <critical> placed after the first record was not caught")
+    check(V.check(d) == [],
+          "case 10: a heading before valid metadata was treated as a schema defect")
 
     no_scope = ("---\nscope: project\n---\n\n<critical>\nphase: writing\n</critical>\n\n"
                 "### a lesson\n- seen — 1\n")

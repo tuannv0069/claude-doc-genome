@@ -4,8 +4,7 @@
 Law enforced, source: `guide/general/decision-journal.md` §2-§4, §8, §9.
 
 The gate checks the SHAPE of an entry that was written: file name, frontmatter, class,
-a `subject` that resolves, `supersedes` pointing at an entry that exists, and a body short
-enough. The gate CANNOT catch a decision that happened and nobody recorded — you cannot
+a `subject` that resolves, `supersedes` pointing at an entry that exists, and a nonempty recorded decision. The gate CANNOT catch a decision that happened and nobody recorded — you cannot
 measure what does not exist (the limit is declared in §1 of the law; the backstop is a human
 reading `git log` from time to time).
 
@@ -29,7 +28,6 @@ CLASSES = ("choice", "scope", "debt", "rule", "review")
 NAME = re.compile(r"^(\d{4})-(\d{2})-(\d{2})-(" + "|".join(CLASSES) + r")-[a-z0-9][a-z0-9-]*\.md$")
 SHARD = re.compile(r"^\d{4}-\d{2}$")
 ARCHIVE_YEAR = re.compile(r"^\d{4}$")
-BODY_MAX = 4
 REQUIRED = ("class", "subject", "anchor")
 
 
@@ -66,7 +64,7 @@ def subject_state(repo_root: Path, subject: str) -> str:
     try:
         out = subprocess.run(
             ["git", "log", "--format=", "--name-only", "--", path],
-            cwd=repo_root, capture_output=True, text=True, timeout=60,
+            cwd=repo_root, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=60,
         )
     except (OSError, subprocess.SubprocessError):
         return "missing"
@@ -160,13 +158,13 @@ def check(decisions: Path, repo_root: Path):
         if not body:
             problems.append(f"{rel}: entry body is empty")
             continue
-        if len(body) > BODY_MAX:
-            problems.append(f"{rel}: entry body is {len(body)} lines, the ceiling is {BODY_MAX}")
-        if not body[0].startswith("- decided:"):
-            problems.append(f"{rel}: the first body line must be `- decided:`")
-        for ln in body:
-            if not ln.startswith("- "):
-                problems.append(f"{rel}: the entry body takes `- ` bullets only: {ln!r}")
+        # Field labels are data. Paragraph length and list formatting are not.
+        match = re.search(
+            r"^(?:[-*]\s+)?decided:\s*(.*?)(?=^(?:[-*]\s+)?(?:because|rejected|unlocked by):|\Z)",
+            "\n".join(body), re.M | re.S,
+        )
+        if not match or not match.group(1).strip():
+            problems.append(f"{rel}: entry has no nonempty `decided:` field")
 
     for path, target in superseded_by:
         if target not in ids:
