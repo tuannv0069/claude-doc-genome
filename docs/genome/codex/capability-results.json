@@ -1,0 +1,98 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "isolation": "Synthetic CODEX_HOME and Git fixture. No credentials copied, no model call.",
+  "desktop_ui_tested": false,
+  "results": [
+    {
+      "case": "untrusted_nested_config",
+      "rpc_error": false,
+      "project_doc_max_bytes": 18000,
+      "disabled_project_layers": 2,
+      "project_marker_layer_values": [
+        18002,
+        18001,
+        18000
+      ]
+    },
+    {
+      "case": "untrusted_fallback_not_loaded",
+      "exit_code": 0,
+      "markers": {
+        "CAP_ROOT_9817": false,
+        "CAP_FALLBACK_9817": false,
+        "CAP_CHILD_9817": false,
+        "capability-parent-skill": true,
+        "CAP_SKILL_BODY_9817": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "trusted_root_config",
+      "rpc_error": false,
+      "project_doc_max_bytes": 18001,
+      "disabled_project_layers": 0,
+      "project_marker_layer_values": [
+        18001,
+        18000
+      ]
+    },
+    {
+      "case": "trusted_nested_config",
+      "rpc_error": false,
+      "project_doc_max_bytes": 18002,
+      "disabled_project_layers": 0,
+      "project_marker_layer_values": [
+        18002,
+        18001,
+        18000
+      ]
+    },
+    {
+      "case": "cli_overrides_project_config",
+      "rpc_error": false,
+      "project_doc_max_bytes": 18003,
+      "disabled_project_layers": 0,
+      "project_marker_layer_values": [
+        18003,
+        18002,
+        18001,
+        18000
+      ]
+    },
+    {
+      "case": "trusted_nested_fallback_and_parent_skill",
+      "exit_code": 0,
+      "markers": {
+        "CAP_ROOT_9817": true,
+        "CAP_FALLBACK_9817": true,
+        "CAP_CHILD_9817": false,
+        "capability-parent-skill": true,
+        "CAP_SKILL_BODY_9817": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "regular_agents_precedes_fallback",
+      "exit_code": 0,
+      "markers": {
+        "CAP_ROOT_9817": true,
+        "CAP_FALLBACK_9817": false,
+        "CAP_CHILD_9817": true,
+        "capability-parent-skill": true,
+        "CAP_SKILL_BODY_9817": false
+      },
+      "stderr_present": false
+    }
+  ],
+  "checks": {
+    "untrusted_project_config_is_disabled": true,
+    "root_project_config_overrides_user": true,
+    "nested_project_config_overrides_root": true,
+    "cli_overrides_nested_config": true,
+    "trusted_fallback_is_loaded": true,
+    "regular_agents_precedes_fallback": true,
+    "root_skill_metadata_reaches_nested_cwd": true,
+    "skill_body_not_in_initial_prompt": true,
+    "explicit_untrusted_root_instructions_omitted_in_this_cli": true
+  }
+}

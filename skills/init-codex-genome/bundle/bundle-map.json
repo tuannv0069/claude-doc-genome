@@ -1,0 +1,235 @@
+{
+  "files": [
+    {
+      "kind": "region",
+      "path": "AGENTS.md",
+      "sha256": "f78b1ee5126328d3a4bd4448faabf1a5b789bcd763e534bf94ee8fc034cff78f",
+      "source": "templates/AGENTS.md"
+    },
+    {
+      "kind": "seed",
+      "path": ".agent-workspace/guide/index.md",
+      "sha256": "20a7d11b8e8c6bf4c9bf8cdfc5ff14d71be94738e2caff11a7c15e98a9b30372",
+      "source": "templates/guide-index.md"
+    },
+    {
+      "kind": "seed",
+      "path": ".agent-workspace/guide/roles/index.md",
+      "sha256": "9c9c9d42bd1262a4840c3fe8ff52e0143f465479299c09be81d96d301f6c051c",
+      "source": "templates/roles-index.md"
+    },
+    {
+      "kind": "seed",
+      "path": ".agent-workspace/lessons/index.md",
+      "sha256": "be372d6d1add1ce38f1b092503a5d708bf7a2c8c49653029d228055b7b2342a1",
+      "source": "templates/lessons-index.md"
+    },
+    {
+      "kind": "seed",
+      "path": ".agent-workspace/decisions/index.md",
+      "sha256": "069fe64c650155fa0f4a92782075f25c22718dd2cd587cbfb669a873ecb6f976",
+      "source": "templates/decisions-index.md"
+    },
+    {
+      "kind": "seed",
+      "path": ".agent-workspace/wiki/index.md",
+      "sha256": "bbeff91055259fdc30f1d24bfe8e6c0af3f74286b41270d8bfd41bf13d162f8a",
+      "source": "templates/wiki-index.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/bug-report-format.md",
+      "sha256": "9722470c2f06619c12b93bc8328846569cdc622482e4f37483513819ed88fb30",
+      "source": "portable/.agent-workspace/guide/general/bug-report-format.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/capability-packaging.md",
+      "sha256": "8c5782e397bb41827d3a72b48fe0bf9b12636161b1de1318a04012338b0a5c44",
+      "source": "portable/.agent-workspace/guide/general/capability-packaging.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/decision-journal.md",
+      "sha256": "a659e4a6698402e88318fac381c7a61db7db7fe5f28ed4447732fd179010e715",
+      "source": "portable/.agent-workspace/guide/general/decision-journal.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/doc-system-mechanics.md",
+      "sha256": "27ae3ccf4d180b9f90b68d6226b919f92c73336c569ab75951a19fdc63697b40",
+      "source": "portable/.agent-workspace/guide/general/doc-system-mechanics.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/five-why.md",
+      "sha256": "506d52fab98a0cc8853b4910c48dd6f636bd70f63f63c5ec17120afa103ab502",
+      "source": "portable/.agent-workspace/guide/general/five-why.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/fix-impact-analysis.md",
+      "sha256": "8dee561fd9c9165f2166e07d349ed4d082535cea714ec133f105f987a025237c",
+      "source": "portable/.agent-workspace/guide/general/fix-impact-analysis.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/lesson-capture.md",
+      "sha256": "601d451859071efe589c4791d1f76f54a9b9096421587a05c19d459a6c350550",
+      "source": "portable/.agent-workspace/guide/general/lesson-capture.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/markdown.md",
+      "sha256": "56c58af695286ec0af78f5e6594f2ba40acbb09182cc1f3de8ba5c06fb5335e0",
+      "source": "portable/.agent-workspace/guide/general/markdown.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/mermaid.md",
+      "sha256": "1dc39f7c6b25a7f79e8c4069e9cdf767cbf9707abc3a62a49e95241421bea518",
+      "source": "portable/.agent-workspace/guide/general/mermaid.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/orchestration-policy.md",
+      "sha256": "450c2d8f4332673dda43d14b04390f8eb0a67d3a49f382be08427e1af864da04",
+      "source": "portable/.agent-workspace/guide/general/orchestration-policy.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/review-checklist-method.md",
+      "sha256": "4655ea79f8806b0d35cce26cfe795309decb6e9d6d51444fc8885ea8ec7cb99d",
+      "source": "portable/.agent-workspace/guide/general/review-checklist-method.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/role-selection.md",
+      "sha256": "42d7cb36f90cbcc1f388fc1f5a897d577afe9526a32d5b5653006ff9b1c997b0",
+      "source": "portable/.agent-workspace/guide/general/role-selection.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/rule-health.md",
+      "sha256": "40c929d139bfd59e4a2954e26ba3eabc970737e1fe92446e59b254120b3039c8",
+      "source": "portable/.agent-workspace/guide/general/rule-health.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/task-planning.md",
+      "sha256": "ef0bd6579b74b6dbf1d251137da50355cbac4fec8e47c70ff1a4580467631f6f",
+      "source": "portable/.agent-workspace/guide/general/task-planning.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/verification-gate-design.md",
+      "sha256": "5c35dd11aa91e249c8c3e1f0e316bed6f8b9826a993cbf00df21ad6b9f33c4be",
+      "source": "portable/.agent-workspace/guide/general/verification-gate-design.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/general/worktree.md",
+      "sha256": "7b25bc1c498a456b6884e9514c6bc8b442dc659486d67a06a22c6f8784d97ec1",
+      "source": "portable/.agent-workspace/guide/general/worktree.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/business-analyst.md",
+      "sha256": "8e9946a7e722917eadb557063969280c22f1a55c698608a79b1cec4b84833dcf",
+      "source": "portable/.agent-workspace/guide/roles/business-analyst.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/comtor.md",
+      "sha256": "f92be6636231fb90035ebc38111d519cd3317bb9f58d60fafb9a61012d69d169",
+      "source": "portable/.agent-workspace/guide/roles/comtor.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/developer.md",
+      "sha256": "64251df6149062e3c01eaa8da57c138aec85f4ec17c4271228654917331b0767",
+      "source": "portable/.agent-workspace/guide/roles/developer.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/project-manager.md",
+      "sha256": "3929b970726929d9eb22b607025a694cb3b266ae706ebb65f1b973ce8e9e8148",
+      "source": "portable/.agent-workspace/guide/roles/project-manager.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/qa.md",
+      "sha256": "1512ea0a333214dd2a1ab2c23eb4d1b8fc0a2fd45b2adc23d321f0f67253367a",
+      "source": "portable/.agent-workspace/guide/roles/qa.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/security.md",
+      "sha256": "8b2b437502b0a3130eb368b36273e0f19056191391ee020efb095d6bf826acb3",
+      "source": "portable/.agent-workspace/guide/roles/security.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/guide/roles/tech-lead.md",
+      "sha256": "cdee93f6ee00f05b43986fc06bbbbd1f999ddb41f60abb278671e5d14c42afd1",
+      "source": "portable/.agent-workspace/guide/roles/tech-lead.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/agents-md-standards.md",
+      "sha256": "cfd6bcac1a81951ac82ccb30319c074c58d29625436bf7de474abdcf28868622",
+      "source": "portable/.agent-workspace/rules/agents-md-standards.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/codex-agents-standards.md",
+      "sha256": "db06debaa3ba8d17cc82a8271c3225ed225a5e405ba1c097031fd1147f662fd4",
+      "source": "portable/.agent-workspace/rules/codex-agents-standards.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/codex-config-standards.md",
+      "sha256": "1646685834c349b6902f6547d18f9546059c1c2b60190e028433d269db4e315b",
+      "source": "portable/.agent-workspace/rules/codex-config-standards.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/critical-thinking.md",
+      "sha256": "bf927a6237e3b5c02145a6b017af8e455039dd0052049676db4a8ff343eef07a",
+      "source": "portable/.agent-workspace/rules/critical-thinking.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/doc-organization.md",
+      "sha256": "0b450b4e3a1cc913f43e724a6e7f5b12cff51685fd22d9098bf8f7d3c4379da2",
+      "source": "portable/.agent-workspace/rules/doc-organization.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/file-reading.md",
+      "sha256": "fe0d40ae9188e56297a3ccb7a17c8e61f6892a8ace659e4e8204bde3d6c3e7fd",
+      "source": "portable/.agent-workspace/rules/file-reading.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/skill-md-standards.md",
+      "sha256": "e99b313b633e3ae93b6415e925e0ec4082b5c867a825b98c580c307e0cb35444",
+      "source": "portable/.agent-workspace/rules/skill-md-standards.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/rules/wiki-tier.md",
+      "sha256": "1666a792c5d84e42affad9db5a8f5f310cec133ea0181c8d0b089bceeb0decb0",
+      "source": "portable/.agent-workspace/rules/wiki-tier.md"
+    },
+    {
+      "kind": "portable",
+      "path": ".agent-workspace/tooling/genome.py",
+      "sha256": "cb49f20cadbb7b4d4e6d7b273c4765d0727ae00397569f4a2cfdb1c2b40b97da",
+      "source": "portable/.agent-workspace/tooling/genome.py"
+    }
+  ],
+  "product": "codex-genome",
+  "schema_version": 1,
+  "version": "1.0.0"
+}

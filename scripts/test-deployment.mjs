@@ -59,6 +59,22 @@ test('manifest records all six groups and seven templates', () => fixture((f) =>
   assert.ok(f.manifest().files.some((item) => item.path.includes('/tooling/')));
 }));
 
+test('Claude can reuse a complete workspace created by another adapter', () => fixture((f) => {
+  unlinkSync(f.manifestPath);
+  const shared = f.entries.filter((item) => item.live.startsWith('.agent-workspace/guide/'));
+  for (const item of shared) put(join(f.project, item.live), `Shared project ${item.group} content.\n`);
+  let out = f.cli('init-manifest.mjs', '--reuse-shared-workspace');
+  assert.equal(out.status, 0, out.stderr);
+  assert.equal(f.manifest().sharedWorkspace, 'reused');
+  assert.ok(!f.manifest().files.some((item) => item.path.startsWith('.agent-workspace/guide/')));
+
+  for (const item of shared) put(item.source, `Changed Claude ${item.group} source.\n`);
+  const before = shared.map((item) => readFileSync(join(f.project, item.live), 'utf8'));
+  out = f.cli('update.mjs', '--apply');
+  assert.equal(out.status, 0, out.stderr + out.stdout);
+  assert.deepEqual(shared.map((item) => readFileSync(join(f.project, item.live), 'utf8')), before);
+}));
+
 test('dry run is read only; apply updates clean files and adds missing files', () => fixture((f) => {
   f.bump(); put(f.entries[0].source, 'New rule.\n');
   unlinkSync(join(f.project, f.entries[1].live));

@@ -1,0 +1,49 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "isolated_home": true,
+  "desktop_ui_tested": false,
+  "results": [
+    {
+      "command": [
+        "plugin",
+        "marketplace",
+        "add"
+      ],
+      "exit_code": 0,
+      "plugin_id": null,
+      "marketplace": "codex-genome-local",
+      "version": null
+    },
+    {
+      "command": [
+        "plugin",
+        "add",
+        "codex-genome@codex-genome-local"
+      ],
+      "exit_code": 0,
+      "plugin_id": "codex-genome@codex-genome-local",
+      "marketplace": "codex-genome-local",
+      "version": "1.0.0"
+    },
+    {
+      "command": [
+        "debug",
+        "prompt-input"
+      ],
+      "exit_code": 0,
+      "skill_name_present": true,
+      "skill_description_present": true,
+      "skill_body_present": false
+    },
+    {
+      "command": [
+        "cached-skill",
+        "init",
+        "dry-run"
+      ],
+      "exit_code": 0,
+      "conflicts": [],
+      "planned_changes": 40
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-16",
+  "host": "Windows",
+  "codex_version": "1.0.0",
+  "claude_version": "5.0.0",
+  "architecture": {
+    "project_genome": ".agent-workspace/",
+    "codex_manifest": ".codex/genome-manifest.json",
+    "codex_source": "skills/init-codex-genome",
+    "shared_workspace_mode": "reuse a complete existing workspace; bootstrap when absent"
+  },
+  "codex_suite": {
+    "run": 47,
+    "passed": 46,
+    "skipped": 1,
+    "skip_reason": "Windows symbolic-link creation privilege unavailable; the real junction test passed"
+  },
+  "shared_workspace_integration": {
+    "passed": true,
+    "claude_created_workspace_preserved_byte_for_byte": true,
+    "codex_manifest_excludes_reused_shared_files": true,
+    "claude_manifest_excludes_reused_shared_files": true,
+    "both_install_orders": true,
+    "both_update_directions": true,
+    "claude_update_preserves_codex_adapter": true,
+    "codex_update_preserves_shared_workspace": true,
+    "codex_verifier_accepts_the_reused_workspace": true
+  },
+  "source_check": {
+    "status": "pass",
+    "markdown_files": 37,
+    "drift": [],
+    "errors": []
+  },
+  "claude_regression": {
+    "deployment_tests": 19,
+    "deployment_failures": 0,
+    "portable_tooling_scripts": 6,
+    "portable_tooling_failures": 0,
+    "doc_lint_files": 39,
+    "doc_lint_errors": 0,
+    "version": "5.0.0"
+  },
+  "distribution": {
+    "skill_validation": "pass",
+    "codex_version_sync": "pass",
+    "temporary_package_build": "pass"
+  },
+  "limits": [
+    "No fresh desktop UI behavior run was performed for this path and ownership correction.",
+    "The skipped symbolic-link test reflects host privilege, not a passing symlink result."
+  ]
+}

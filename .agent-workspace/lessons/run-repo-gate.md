@@ -38,3 +38,27 @@ Use an absolute path for evidence owned by a different workspace, and establish 
 The first integrated rule-health run failed on Windows even though its parser fixtures passed. Git returned UTF-8 text, while a subprocess decoded it with the host's default Windows-1252 codec. The decoding error left the history comparison without valid text.
 
 Use explicit UTF-8 decoding for Git text and include a history fixture with non-ASCII content under a different preferred host encoding. The new fixture also verifies that a later target revision reopens an earlier resolved drift finding. Parser-only success does not establish that the tool can read real history on the host. This failure has been observed once.
+
+### Check command output encoding as well as file encoding
+
+The independent Codex updater handled UTF-8 files correctly, but its first CLI test with a Vietnamese project path failed while printing the JSON plan on Windows. The command still inherited a legacy output encoding, so correct file handling did not establish that a caller could receive its result.
+
+Set the CLI's text streams to UTF-8 and exercise the real process with a non-ASCII target path. Verify the parsed output and exit status, not only the in-process functions. The corrected Codex tests cover this through an external invocation. This failure has been observed once.
+
+### Retain partial evidence when a model-backed check times out
+
+Three first-run Codex behavior probes reached their time limit, but the probe's exception handler saved only the timeout flag. It discarded partial events, leaving no way to tell from those records whether the model had started, selected a tool or stalled before completion. Treating those records as an instruction-following failure would have been unsupported.
+
+Retain filtered events and diagnostics on timeout, and explicitly close unused standard input for a noninteractive CLI. Use an independent minimal tool probe to distinguish a general execution problem from the behavior under test. A later conversation probe completed with the genome routers read; it does not retroactively establish the cause of the three earlier timeouts. This instrumentation failure has been observed once.
+
+### Resolve distribution-document links in the built package
+
+A final ad hoc link check resolved `codex/PACKAGE.md` links relative to the source directory and reported two missing targets. That document becomes the package README, whose `skills/` paths exist only after packaging. The external-package test had already checked that layout successfully.
+
+Validate a distribution document at its actual output location after the build, while checking source documents against their source directories. A missing source-relative target does not prove a broken package link. The corrected check used the built README and found no missing targets. This method failure has been observed once.
+
+### Preserve managed bytes when testing an unrelated edit
+
+An independent portability probe prepended project-owned context to AGENTS using a text read/write round trip. On Windows, that operation also normalized line endings inside the managed region. The next updater correctly reported a conflict, even though the probe intended to change only content outside the region.
+
+Construct an outside-region edit without changing the managed bytes, and compare those bytes before interpreting a conflict as a product defect. The corrected byte-preserving fixture passed initialization, source refresh, update and local-conflict checks. Evidence is retained in the Codex single-source forward-test record. This instrumentation failure has been observed once.

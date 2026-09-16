@@ -1,0 +1,92 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "method": "debug prompt-input; presence of synthetic markers only; no inference execution",
+  "uses_existing_user_configuration": true,
+  "results": [
+    {
+      "case": "root",
+      "exit_code": 0,
+      "markers": {
+        "GENOME_PROBE_ROOT_7421": true,
+        "GENOME_PROBE_CHILD_7421": false,
+        "GENOME_PROBE_OVERRIDE_7421": false,
+        "GENOME_PROBE_CLAUDE_7421": false,
+        "GENOME_PROBE_MD_RULE_7421": false,
+        "genome-probe-agents-skill": true,
+        "genome-probe-legacy-skill": true,
+        "GENOME_PROBE_SKILL_BODY_7421": false,
+        "genome_probe_reviewer": false,
+        "GENOME_PROBE_AGENT_BODY_7421": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "child",
+      "exit_code": 0,
+      "markers": {
+        "GENOME_PROBE_ROOT_7421": true,
+        "GENOME_PROBE_CHILD_7421": true,
+        "GENOME_PROBE_OVERRIDE_7421": false,
+        "GENOME_PROBE_CLAUDE_7421": false,
+        "GENOME_PROBE_MD_RULE_7421": false,
+        "genome-probe-agents-skill": true,
+        "genome-probe-legacy-skill": true,
+        "GENOME_PROBE_SKILL_BODY_7421": false,
+        "genome_probe_reviewer": false,
+        "GENOME_PROBE_AGENT_BODY_7421": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "child_override",
+      "exit_code": 0,
+      "markers": {
+        "GENOME_PROBE_ROOT_7421": true,
+        "GENOME_PROBE_CHILD_7421": false,
+        "GENOME_PROBE_OVERRIDE_7421": true,
+        "GENOME_PROBE_CLAUDE_7421": false,
+        "GENOME_PROBE_MD_RULE_7421": false,
+        "genome-probe-agents-skill": true,
+        "genome-probe-legacy-skill": true,
+        "GENOME_PROBE_SKILL_BODY_7421": false,
+        "genome_probe_reviewer": false,
+        "GENOME_PROBE_AGENT_BODY_7421": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "root_small_budget",
+      "exit_code": 0,
+      "markers": {
+        "GENOME_PROBE_ROOT_7421": false,
+        "GENOME_PROBE_CHILD_7421": false,
+        "GENOME_PROBE_OVERRIDE_7421": false,
+        "GENOME_PROBE_CLAUDE_7421": false,
+        "GENOME_PROBE_MD_RULE_7421": false,
+        "genome-probe-agents-skill": true,
+        "genome-probe-legacy-skill": true,
+        "GENOME_PROBE_SKILL_BODY_7421": false,
+        "genome_probe_reviewer": false,
+        "GENOME_PROBE_AGENT_BODY_7421": false
+      },
+      "stderr_present": false
+    },
+    {
+      "case": "child_combined_budget",
+      "exit_code": 0,
+      "markers": {
+        "GENOME_PROBE_ROOT_7421": true,
+        "GENOME_PROBE_CHILD_7421": false,
+        "GENOME_PROBE_OVERRIDE_7421": false,
+        "GENOME_PROBE_CLAUDE_7421": false,
+        "GENOME_PROBE_MD_RULE_7421": false,
+        "genome-probe-agents-skill": true,
+        "genome-probe-legacy-skill": true,
+        "GENOME_PROBE_SKILL_BODY_7421": false,
+        "genome_probe_reviewer": false,
+        "GENOME_PROBE_AGENT_BODY_7421": false
+      },
+      "stderr_present": false
+    }
+  ]
+}

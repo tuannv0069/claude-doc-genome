@@ -1,0 +1,37 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "exit_code": 0,
+  "timed_out": false,
+  "custom_agent_success_marker_present": false,
+  "unavailable_marker_present": true,
+  "stderr_present": true,
+  "events": [
+    {
+      "event_type": "thread.started",
+      "item_type": null,
+      "tool": null,
+      "status": null
+    },
+    {
+      "event_type": "turn.started",
+      "item_type": null,
+      "tool": null,
+      "status": null
+    },
+    {
+      "event_type": "item.completed",
+      "item_type": "agent_message",
+      "tool": null,
+      "status": null
+    },
+    {
+      "event_type": "turn.completed",
+      "item_type": null,
+      "tool": null,
+      "status": null
+    }
+  ],
+  "uses_existing_user_configuration_and_authentication": true,
+  "temporary_cli_trust_override_only": true,
+  "desktop_ui_tested": false
+}

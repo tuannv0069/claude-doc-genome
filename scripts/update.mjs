@@ -6,7 +6,7 @@
 import { copyFileSync, existsSync, lstatSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bundleFiles, checkRenderedTargets, options, ownedPath, pathIdentity, readManifest, RETIRED_PATHS, safePath, sha, TEMPLATES } from './deployment-map.mjs';
+import { bundleFiles, checkRenderedTargets, isSharedPath, options, ownedPath, pathIdentity, readManifest, RETIRED_PATHS, safePath, sha, TEMPLATES } from './deployment-map.mjs';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 function main() {
@@ -14,7 +14,9 @@ function main() {
   const project = resolve(args['--project'] || process.cwd());
   const manifest = readManifest(project);
   checkRenderedTargets(project, manifest.modules || ['core']);
-  const wanted = bundleFiles(repo);
+  const allWanted = bundleFiles(repo);
+  const reuseShared = manifest.sharedWorkspace === 'reused';
+  const wanted = new Map([...allWanted].filter(([path]) => !reuseShared || !isSharedPath(path)));
   const canonical = new Map([...wanted.keys()].map((key) => [pathIdentity(key), key]));
   const recorded = new Map(manifest.files.map((file) => [canonical.get(pathIdentity(file.path)) || file.path, file.sha256]));
   const version = readFileSync(join(repo, 'skills/init-project/VERSION'), 'utf8').trim();
@@ -50,7 +52,7 @@ function main() {
     if (!existsSync(source)) throw new Error(`Bundle template is missing: ${key}`);
     return { path: key, sha256: sha(source), live };
   });
-  const drift = templates.filter((item) => oldTemplates.get(item.path) !== item.sha256);
+  const drift = templates.filter((item) => oldTemplates.get(item.path) !== item.sha256 && !(reuseShared && isSharedPath(item.live)));
   console.log(`Update plan: project ${manifest.version || '(unknown)'}; bundle ${version}.`);
   for (const kind of ['add', 'update', 'remove', 'conflict']) {
     console.log(`${kind}: ${plan[kind].length}`);

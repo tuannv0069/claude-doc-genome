@@ -1,6 +1,6 @@
 # claude-doc-genome
 
-This repository develops the Claude Code documentation genome and uses the same workflow rules that it distributes to other projects.
+This repository develops independent documentation genomes for Claude Code and Codex. Its own working instructions use the Claude genome.
 
 ## Project environment
 
@@ -16,7 +16,7 @@ Do not commit or push unless the user has requested that action. Use the authori
 
 Keep project instructions, reusable workflow guidance and project deliverables in their appropriate locations. Read `.claude/rules/doc-organization.md` §8.3 when adding content, and update its routers and references whenever a file is added, moved, renamed or removed.
 
-Do not edit portable bundle copies as their primary source. Edit the live file, verify it, and then synchronize it into the bundle. Keep project-specific values out of portable content.
+For the Claude genome, edit the live file, verify it, and then synchronize it into the bundle. The Codex genome is authored directly in `skills/init-codex-genome/`; it has no separate live authoring tree. Keep project-specific values out of portable content in both products.
 
 ## Starting work
 
@@ -54,7 +54,7 @@ Place working files without a specified destination under `.agent-workspace/task
 
 Before creating, using or removing an isolated Git worktree, read `.agent-workspace/guide/general/worktree.md`.
 
-Enable the repository hooks after cloning with `git config core.hooksPath .githooks`. Before handing off a change, run the relevant checks and confirm that portable live files match their bundle copies. Record changes under Unreleased in `CHANGELOG.md`. Follow `CONTRIBUTING.md` for release work only when a release has been authorized.
+Enable the repository hooks after cloning with `git config core.hooksPath .githooks`. Before handing off a change, run the relevant checks. For Claude portable changes, confirm that live files match their bundle copies. For Codex changes, follow `docs/codex/contributing.md` to check the skill directly. Record changes under Unreleased in `CHANGELOG.md`. Follow `CONTRIBUTING.md` for release work only when a release has been authorized.
 
 
 
@@ -67,6 +67,7 @@ Enable the repository hooks after cloning with `git config core.hooksPath .githo
 | Portable tooling | Edit `.agent-workspace/tooling/`, then synchronize the genome tools into `skills/init-project/portable/tooling/`. |
 | Optional skills and agents | Edit the live source under `.claude/skills/` or `.claude/agents/`. Promote only components intentionally owned by the genome. |
 | Templates and init workflow | Edit `skills/init-project/templates/` and `skills/init-project/SKILL.md` directly. |
+| Codex genome | Edit `skills/init-codex-genome/` directly. Support belongs in `tests/codex/`, `scripts/codex/` and `docs/codex/`; none is another genome source. |
 | Repository tooling | Edit `scripts/`, hooks and CI directly. |
 | Project records | Maintain this file, routers, lessons, decisions and repository documentation as project-owned content. |
 

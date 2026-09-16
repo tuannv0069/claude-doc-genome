@@ -65,6 +65,8 @@ Select optional modules using §7. A module needs evidence from the project or t
 
 Create the required destinations in §3, then copy the bundle's portable files into them. Preserve existing local files that differ from the incoming content until their differences have been reviewed. Installation must not silently erase project work.
 
+When a complete project genome already exists under `.agent-workspace/`, reuse its guide, role, lesson, decision and wiki files instead of copying or rendering another set over them. Install only the Claude-specific adapter, rules, skills, agents and non-conflicting tooling. Verify that every shared portable file and required router named in §3 exists; a partial workspace requires reviewed migration rather than selective filling. This is the deployed collaboration space for every supported agent, not a Codex-owned foreign tree.
+
 Add `.agent-workspace/tasks/` and `.agent-workspace/worktrees/` to the project's ignore rules without replacing its existing ignore entries. These locations hold working state and temporary checkouts rather than distributed guidance.
 
 ### Merge the project indexes
@@ -82,6 +84,8 @@ After the files and indexes are correct, generate their manifest with:
 ```sh
 node <plugin-root>/scripts/init-manifest.mjs --project <project-root> --modules <comma-separated-modules>
 ```
+
+When §4 reused an existing shared genome, add `--reuse-shared-workspace`. The manifest then records only the files this Claude adapter installed and updates continue to leave the shared files under their existing updater ownership.
 
 The manifest records the installed bundle version, file hashes, template source hashes and selected modules. Generate hashes from the actual installed files; do not invent them or use a manifest refresh to conceal unreviewed differences.
 

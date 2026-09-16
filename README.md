@@ -7,6 +7,10 @@
 
 The project owns its requirements, domain knowledge and deliverables. The genome provides the procedures for finding instructions, working from evidence, managing changes and carrying useful lessons forward. It does not prescribe a shared writing style for conversations, scripts or documents.
 
+## Choose the product
+
+The two initialization skills live under `skills/`: [init-project](skills/init-project/SKILL.md) for Claude Code and [init-codex-genome](skills/init-codex-genome/SKILL.md) for Codex. Copy the whole Codex skill into a project's `.agents/skills/` to use it there. That skill is the only authored Codex distribution source; its [documentation](docs/codex/index.md), tests and development tools live under `docs/codex/`, `tests/codex/` and `scripts/codex/`. The Claude product described below keeps its existing source layout, tools and version. Improvements that apply to both are implemented and verified separately; there is no common authoring source or cross-product renderer. After deployment, both adapters use the same `.agent-workspace/` in the project.
+
 ## Install and initialize
 
 Add the marketplace and install the plugin in Claude Code:

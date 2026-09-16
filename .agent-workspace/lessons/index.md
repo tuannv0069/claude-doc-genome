@@ -17,6 +17,7 @@ When delegating the work, pass the relevant store paths to the delegate. The del
 | `verify-context-rule-change.md` | Verifying whether an edit to CLAUDE.md or a shared rule changed agent behavior | — | — |
 | `run-repo-gate.md` | Running a script or gate under .agent-workspace/tooling/ | — | — |
 | `establish-external-platform-fact.md` | Establishing an external tool's path, filename or configuration key | — | — |
+| `plan-platform-products.md` | Planning ownership and maintenance of genome products for different agent hosts | — | — |
 
 Register a store here when creating it, and keep its paired guide reference consistent according to `.agent-workspace/guide/general/lesson-capture.md` §5. The router and store metadata are validated by `.agent-workspace/tooling/verify_lesson_router.py`. A new project with no store rows or store files is valid.
 

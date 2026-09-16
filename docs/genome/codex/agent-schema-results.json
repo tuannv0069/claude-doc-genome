@@ -1,0 +1,30 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "method": "debug prompt-input; isolated CODEX_HOME; no model invocation",
+  "results": [
+    {
+      "case": "valid_agent",
+      "exit_code": 0,
+      "stderr_present": false,
+      "stderr_mentions_probe_filename": false,
+      "stderr_mentions_required_field": false,
+      "stderr_mentions_parse_error": false
+    },
+    {
+      "case": "agent_missing_instructions",
+      "exit_code": 0,
+      "stderr_present": false,
+      "stderr_mentions_probe_filename": false,
+      "stderr_mentions_required_field": false,
+      "stderr_mentions_parse_error": false
+    },
+    {
+      "case": "agent_invalid_toml",
+      "exit_code": 0,
+      "stderr_present": false,
+      "stderr_mentions_probe_filename": false,
+      "stderr_mentions_required_field": false,
+      "stderr_mentions_parse_error": false
+    }
+  ]
+}

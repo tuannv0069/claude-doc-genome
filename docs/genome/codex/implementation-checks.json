@@ -1,0 +1,60 @@
+{
+  "date": "2026-09-16",
+  "host": "Windows",
+  "python": "3.12.10",
+  "claude_version": "5.0.0",
+  "codex_version": "1.0.0",
+  "codex_integrated_suite": {
+    "tests": 38,
+    "passed": 37,
+    "skipped": 1,
+    "skip_reason": "Windows symbolic link creation requires unavailable privilege; actual Windows junction rejection passed"
+  },
+  "codex_standalone_copy_suite": {
+    "tests": 38,
+    "passed": 36,
+    "skipped": 2,
+    "skip_reasons": [
+      "No Claude source in independent copy: separate coexistence suite intentionally skipped",
+      "Windows symbolic-link privilege unavailable"
+    ]
+  },
+  "codex_document_verification": {
+    "live_markdown_files": 37,
+    "errors": 0
+  },
+  "bundle_drift": [],
+  "claude_deployment_tests": {
+    "tests": 18,
+    "passed": 18
+  },
+  "claude_portable_test_scripts": {
+    "count": 6,
+    "failures": 0
+  },
+  "claude_document_lint": {
+    "files": 39,
+    "errors": 0
+  },
+  "coexistence": {
+    "both_install_orders": true,
+    "both_update_directions": true
+  },
+  "independent_review": {
+    "tooling_findings_resolved": 7,
+    "packaging_findings_resolved": 3,
+    "guidance_contract_findings_resolved": 2
+  },
+  "desktop_ui_tested": false,
+  "ci_executed_locally_equivalent_windows": true,
+  "github_ci_run": false,
+  "fresh_cli_behavior": {
+    "conversation": "passed",
+    "nested_agents_creation": "passed",
+    "external_skill_initialization": "passed",
+    "fresh_session_after_initialization": "passed",
+    "initial_timeouts_retained": 3,
+    "lesson_or_decision_capture_exercised": true,
+    "record_capture": "Passed with explicitly requested synthetic incident; initial schema errors corrected; actual maintenance lesson also captured; independent verifier passed 41 files."
+  }
+}

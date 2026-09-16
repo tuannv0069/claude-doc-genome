@@ -1,0 +1,16 @@
+{
+  "name": "codex-genome",
+  "version": "1.0.0",
+  "description": "Independent project workflow guidance and maintenance for Codex.",
+  "author": {"name": "Tuấn Nguyễn"},
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Codex Genome",
+    "shortDescription": "Initialize and maintain a project's Codex genome.",
+    "longDescription": "Install project instructions, task-routed guidance, evidence records and verification tools with independent ownership and updates.",
+    "developerName": "Tuấn Nguyễn",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Initialize the Codex genome in this project."
+  }
+}

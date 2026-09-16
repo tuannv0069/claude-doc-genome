@@ -8,6 +8,8 @@ export const GROUPS = [
   ['roles', '.agent-workspace/guide/roles'], ['tooling', '.agent-workspace/tooling'],
   ['skills', '.claude/skills'], ['agents', '.claude/agents'],
 ];
+export const SHARED_PREFIXES = ['.agent-workspace/guide/', '.agent-workspace/lessons/', '.agent-workspace/decisions/', '.agent-workspace/wiki/'];
+export const isSharedPath = (key) => SHARED_PREFIXES.some((prefix) => pathIdentity(key).startsWith(pathIdentity(prefix)));
 export const TEMPLATES = [
   ['CLAUDE.md.tpl', 'CLAUDE.md'],
   ['guide/index.md.tpl', '.agent-workspace/guide/index.md'],
@@ -113,6 +115,9 @@ export function readManifest(project) {
   if (!existsSync(path)) throw new Error(`Manifest not found: ${path}`);
   const manifest = JSON.parse(readFileSync(path, 'utf8'));
   if (!Array.isArray(manifest.files)) throw new Error('Manifest files must be an array.');
+  if (manifest.sharedWorkspace && !['managed', 'reused'].includes(manifest.sharedWorkspace)) {
+    throw new Error('Manifest sharedWorkspace must be managed or reused.');
+  }
   const seen = new Set();
   for (const file of manifest.files) {
     safePath(project, file.path);

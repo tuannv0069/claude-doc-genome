@@ -1,0 +1,158 @@
+{
+  "cli_version": "codex-cli 0.154.0-alpha.6.2",
+  "command_family": "codex exec --ephemeral --json --sandbox read-only",
+  "timeout_seconds": 90,
+  "timed_out": false,
+  "exit_code": 0,
+  "elapsed_seconds": 20.454,
+  "events": [
+    {
+      "elapsed_seconds": 0.094,
+      "channel": "stderr",
+      "line_characters": 38,
+      "line_sha256": "1aa26269eb1cc57f86b235a03cda53c004edb5b1e9fc99d4da4f00843293d721",
+      "classifications": [],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 0.141,
+      "channel": "stderr",
+      "line_characters": 143,
+      "line_sha256": "d2557f521c8e0a31fbb3eeac6948f5cb80c4bfc47ac2675990d6a25c2dc04cac",
+      "classifications": [
+        "warning"
+      ],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 0.141,
+      "channel": "stderr",
+      "line_characters": 143,
+      "line_sha256": "295d05ba1b545c8f53cfd04ce941c7ff70ca19878dd9f5b70930a325d5931919",
+      "classifications": [
+        "warning"
+      ],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 0.141,
+      "channel": "stderr",
+      "line_characters": 157,
+      "line_sha256": "447730950c15342770bcaa81032e034d462156d04e6e4212d77f9f0559b02613",
+      "classifications": [
+        "warning",
+        "error"
+      ],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 1.782,
+      "channel": "stdout",
+      "event_type": "thread.started",
+      "item_type": null,
+      "tool": null,
+      "status": null,
+      "exit_code": null,
+      "marker_present": false,
+      "mentions_sentinel": false,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 1.797,
+      "channel": "stdout",
+      "event_type": "turn.started",
+      "item_type": null,
+      "tool": null,
+      "status": null,
+      "exit_code": null,
+      "marker_present": false,
+      "mentions_sentinel": false,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 1.922,
+      "channel": "stderr",
+      "line_characters": 143,
+      "line_sha256": "b0c8b0e073ad4f11823a66236beb1a1e10cd795a50683e9e6f19ae8cbe3291c3",
+      "classifications": [
+        "warning"
+      ],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 1.922,
+      "channel": "stderr",
+      "line_characters": 143,
+      "line_sha256": "dd6e0929d5204ff6ade6d4608ba44ec4328d5a22dc50fdf448ce38b94d055fc1",
+      "classifications": [
+        "warning"
+      ],
+      "http_status_codes": []
+    },
+    {
+      "elapsed_seconds": 8.094,
+      "channel": "stdout",
+      "event_type": "item.completed",
+      "item_type": "agent_message",
+      "tool": null,
+      "status": null,
+      "exit_code": null,
+      "marker_present": false,
+      "mentions_sentinel": true,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 10.969,
+      "channel": "stdout",
+      "event_type": "item.started",
+      "item_type": "command_execution",
+      "tool": null,
+      "status": "in_progress",
+      "exit_code": null,
+      "marker_present": false,
+      "mentions_sentinel": true,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 11.11,
+      "channel": "stdout",
+      "event_type": "item.completed",
+      "item_type": "command_execution",
+      "tool": null,
+      "status": "completed",
+      "exit_code": 0,
+      "marker_present": true,
+      "mentions_sentinel": true,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 13.032,
+      "channel": "stdout",
+      "event_type": "item.completed",
+      "item_type": "agent_message",
+      "tool": null,
+      "status": null,
+      "exit_code": null,
+      "marker_present": true,
+      "mentions_sentinel": false,
+      "classifications": []
+    },
+    {
+      "elapsed_seconds": 14.219,
+      "channel": "stdout",
+      "event_type": "turn.completed",
+      "item_type": null,
+      "tool": null,
+      "status": null,
+      "exit_code": null,
+      "marker_present": false,
+      "mentions_sentinel": false,
+      "classifications": [],
+      "terminal_turn_event": true
+    }
+  ],
+  "uses_existing_user_configuration_and_authentication": true,
+  "model_override": false,
+  "user_config_changed": false,
+  "desktop_ui_tested": false
+}

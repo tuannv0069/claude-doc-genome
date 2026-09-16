@@ -1,0 +1,6 @@
+{
+  "case": "conversation",
+  "timed_out": true,
+  "timeout_seconds": 240,
+  "desktop_ui_tested": false
+}

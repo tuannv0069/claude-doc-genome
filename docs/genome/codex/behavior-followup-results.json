@@ -1,0 +1,21 @@
+{
+  "case": "fresh_session_after_skill_init",
+  "exit_code": 0,
+  "actions": [
+    {
+      "command": "\"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\" -Command 'Get-Content .agent-workspace/codex/lessons/index.md, .agent-workspace/codex/guide/roles/index.md, .agent-workspace/codex/rules/critical-thinking.md, .agent-workspace/codex/rules/file-reading.md, .agent-workspace/codex/rules/doc-organization.md, .agent-workspace/codex/guide/general/task-planning.md, docs/index.md'",
+      "exit_code": 0
+    },
+    {
+      "command": "\"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\" -Command 'Get-Content -Encoding UTF8 .agent-workspace/codex/guide/roles/journal-editor.md, .agent-workspace/codex/guide/general/role-selection.md, .agent-workspace/codex/guide/general/capability-packaging.md, docs/index.md'",
+      "exit_code": 0
+    }
+  ],
+  "messages": [
+    "Tôi sẽ đọc hướng dẫn và phần giới thiệu nhật ký của dự án trước khi viết đoạn văn trong chat.\n",
+    "Chiều nay, mình ra khỏi nhà khi nắng vừa rút khỏi bậc cửa. Không định đi đâu, mình cứ men theo con đường nhỏ, ngang qua tiệm tạp hóa và giàn hoa giấy nhà cuối ngõ. Một chiếc lá mắc vào quai dép, theo mình một quãng rồi mới rơi xuống. Đến công viên, mình ngồi nhìn hai ông cụ đánh cờ, chẳng hiểu thế cờ mà vẫn nán lại chờ xem ai thắng. Gió bắt đầu lạnh, mình đứng dậy về trước khi ván cờ kết thúc. Trên đường về, mình mua một ổ bánh mì còn nóng, ôm sát vào người qua lớp túi giấy. Nhà tối và yên, vẫn còn chiếc cốc uống dở từ trưa trên bàn. Mình bật đèn, mở hé cửa sổ rồi bẻ bánh ra ăn. Lúc ấy mới nhận ra đã đi cả buổi mà không nghĩ đến chuyện khiến mình bực từ sáng. Vụn bánh rơi xuống bàn; mình lấy tay gom lại, chợt thấy đói."
+  ],
+  "desktop_ui_tested": false,
+  "temporary_cli_trust_override": true,
+  "uses_existing_user_configuration_and_authentication": true
+}

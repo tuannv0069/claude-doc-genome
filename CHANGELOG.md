@@ -6,6 +6,10 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Repository additions
+
+- Added the independently maintained Codex distribution in `skills/init-codex-genome/`, with its complete sources, deployment tool, templates and version. Development support is organized under `tests/codex/`, `scripts/codex/` and `docs/codex/`; no separate Codex product directory remains at the root. Claude Code and Codex keep independent source distributions while using the same deployed `.agent-workspace/` in a project; see `docs/codex/changelog.md`.
+
 ### Changed
 
 - Rewrote the distributed rules, guides, roles, templates and initialization workflow in complete prose. Shared guidance now owns working procedures and evidence requirements; projects own the style of their deliverables.

@@ -1,0 +1,51 @@
+name: codex-genome-checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  codex-product:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Codex version and source contracts
+        run: |
+          python scripts/codex/sync-version.py check --skill-root skills/init-codex-genome
+          python skills/init-codex-genome/scripts/genome.py check
+      - name: Run the product outside the Claude repository
+        shell: python
+        run: |
+          from pathlib import Path
+          import shutil, subprocess, sys, tempfile
+          with tempfile.TemporaryDirectory(prefix='codex-independent-') as temporary:
+              product = Path(temporary)
+              for relative in ('scripts/codex', 'tests/codex', 'docs/codex', 'skills/init-codex-genome'):
+                  shutil.copytree(relative, product / relative, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
+              shutil.copy2('LICENSE', product / 'LICENSE')
+              subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', str(product / 'tests/codex')], cwd=temporary, check=True)
+      - name: Build isolated distribution
+        run: python scripts/codex/package.py --skill-root skills/init-codex-genome --output .agent-workspace/tasks/codex-ci-marketplace
+
+  shared-workspace:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check shared workspace integration
+        run: python -m unittest discover -s tests/codex -p test_coexistence.py

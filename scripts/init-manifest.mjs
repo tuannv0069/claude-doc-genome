@@ -4,21 +4,30 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bundleFiles, checkRenderedTargets, options, pathIdentity, readManifest, RETIRED_PATHS, safePath, sha, TEMPLATES } from './deployment-map.mjs';
+import { bundleFiles, checkRenderedTargets, isSharedPath, options, pathIdentity, readManifest, RETIRED_PATHS, safePath, sha, TEMPLATES } from './deployment-map.mjs';
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 function main() {
-  const args = options(process.argv.slice(2), ['--project', '--modules']);
+  const args = options(process.argv.slice(2), ['--project', '--modules', '--reuse-shared-workspace']);
   const project = resolve(args['--project'] || process.cwd());
   const wanted = bundleFiles(repo);
-  const wantedIdentities = new Set([...wanted.keys()].map(pathIdentity));
+  const reuseShared = Boolean(args['--reuse-shared-workspace']);
+  const managed = new Map([...wanted].filter(([path]) => !reuseShared || !isSharedPath(path)));
+  const wantedIdentities = new Set([...managed.keys()].map(pathIdentity));
   for (const key of RETIRED_PATHS) {
     if (!wanted.has(key) && existsSync(safePath(project, key))) {
       throw new Error(`Retired file still exists: ${key}. Review its migration before recording completion.`);
     }
   }
   const files = [];
-  for (const [path, source] of wanted) {
+  if (reuseShared) {
+    for (const [path] of wanted) {
+      if (isSharedPath(path) && !existsSync(safePath(project, path))) {
+        throw new Error(`Shared genome is incomplete: ${path}`);
+      }
+    }
+  }
+  for (const [path, source] of managed) {
     const target = safePath(project, path);
     if (!existsSync(target) || sha(target) !== sha(source)) {
       throw new Error(`Deployment is incomplete or locally changed: ${path}`);
@@ -44,6 +53,7 @@ function main() {
     version: readFileSync(join(repo, 'skills/init-project/VERSION'), 'utf8').trim(),
     deployedAt: new Date().toISOString(),
     modules,
+    sharedWorkspace: reuseShared ? 'reused' : 'managed',
     files, templates,
   };
   mkdirSync(dirname(target), { recursive: true });
