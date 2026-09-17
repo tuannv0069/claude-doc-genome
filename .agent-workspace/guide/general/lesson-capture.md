@@ -64,7 +64,7 @@ The router has the columns `file`, `work type`, `paired guide`, and `checks`. Th
 
 Choose the store by asking which phase would avoid the failure on its next run. When a review discovers a writing-method defect, record the lesson for writing. If the review technique itself failed, record it for reviewing.
 
-Each store declares `scope:` and `phase:` in its `<critical>` metadata block. The phase values are `writing`, `reviewing`, `answering`, `building-gate`, `orchestrating`, `investigating`, and `operating`. A store that requires separate phases should be split accordingly.
+Each store declares `scope:` and `phase:` in its `<critical>` metadata block. The phase values are `writing`, `reviewing`, `answering`, `building-gate`, `orchestrating`, `investigating`, and `operating`. A store that requires separate phases should be split accordingly. A store may instead declare the protected action as `work_scope:` and the phase as `phase:` in its frontmatter; the verifier accepts either form so that one shared `.agent-workspace/` can be checked by every supported agent. Use one form consistently within a store; the frontmatter `scope:` field classifies portability and is not the protected action.
 
 If both the producing and inspecting phases are affected, store the lesson once with the producing phase and let the inspecting phase reach it through `checks`. Keep that relationship acyclic.
 

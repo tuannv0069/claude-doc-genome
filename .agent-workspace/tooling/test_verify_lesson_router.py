@@ -132,6 +132,30 @@ with tempfile.TemporaryDirectory() as t:
     check(any("while 1 store file" in p for p in V.check(d)),
           "case 17: empty router with a store on disk was not caught")
 
+    # --- shared-workspace forms: bare file cells and frontmatter metadata ---
+    front = ("---\nscope: project\nwork_scope: doing the thing\nphase: writing\n---\n\n"
+             "### a lesson\n- seen — 1\n")
+    d = build(tmp, {"write-doc": front, "review-doc": store(phase="reviewing")},
+              ["| write-doc.md | doing the thing | — | review-doc.md |\n",
+               "| review-doc.md | doing the thing | — | — |\n"])
+    check(V.check(d) == [],
+          "case 19: bare file cells and frontmatter work_scope/phase were rejected")
+
+    front_no_scope = ("---\nscope: project\nphase: writing\n---\n\n### a lesson\n- seen — 1\n")
+    d = build(tmp, {"write-doc": front_no_scope}, [row("write-doc")])
+    check(any("no scope: line" in p for p in V.check(d)),
+          "case 20: frontmatter phase without work_scope was not caught")
+
+    front_bad_phase = ("---\nscope: project\nwork_scope: doing the thing\nphase: refactoring\n---\n\n"
+                       "### a lesson\n- seen — 1\n")
+    d = build(tmp, {"write-doc": front_bad_phase}, [row("write-doc")])
+    check(any("not in the closed set" in p for p in V.check(d)),
+          "case 21: frontmatter phase outside the closed set was not caught")
+
+    d = build(tmp, {"write-doc": store()}, ["| write-doc.md | doing the thing | — | ghost.md |\n"])
+    check(any("ghost.md" in p for p in V.check(d)),
+          "case 22: bare checks pointer at a missing store was not caught")
+
     # --- missing router -------------------------------------------------
     empty = Path(tempfile.mkdtemp(dir=tmp))
     check(any("router not found" in p for p in V.check(empty)),

@@ -4,7 +4,13 @@
 The four router columns and the scope/phase metadata are data contracts. Lesson
 records may use complete paragraphs; this gate does not constrain their length
 or wording. A correctly seeded router with no stores is valid. The gate cannot
-judge whether a declared phase accurately describes the work in a store."""
+judge whether a declared phase accurately describes the work in a store.
+
+A store declares its protected action and phase either in a `<critical>` block
+(`scope:` and `phase:`) or in frontmatter (`work_scope:` and `phase:`). Both
+forms are documented in lesson-capture.md and both are accepted here, so one
+shared `.agent-workspace/` can be checked by every supported agent. File cells
+in the router may be bare or backticked."""
 from __future__ import annotations
 
 import re
@@ -14,14 +20,15 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 LESSONS = Path(".agent-workspace/lessons")
-NAME = re.compile(r"`([a-z0-9-]+\.md)`")
+NAME = re.compile(r"([a-z0-9-]+\.md)")
 WIKILINK = re.compile(r"\[\[([a-z0-9-]+)\]\]")
 PHASES = {"writing", "reviewing", "answering", "building-gate",
           "orchestrating", "investigating", "operating"}
 CRIT_OPEN = re.compile(r"^<critical>\s*$", re.M)
 CRIT_CLOSE = re.compile(r"^</critical>\s*$", re.M)
 HEADER_CELLS = ["file", "work type", "paired guide", "checks"]
-FILE_CELL = re.compile(r"^`([a-z0-9-]+\.md)`$")
+FILE_CELL = re.compile(r"^`?([a-z0-9-]+\.md)`?$")
+FRONTMATTER = re.compile(r"\A---[ \t]*\n(.*?)\n---[ \t]*(?:\n|\Z)", re.S)
 
 
 def parse_router(index_path: Path) -> tuple[list[dict], list[str], bool]:
@@ -65,29 +72,40 @@ def parse_router(index_path: Path) -> tuple[list[dict], list[str], bool]:
 
 
 def scope_status(text: str) -> tuple[str, str, str]:
-    """State of a store's <critical> block.
+    """State of a store's protected-action metadata.
 
-    ('missing', '', '')  — no block at all
-    ('no_scope', '', '') — the block is in place but has no scope: line
-    ('ok', line, phase)  — valid; `line` is the stripped scope: line, `phase` is the
-                           stripped text after `phase:`, or '' when that line is absent
+    ('missing', '', '')   — neither a <critical> block nor work_scope:/phase: frontmatter
+    ('no_scope', '', '')  — metadata is present but names no protected action
+    ('ok', scope, phase)  — valid; `scope` is the protected action, `phase` is the
+                            declared phase, or '' when no phase line is present
+
+    Frontmatter `work_scope:` and `phase:` take precedence over the <critical>
+    lines when both forms are present. Frontmatter `scope:` classifies
+    portability and is never read as the protected action.
     """
+    front: dict[str, str] = {}
+    fm = FRONTMATTER.match(text)
+    if fm:
+        for raw in fm.group(1).splitlines():
+            key, sep, value = raw.partition(":")
+            if sep:
+                front[key.strip()] = value.strip()
+    crit: dict[str, str] = {}
     m = CRIT_OPEN.search(text)
-    if not m:
+    if m:
+        close = CRIT_CLOSE.search(text, m.end())
+        block = text[m.end():close.start()] if close else text[m.end():]
+        for raw in block.splitlines():
+            key, sep, value = raw.strip().partition(":")
+            if sep and key in ("scope", "phase"):
+                crit[key] = value.strip()
+    if not m and not front.get("work_scope") and not front.get("phase"):
         return ("missing", "", "")
-    close = CRIT_CLOSE.search(text, m.end())
-    block = text[m.end():close.start()] if close else text[m.end():]
-    line = ""
-    phase = ""
-    for raw in block.splitlines():
-        stripped = raw.strip()
-        if stripped.startswith("scope:"):
-            line = stripped
-        elif stripped.startswith("phase:"):
-            phase = stripped[len("phase:"):].strip()
-    if not line:
+    scope = front.get("work_scope") or crit.get("scope", "")
+    phase = front.get("phase") or crit.get("phase", "")
+    if not scope:
         return ("no_scope", "", "")
-    return ("ok", line, phase)
+    return ("ok", scope, phase)
 
 
 def check(lessons: Path) -> list[str]:
@@ -148,17 +166,19 @@ def check(lessons: Path) -> list[str]:
         if n > 1:
             problems.append(f"{index}: `{name}` has {n} rows, it must have exactly 1")
 
-    # 4. <critical> block present, with scope: and exactly one declared phase
+    # 4. protected action and exactly one declared phase, in either documented form
     for name in sorted(on_disk):
         text = (lessons / name).read_text(encoding="utf-8")
         status, _line, phase = scope_status(text)
         if status == "missing":
-            problems.append(f"{lessons/name}: no <critical> block")
+            problems.append(
+                f"{lessons/name}: no <critical> block and no work_scope:/phase: frontmatter")
         elif status == "no_scope":
-            problems.append(f"{lessons/name}: <critical> block has no scope: line")
+            problems.append(
+                f"{lessons/name}: metadata has no scope: line (or work_scope: in frontmatter)")
         elif not phase:
             problems.append(
-                f"{lessons/name}: <critical> block has no phase: line"
+                f"{lessons/name}: metadata has no phase: line"
                 " — a store must DECLARE its phase"
             )
         elif phase not in PHASES:
