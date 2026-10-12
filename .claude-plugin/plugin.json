@@ -1,7 +1,7 @@
 {
   "name": "claude-doc-genome",
   "description": "Set up a Claude Code project's documentation system with project instructions, shared rules, on-demand guides, and tools for maintaining them.",
-  "version": "5.0.0",
+  "version": "8.1.0",
   "author": {
     "name": "Tuấn Nguyễn"
   },

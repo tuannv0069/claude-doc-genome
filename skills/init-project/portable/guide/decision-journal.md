@@ -2,13 +2,25 @@
 scope: portable
 ---
 
+<critical>
+scope: the decision journal — which decisions are recorded, when an entry is written, how it is read back and superseded.
+never: edit or delete a historical entry, or record what version history can reconstruct by itself.
+note: search the journal before changing a law; write an admitted decision in the same turn it is made; a wrong entry is corrected by a later entry that supersedes it.
+</critical>
+
 # Decision journal
 
 The journal records reasons and choices that a diff cannot reconstruct. It complements version history without repeating a record of the files changed.
 
 ## §1 Admission test
 
-Before adding an entry, ask whether version history alone could reconstruct the conclusion. If it could, do not duplicate that history. If the conclusion depends on an alternative that was rejected, an accepted limitation, or another decision that leaves no sufficient trace in the diff, record it under one of the classes in §2.
+One question decides every candidate: if the entry were deleted, could version history alone reconstruct the conclusion?
+
+<rules section="ALWAYS">
+- Before adding an entry, ask whether version history alone could reconstruct the conclusion, and skip the entry when it could.
+- Record the conclusion under one of the classes in §2 when it depends on a rejected alternative, an accepted limitation, or another decision that leaves no sufficient trace in the diff.
+- Skip an entry for choosing among creative drafts or options and for revising creative text for taste; `creative-work.md` §8 covers those.
+</rules>
 
 ## §2 Decision classes
 
@@ -24,11 +36,18 @@ A review entry is the authoritative record of its root-cause classification. Wor
 
 ## §3 Entry data
 
-Each decision has its own Markdown file. Its YAML metadata includes `class`, `subject`, and `anchor`. The subject identifies an existing repository-relative path and can include a stable section. The anchor identifies the evidence or commit supporting the decision. Add `supersedes` only when the entry replaces a previous decision, using that entry's identifier.
+Each decision has its own Markdown file. The labels `decided:`, `because:`, `rejected:` and `unlocked by:` identify decision data for the journal's verifier; their values can contain the explanation the decision requires.
 
-The body contains a nonempty `decided:` field. Use `because:`, `rejected:`, or `unlocked by:` when that information applies. These labels identify decision data for the journal's verifier; their values can contain the explanation the decision requires.
+<rules section="ALWAYS">
+- Give the YAML metadata `class`, `subject` and `anchor`, where `subject` identifies an existing repository-relative path with an optional stable section and `anchor` identifies the evidence or commit supporting the decision.
+- Add `supersedes` only when the entry replaces a previous decision, using that entry's identifier.
+- Write a nonempty `decided:` field in the body, and add `because:`, `rejected:` or `unlocked by:` when that information applies.
+</rules>
 
-Do not edit or delete a historical entry to change its conclusion. Add a new entry that supersedes it. Progress, test output, and descriptions of the current file contents belong in working records or version history.
+<rules section="NEVER">
+- Edit or delete a historical entry to change its conclusion; add a new entry that supersedes it.
+- Record progress, test output or descriptions of the current file contents; those belong in working records or version history.
+</rules>
 
 ## §4 Location and identifiers
 
@@ -38,19 +57,30 @@ One file per decision avoids competing sessions appending to the same file. If t
 
 ## §5 When to write
 
-Apply the admission test when changing a law, answering a review comment that affects a law, or deciding scope, accepted debt, or a rejected alternative. Write an admitted decision during the same turn in which it is made, while its evidence and reasoning remain available.
-
 A law includes a rule, guide, role, lesson-store requirement, or deliverable standard. A minor wording edit does not need a journal entry when its entire meaning is already recoverable from the diff.
+
+<rules section="ALWAYS">
+- Apply the admission test when changing a law, answering a review comment that affects a law, or deciding scope, accepted debt, or a rejected alternative.
+- Write an admitted decision during the same turn in which it is made, while its evidence and reasoning remain available.
+</rules>
 
 ## §6 When to read
 
-Before changing a law, search the journal for its subject and read any standing decision that could conflict with the proposed change. Understand the earlier reason before reversing the decision.
+Search by repository-relative path and relevant stable section. A search result is a candidate record; the supersession relationships determine whether it still governs the subject.
 
-Search by repository-relative path and relevant stable section. A search result is a candidate record; use the supersession relationships to determine whether it still governs the subject.
+<rules section="ALWAYS">
+- Before changing a law, search the journal for its subject and read any standing decision that could conflict with the proposed change.
+- Understand the earlier reason before reversing the decision.
+</rules>
 
 ## §7 Subagents
 
-A subagent returns the decisions it made or identified together with their evidence. The orchestrator reconciles those results and writes any journal entries. Subagents do not write competing entries independently for the same coordinated task.
+Subagents do not write competing entries independently for the same coordinated task.
+
+<rules section="ALWAYS">
+- A subagent returns the decisions it made or identified together with their evidence.
+- The orchestrator reconciles those results and writes any journal entries.
+</rules>
 
 ## §8 Lifecycle
 
@@ -66,4 +96,8 @@ Use `archive_decisions.py --year YYYY` to inspect archive candidates. Only super
 
 ## §10 Relationship to current guidance
 
-Decision records preserve history; rules and guides state the requirements currently in force. Keep the two responsibilities separate. Do not copy an entry's change history into the body of the requirement it describes.
+Decision records preserve history; rules and guides state the requirements currently in force. Keep the two responsibilities separate.
+
+<rules section="NEVER">
+- Copy an entry's change history into the body of the requirement it describes.
+</rules>

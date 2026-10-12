@@ -49,4 +49,4 @@ Create a cluster when an investigation first reaches its lookup topic, following
 
 ## §4 Verification
 
-Run `python .agent-workspace/tooling/verify_wiki.py` to validate the wiki. Use `--new-id <cluster>` to allocate an identifier and `--merge-check <ref> <ref>` to check conservation across at least two Git references.
+Run `python .agent-workspace/tooling/genome/verify_wiki.py` to validate the wiki. Use `--new-id <cluster>` to allocate an identifier and `--merge-check <ref> <ref>` to check conservation across at least two Git references.

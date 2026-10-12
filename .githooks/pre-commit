@@ -11,7 +11,7 @@ if ! node scripts/sync-version.mjs check; then
   exit 1
 fi
 
-if ! node scripts/doc-lint.mjs --quiet; then
-  echo "pre-commit: Resolve the documentation findings before committing." >&2
+if ! node scripts/doc-lint.mjs --bundle --quiet; then
+  echo "pre-commit: Resolve the bundle documentation findings before committing." >&2
   exit 1
 fi

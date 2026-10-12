@@ -2,21 +2,39 @@
 scope: portable
 ---
 
+<critical>
+scope: a defect fix in code, documentation, a rule, configuration or any artifact with dependents, when no skill owns the fixing workflow.
+never: edit before finding what depends on the changed part, or declare a fix complete because the symptom is gone.
+note: the defect description is a starting point, not proof that the requested edit is the remedy; scale the analysis to what the dependency search finds (§4).
+</critical>
+
 # Assessing the impact of a fix
 
 This guide applies to a defect fix when no skill already owns the fixing workflow. It covers code, documentation, rules, configuration, and other artifacts with dependents.
 
 ## §1 Establish the scope before editing
 
-Before applying a fix, determine what relies on the part being changed and what could stop working after the change. The defect description is a starting point for investigation, not proof that the requested edit is the correct remedy.
+A local change can remove a visible symptom while breaking another consumer.
 
-A local change can remove a visible symptom while breaking another consumer. Examine the dependency boundary before deciding that the change is local.
+<rules section="ALWAYS">
+- Before applying a fix, determine what relies on the part being changed and what could stop working after the change.
+- Examine the dependency boundary before deciding that the change is local.
+- Revise creative text for taste without a dependency analysis unless the revision changes a fact, a promise made elsewhere or a cross-reference (`creative-work.md` §8).
+</rules>
+
+<rules section="NEVER">
+- Treat the defect description as proof that the requested edit is the correct remedy.
+</rules>
 
 ## §2 Finding dependents
 
-For code, inspect callers, importers, shared state, return values, side effects, and persisted data that consumers rely on. For documentation and rules, inspect incoming links, stable-section references, and statements whose meaning depends on the changed requirement. For configuration, inspect the readers of the value and the behavior it controls.
+This is the same dependency question across artifact types; the evidence used to answer it changes with the artifact.
 
-This is the same dependency question across artifact types. The evidence used to answer it changes with the artifact.
+<rules section="ALWAYS">
+- For code, inspect callers, importers, shared state, return values, side effects, and persisted data that consumers rely on.
+- For documentation and rules, inspect incoming links, stable-section references, and statements whose meaning depends on the changed requirement.
+- For configuration, inspect the readers of the value and the behavior it controls.
+</rules>
 
 ## §3 Procedure
 
@@ -28,15 +46,26 @@ This is the same dependency question across artifact types. The evidence used to
 
 ## §4 Scale the work to the dependency findings
 
-Every fix needs the initial dependency search. A leaf change with no affected consumers can proceed with a local check; it does not need a separate impact report. A change to shared behavior or a widely referenced requirement needs a record of the affected surfaces and verification of those surfaces.
+Every fix needs the initial dependency search. A leaf change with no affected consumers can proceed with a local check. A change to shared behavior or a widely referenced requirement needs a record of the affected surfaces and verification of those surfaces.
 
-Do not infer low risk from a small diff. Conversely, do not require an extensive impact analysis after the search has established that the change is isolated.
+<rules section="NEVER">
+- Infer low risk from a small diff.
+- Require an extensive impact analysis after the search has established that the change is isolated.
+</rules>
 
 ## §5 Examples
 
-If a shared helper returns a shape used by several callers, changing that shape to satisfy one caller can break the others. Read the callers first. A correction at the faulty caller may preserve the shared contract; if the contract itself needs to change, update and verify affected consumers.
+<example type="shared_helper">
+input: a shared helper returns a shape used by several callers, and one caller needs a different shape
+❌ change the shared shape to satisfy that caller; the other callers break
+✅ read the callers first; correct the faulty caller if the contract can stay, or update and verify every consumer if the contract itself must change
+</example>
 
-If a rule's meaning changes, a link to its section can remain valid while the referring sentence becomes false. Read the referring statements and reconcile them in the same change.
+<example type="stale_reference">
+input: a rule's meaning changes while a link to its section still resolves
+❌ leave the referring sentence because the link is not broken
+✅ read the referring statements and reconcile them in the same change
+</example>
 
 ## §6 Related requirements
 

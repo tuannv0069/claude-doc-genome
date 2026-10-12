@@ -1,7 +1,7 @@
 # claude-doc-genome
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-8.1.0-blue.svg)](CHANGELOG.md)
 
 `claude-doc-genome` is a Claude Code plugin that gives a project a documentation system for AI work. It installs project instructions, reusable workflow rules, guides that are read when needed, and tools that check the relationships between them.
 
@@ -30,8 +30,6 @@ The skill inspects the project, resolves the required settings, copies the porta
 |---|---|---|
 | `/init-project` | A new project | Establishes the documentation system. |
 | `/init-project update` | An initialized project | Reviews and applies changes from a newer bundle. |
-| `/init-project check` | This source repository | Compares the live genome with its portable bundle. |
-| `/init-project promote` | This source repository | Copies reviewed live improvements into the bundle. |
 
 Initialization happens once. Later changes use the update procedure, which compares the new bundle, the current files and the hashes recorded at deployment. It preserves conflicting local edits. An unchanged retired genome file can be removed when the manifest proves its ownership. Project-owned indexes and instructions are merged separately; they are not overwritten by the updater.
 
@@ -43,8 +41,8 @@ The updater reports changed template sources until their changes have been revie
 |---|---|---|
 | Workflow rules | `.claude/rules/` | Establish source reading, evidence, placement and component contracts. |
 | General guides | `.agent-workspace/guide/general/` | Describe planning, review, verification, lessons, decisions and related procedures. |
-| Roles | `.agent-workspace/guide/roles/` | Provide working perspectives and completion checks. |
-| Verification tools | `.agent-workspace/tooling/` | Check the genome's data and references. |
+| Role router and template | `.agent-workspace/guide/roles/` | Route work to the project's own roles, which are created from the bundled template. |
+| Verification tools | `.agent-workspace/tooling/genome/` | Check the genome's data and references. |
 | Optional skills and agents | `.claude/skills/`, `.claude/agents/` | Hold reusable workflows or delegates that the bundle explicitly includes. |
 | Project instructions and indexes | `CLAUDE.md` and the appropriate workspace indexes | Connect shared guidance to the actual project. |
 
@@ -54,7 +52,7 @@ Lessons, decisions and optional wiki claims live under `.agent-workspace/`. Temp
 
 Each substantive requirement has one source. Routers and references make that source reachable without copying its text into every workflow. Guidance needed before an action is connected to that action; other guidance is read when the task reaches its subject.
 
-Portable files contain reusable procedures. Templates supply the project-specific information and routing that cannot be copied unchanged. A useful improvement is first verified in the live project, then promoted into the bundle when it is appropriate for other projects.
+Portable files contain reusable procedures. Templates supply the project-specific information and routing that cannot be copied unchanged. This repository holds only the bundle. A useful improvement is verified in a project that has deployed the genome, then brought into the bundle when it is appropriate for other projects.
 
 The current rewrite's [design](docs/genome/thiet-ke-goc.md) and [plan](docs/genome/ke-hoach-viet-lai.md) explain the source architecture and the rewrite. The [implementation report](docs/genome/ket-qua-viet-lai.md) records the completed checks and the remaining limits.
 

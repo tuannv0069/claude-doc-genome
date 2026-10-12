@@ -21,6 +21,6 @@ Search a subject with `rg -l "subject: <path>" .agent-workspace/decisions`. Sear
 
 ## §4 Tools
 
-Run `python .agent-workspace/tooling/verify_decision_log.py` to validate the journal. Use `python .agent-workspace/tooling/archive_decisions.py --year YYYY` for the archive procedure defined in `.agent-workspace/guide/general/decision-journal.md` §9.
+Run `python .agent-workspace/tooling/genome/verify_decision_log.py` to validate the journal. Use `python .agent-workspace/tooling/genome/archive_decisions.py --year YYYY` for the archive procedure defined in `.agent-workspace/guide/general/decision-journal.md` §9.
 
 A newly initialized journal contains this router and no entries. Create an entry when there is an actual decision to record.

@@ -4,25 +4,52 @@ paths:
 scope: portable
 ---
 
+<critical>
+scope: the wiki tier — claims already established about the project's subject material, written back so a later run does not derive them again; content lives in `.agent-workspace/wiki/<subject>/<cluster>.md`, routed by `.agent-workspace/wiki/index.md`.
+never: store a measurement as a claim, answer an investigation from a `hypothesis` edge, or let a contradiction at the deliverable boundary pass unresolved.
+note: an investigation opens with a lookup and closes with a write-back (§6 R1); the gate checks structure and locators, never truth (§6 R8); every project-specific value is declared by the project under §7.
+</critical>
+
 # Established knowledge about subject material
 
 The optional wiki stores claims established about material the project investigates. It helps a later task reuse that knowledge without repeating the investigation. It is separate from instructions about how the assistant works and from finished deliverables.
 
 ## §1 Decide what belongs in the wiki
 
-Store a claim when it establishes something about the subject material and another existing knowledge tier does not already own it. The claim should identify useful structure, authority or location: for example, which source defines a set of valid values and what those values are.
+A claim enters the wiki when it establishes something about the subject material and no other knowledge tier already owns it. The useful content is structure, authority and location: which source defines a set of valid values, what those values are, where a thing lives, which artifact governs it. A count or size observed at one moment can become false while its source still exists; such observations belong in the task evidence or deliverable that records their context.
 
-Do not store transient measurements as durable claims. A count or size observed at one moment can become false while its source still exists. Keep such observations in the task evidence or deliverable that records their context. A query used as evidence may return a measurement, but that does not make the measurement suitable for the wiki's claim field.
+<rules section="ALWAYS">
+- Store structure and position: the catalogue of valid values, where a thing lives, which artifact governs it.
+- Before writing a claim, ask whether omitting it would cause a later task to investigate the same question again.
+</rules>
 
-Before adding a claim, ask whether omitting it would cause a later task to investigate the same question again. A fact encountered incidentally does not need its own record if it answers no question the investigation looked up.
+<rules section="NEVER">
+- Store a measurement such as a count, a total or a size as a durable claim; a query used as evidence may return one, but the number does not enter the claim field.
+- Record a fact encountered incidentally when it answers no question the investigation looked up.
+</rules>
+
+<example type="structure_vs_measurement">
+input: an investigation established which catalogue is the authority for an attribute
+✅ `<catalogue>` is the authority for `<attribute>`, and it lists `<v1>`, `<v2>` and `<v3>`
+❌ `<catalogue>` holds exactly four rows at lookup time
+</example>
 
 ## §2 Place the claim in a lookup cluster
 
-A cluster is a Markdown file under `.agent-workspace/wiki/<subject>/` that groups claims answering a shared lookup topic. Choose the cluster from the question being investigated rather than creating one file per source artifact.
+A cluster is a Markdown file under `.agent-workspace/wiki/<subject>/` that groups claims answering a shared lookup topic, what gets asked as a single block. It is not one file per source artifact and not one per unit of the material's own organisation. Different lookup topics can lead to the same fact; duplicate detection keys on the evidence locator under §6 R6, not on the cluster.
 
-Use the cluster searched at the start of the investigation. If no cluster covers that topic, create it and register its link in `.agent-workspace/wiki/index.md` in the same change. The router link uses a path relative to the wiki root and identifies what the cluster answers. A filename written as plain text is not a router link.
+<rules section="ALWAYS">
+- Write a claim into the cluster that the opening query of §6 R1 already searched.
+- When no cluster covers the topic, create it and register its router row in `.agent-workspace/wiki/index.md` in the same change.
+- Write the router row's cluster name as a Markdown link whose target is the cluster path relative to the wiki root, together with what the cluster answers.
+- Search by evidence locator before adding a new claim.
+</rules>
 
-Before adding a new claim, also search by its evidence locator under §6 R6. Different lookup topics can lead to the same fact; that does not require duplicate claim records.
+<example type="router_row">
+input: registering a new cluster in the wiki router
+✅ `| <subject> | [<lookup topic>](<subject>/<cluster>.md) | <what it answers> |`
+❌ `| <subject> | <cluster>.md | <what it answers> |`, a plain filename that the router scan reads as an orphaned cluster
+</example>
 
 ## §3 Preserve the claim-record schema
 
@@ -40,7 +67,7 @@ The schema is an interface for the wiki tools. It does not prescribe how an unre
 
 ## §4 Record evidence that can be revisited
 
-Every evidence item begins with a form name and a colon. The available forms identify different sources of evidence:
+Every evidence item begins with a form name and a colon. The forms describe an item, not an edge: one edge carries items of several forms when its claim class requires several sources. A claim class whose required sources have no carrying form can never reach `sourced`; adding the class means adding its form.
 
 | Form | Required values and interpretation |
 |---|---|
@@ -49,69 +76,157 @@ Every evidence item begins with a form name and a colon. The available forms ide
 | `stored-data` | The `dataset`, `object`, `field` and exact `query` used to inspect stored data. |
 | `running-system` | The `account` or session context, `screen` or entry point and what was `observed`. |
 
-The parser reads `located` in the form ``located: `<path>:<line>` anchor=`<verbatim text>` ``. The first pair of backticks contains the path and line; writing separate `path=` and `line=` values is not equivalent for this form.
+The parser reads `located` in the form ``located: `<path>:<line>` anchor=`<verbatim text>` ``. The other forms use named `key=value` pairs, and a value may be enclosed in backticks or double quotes. The path identifies the source; the anchor helps detect changed positions. A match of the same text in a different file does not by itself invalidate the recorded locator.
 
-The other forms use named `key=value` pairs. Values may be enclosed in backticks or double quotes. For example, an absence item begins with `absent:` and includes `query=`, `scope=` and `expected=`. Stored-data and running-system items do not use an `anchor`; a source-text search would not establish what a database or running system contained.
+The locator check compares the recorded and observed sets of matching positions within the cited file and reports missing as well as extra positions. For the other forms, the tool checks the recorded structure and declares what it has not rerun or observed, so an absence or an observation that has become false stays green until §6 R3 catches it at the deliverable boundary.
 
-Separate multiple items in a cell with `<br>`. The parser also accepts `<br/>` and `<br />` as that boundary. For a claim with several positions in the same source file, provide a separate `located` item for each path, line and anchor combination.
+<rules section="ALWAYS">
+- Open every evidence item with its form name and a colon.
+- Separate the items of one cell with `<br>`; the parser also accepts `<br/>` and `<br />`.
+- Write a `located` position inside the first pair of backticks as `<path>:<line>`; separate `path=` and `line=` values are not read for this form.
+- Provide a separate `located` item for each position when a claim has several positions in the same source file.
+- Resolve each source path relative to the project's `source_root` declaration, which is itself relative to the directory containing the wiki router.
+</rules>
 
-Resolve each source path relative to the project's `source_root` declaration. That declaration is itself relative to the directory containing the wiki router. The path identifies the source; the anchor helps detect changed positions. A match elsewhere in a different file does not by itself invalidate the recorded locator.
-
-The locator check compares the recorded and observed sets of matching positions within the cited file. It reports missing as well as extra positions. For other evidence forms, the current tool checks the recorded structure and declares what it has not rerun or observed. The assistant must not interpret those structural checks as a new execution of the query or a new observation of the system.
+<rules section="NEVER">
+- Give a `stored-data` or `running-system` item an `anchor`; a source-text search does not establish what a database or running system contained.
+- Interpret a structural check of an `absent`, `stored-data` or `running-system` item as a new execution of the query or a new observation of the system.
+</rules>
 
 ## §5 Keep cluster files compatible with the parser
 
-The first Markdown table in a cluster is its edge table. Its header is exactly `id | claim | class | confidence | evidence`, and each data row supplies those fields. Keep one edge table per cluster. The parser does not treat a table inside a code fence as cluster data, and it does not read auxiliary tables after the first as edge records.
+These requirements determine which data the tool reads. Putting a summary table before the edge table changes the parser's input even if the document remains readable. Every table after the first is auxiliary and is never inspected. The router's link scan does not read fences, so an illustrative cluster link anywhere in the real router is read as a reference to a cluster that does not exist.
 
-These requirements determine which data the tool reads. Putting a summary table before the edge table changes the parser's input even if the document remains readable. A missing table, mismatched header, incomplete row or second edge table must be corrected before relying on the check.
+<rules section="ALWAYS">
+- Write the edge table as the first Markdown table of the cluster file.
+- Match its header exactly: `id | claim | class | confidence | evidence`, with every data row supplying those five fields.
+- Keep one edge table per cluster, with every auxiliary table below it.
+- Give every cluster a router link, and make every router link resolve to a cluster.
+- Correct a missing table, a mismatched header, an incomplete row or a second edge table before relying on the check.
+</rules>
 
-Every cluster has a router link, and every router link resolves to a cluster. Keep illustrative cluster links out of the real router: its link scan can treat an example as a reference even when the example appears inside a fence.
+<rules section="NEVER">
+- Write the edge table inside a code fence; a fenced table is illustration, not cluster data.
+- Put a sample cluster link in the real router, fenced or not.
+</rules>
+
+<example type="first_table">
+input: a cluster file that also explains its subject in a table
+✅ the edge table first, then the table explaining the subject
+❌ a summary table first and the edge table below it; the summary is read as the edge table and reported as a header mismatch
+</example>
 
 ## §6 Investigation and record lifecycle
 
 ### R1: Look up knowledge before investigating
 
-Begin an investigation by querying the wiki for the question being asked. Use an applicable established claim when its evidence is sufficient for the current work. End the investigation by recording what it established in the relevant cluster. If nothing was established, there is no claim to add.
+A hit ends the investigation early. An investigation that establishes nothing writes nothing.
+
+<rules section="ALWAYS">
+- Begin an investigation by querying the wiki for the question being asked, and use an applicable established claim when its evidence is sufficient for the current work.
+- End the investigation by recording what it established in the relevant cluster.
+</rules>
 
 ### R2: Match confidence to evidence
 
-A new record remains `hypothesis` until it has reproducible evidence for every evidence class required by its declared claim class. A hypothesis can guide further investigation; it cannot answer the question as established fact. Promote it to `sourced` when the missing evidence is obtained and confirmed.
+A recent successful locator check can establish that recorded source text remains at the stated positions. It cannot establish that the interpretation of that text is correct.
 
-A recent successful locator check can establish that recorded source text remains at the stated positions. It cannot establish that the interpretation of that text is correct. Reopen the source when the claim itself is uncertain or when the deliverable check under R3 requires it.
+<rules section="ALWAYS">
+- Keep a new record at `hypothesis` until it has reproducible evidence for every evidence class required by its declared claim class, then promote it to `sourced` when the missing evidence is obtained and confirmed.
+- Reopen the source when the claim itself is uncertain or when the deliverable check under R3 requires it.
+</rules>
+
+<rules section="NEVER">
+- Answer a question as established fact from a `hypothesis` edge; a hypothesis can only guide further investigation.
+</rules>
 
 ### R3: Resolve contradictions before using a claim
 
-Before a claim enters a deliverable, compare it with the relevant evidence. If they disagree, pause the dependent work, resolve the contradiction and correct the wiki in the same turn. A prior confidence label does not override new evidence.
+A prior confidence label does not override new evidence.
+
+<rules section="ALWAYS">
+- Before a claim enters a deliverable, compare it with the relevant evidence.
+- When they disagree, pause the dependent work, resolve the contradiction and correct the wiki in the same turn.
+</rules>
 
 ### R4: Record the questions actually investigated
 
-Use the looked-up question as the unit of knowledge. If the investigation separates into subquestions, look up and record each resulting claim at that level. Do not turn every incidental observation into a new edge.
+<rules section="ALWAYS">
+- Use the looked-up question as the unit of knowledge, and when the investigation separates into subquestions, look up and record each resulting claim at that level.
+</rules>
+
+<rules section="NEVER">
+- Turn every incidental observation into a new edge.
+</rules>
 
 ### R5: Keep identity stable
 
-Allocate an edge identifier once and keep it unique across the tier. Do not derive it from editable claim text. On a merge collision, allocate a new identifier for the later record and update its intra-wiki references together.
+<rules section="ALWAYS">
+- Allocate an edge identifier once and keep it unique across the tier.
+- On a merge collision, allocate a new identifier for the later record and update its intra-wiki references together.
+</rules>
+
+<rules section="NEVER">
+- Derive an edge identifier from editable claim text.
+</rules>
 
 ### R6: Update an existing fact
 
-Search by subject and locator before writing. When an existing record already represents the same fact, update that record instead of creating another merely because the current task used a different lookup phrase.
+<rules section="ALWAYS">
+- Search by subject and locator before writing, and update an existing record that already represents the same fact.
+</rules>
+
+<rules section="NEVER">
+- Create a second record for the same fact because the current task used a different lookup phrase.
+</rules>
 
 ### R7: Compare locator sets at the right scope
 
-The evidence path establishes which file is being checked. Compare the recorded and observed positions for each cited anchor within that file. Do not merge matches from unrelated files into the comparison, and do not discard additional positions that should have been recorded.
+The evidence path establishes which file is being checked.
+
+<rules section="ALWAYS">
+- Compare the recorded and observed positions for each cited anchor within the cited file.
+</rules>
+
+<rules section="NEVER">
+- Merge matches from unrelated files into the comparison.
+- Discard additional positions that should have been recorded.
+</rules>
 
 ### R8: Distinguish structural validation from truth
 
-The tool must state which checks it performs and which evidence it cannot validate. Passing a schema or locator check does not certify a claim class or the truth of a claim. The assistant remains responsible for the evidence obligations the tool does not evaluate.
+Passing a schema or locator check does not certify a claim class or the truth of a claim.
+
+<rules section="ALWAYS">
+- Make the tool state which checks it performs and which evidence it cannot validate.
+- Keep the assistant responsible for the evidence obligations the tool does not evaluate.
+</rules>
 
 ### R9: Preserve knowledge across merges
 
-Check that identifiers present in any merge parent remain represented in the merge result. Resolve intentional removals explicitly using the supported merge procedure rather than silently losing records. Ordinary deletion on one branch is a separate operation; it does not establish that a merge preserved both parents' knowledge.
+Ordinary deletion on one branch is a separate operation; it does not establish that a merge preserved both parents' knowledge.
+
+<rules section="ALWAYS">
+- Check that identifiers present in any merge parent remain represented in the merge result.
+- Resolve intentional removals explicitly using the supported merge procedure.
+</rules>
+
+<rules section="NEVER">
+- Lose a record silently in a merge.
+</rules>
 
 ### R10: Limit references to individual edges
 
-Artifacts outside the wiki refer to clusters rather than individual edge identifiers. References between edges remain inside the wiki. This boundary allows an obsolete fact to be corrected or removed without leaving external deliverables dependent on its internal identifier.
+This boundary allows an obsolete fact to be corrected or removed without leaving external deliverables dependent on its internal identifier. Git retains the previous content; the active wiki records what remains applicable.
 
-Correct a false claim in place. Remove a claim about something that no longer exists after resolving any intra-wiki references. Git retains the previous content; the active wiki records what remains applicable.
+<rules section="ALWAYS">
+- Refer to clusters, not individual edge identifiers, from artifacts outside the wiki.
+- Correct a false claim in place, and remove a claim about something that no longer exists after resolving any intra-wiki references.
+</rules>
+
+<rules section="NEVER">
+- Reference an edge identifier from outside the wiki.
+</rules>
 
 ## §7 Declare project-specific knowledge boundaries
 

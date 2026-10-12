@@ -8,6 +8,12 @@ All notable changes to this project are documented here. The format is based on
 
 ### Changed
 
+- The repository is now only the source of the `init-project` bundle. Its own deployed instance of the genome (`.claude/rules/`, `.agent-workspace/guide/`, tooling, lessons, decisions and the root instructions) was removed, so the bundle is edited directly and no live copy needs to be synchronized.
+- `doc-lint.mjs --bundle` checks the bundle's portable rules, guides and init skill; the pre-commit hook and CI use it. `scripts/test-bundle-tools.mjs` runs the genome tool tests in a temporary project layout.
+- The bundle was replaced by the 8.1.0 generation: the genome tools moved to `tooling/genome/`, with new guides for tooling, code, creative work, method review and workflow measurement, and a role template in place of distributed roles.
+
+### Changed
+
 - Rewrote the distributed rules, guides, roles, templates and initialization workflow in complete prose. Shared guidance now owns working procedures and evidence requirements; projects own the style of their deliverables.
 - Removed shared word, line, sentence and layout limits from guidance and verification tools. Existing user authorization is retained throughout a task instead of requiring repeated confirmation.
 - Narrowed software-role routing to software work, so creative scripts and editorial tasks use project-specific criteria or the no-match path.

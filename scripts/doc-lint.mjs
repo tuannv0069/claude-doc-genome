@@ -11,14 +11,23 @@
 //
 // Run node scripts/doc-lint.mjs, optionally with --quiet. The command does not
 // write files. It returns 0 when the checks pass and 1 when it reports findings.
+//
+// With --bundle the command checks the distributed bundle in this source
+// repository instead of a deployed project: the portable rules and guides under
+// skills/init-project/portable/ plus the init skill. Paths that the bundle cites
+// in their deployed form resolve by file name, and the root-file and router
+// checks are skipped because a source repository has neither.
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, basename, dirname, sep } from 'node:path';
+import { TEMPLATES } from './deployment-map.mjs';
 
 const quiet = process.argv.includes('--quiet');
+const bundle = process.argv.includes('--bundle');
+const PORTABLE = 'skills/init-project/portable';
 const CLAUDE_MD = 'CLAUDE.md';
-const RULES_DIR = '.claude/rules';
-const GUIDE_DIR = '.agent-workspace/guide';
+const RULES_DIR = bundle ? `${PORTABLE}/rules` : '.claude/rules';
+const GUIDE_DIR = bundle ? `${PORTABLE}/guide` : '.agent-workspace/guide';
 const LESSONS_DIR = '.agent-workspace/lessons';
 const ROUTER = `${GUIDE_DIR}/index.md`;
 
@@ -32,8 +41,12 @@ const add = (check, file, msg) => findings.push({ check, file, msg });
 
 // ---- corpus -------------------------------------------------------------
 const liveFiles = [...walk(RULES_DIR), ...walk(GUIDE_DIR), ...walk(LESSONS_DIR)];
-const mdFiles = [CLAUDE_MD, ...liveFiles, 'skills/init-project/SKILL.md'].filter(existsSync);
+const mdFiles = [...(bundle ? [] : [CLAUDE_MD]), ...liveFiles, 'skills/init-project/SKILL.md'].filter(existsSync);
 const text = new Map(mdFiles.map((p) => [p, readFileSync(p, 'utf8')]));
+
+// A project-owned file that the bundle cites by its deployed path is rendered
+// from a template; the template stands in for it when its sections are checked.
+const rendered = new Map(bundle ? TEMPLATES.map(([src, dst]) => [dst, `skills/init-project/templates/${src}`]) : []);
 
 const byBase = new Map();
 for (const p of mdFiles) if (!byBase.has(basename(p))) byBase.set(basename(p), p);
@@ -104,7 +117,7 @@ if (text.has(CLAUDE_MD)) {
 }
 
 // ---- L6 file <-> router (both directions) -------------------------------
-if (existsSync(ROUTER)) {
+if (!bundle && existsSync(ROUTER)) {
   const router = text.get(ROUTER);
   for (const p of walk(`${GUIDE_DIR}/general`)) {
     if (!router.includes(basename(p))) add('L6', p, 'orphan — no entry in guide/index.md');
@@ -127,7 +140,7 @@ for (const [p, body] of text) {
       const key = `${ref}#${id}`;
       if (isPlaceholder(ref) || seen.has(key)) continue;
       seen.add(key);
-      const target = resolveFrom(p, ref) ?? byBase.get(basename(ref));
+      const target = resolveFrom(p, ref) ?? rendered.get(ref) ?? byBase.get(basename(ref));
       if (!target) { add('L7', p, `pointer to unknown file: ${ref} §${id}`); continue; }
       if (!defines(text.get(target) ?? readFileSync(target, 'utf8'), id)) {
         add('L7', p, `dead §ID: ${basename(ref)} §${id} not defined in ${target}`);

@@ -6,11 +6,9 @@ Describe the command or workflow you used, the expected behavior and the result 
 
 ## Work in the correct source
 
-This repository uses the same genome that it distributes. Portable rules are authored in `.claude/rules/`, guides and roles in `.agent-workspace/guide/`, and verification tools in `.agent-workspace/tooling/`. Edit the live file first, verify it, then synchronize it into the corresponding group under `skills/init-project/portable/`.
+This repository is the source of the genome, not a deployed project. Portable rules, guides, the role template and the verification tools are authored directly under `skills/init-project/portable/`; templates under `skills/init-project/templates/`; the workflow in `skills/init-project/SKILL.md`. Repository scripts and documentation are edited directly as well.
 
-The bundle and live copy are intentionally separate deployment copies. Project-owned additions are not automatically portable. Check that a candidate contains reusable instructions rather than project-specific values before promoting it.
-
-Edit `skills/init-project/SKILL.md`, the templates, repository scripts and repository documentation directly. A rendered project index must not be copied back into a template with its project values still present.
+Improvements normally originate in a project that has deployed the genome. Judge each candidate for reusable instructions rather than project-specific values before bringing it into the bundle, and never copy a rendered project index back into a template with its project values still present.
 
 When removing or renaming content, update the routers, triggers, section references and migration behavior in the same change. Historical decisions remain available as records; active guidance should describe the current workflow.
 
@@ -22,7 +20,7 @@ Enable the local hook after cloning:
 git config core.hooksPath .githooks
 ```
 
-The hook checks version synchronization and the documentation network. Run the tests for any changed tool as well. Before handing off a portable change, compare every affected live file with its bundle copy; a clean updater report is useful evidence but does not replace checking routing and project-owned templates.
+The hook checks version synchronization and the bundle's documentation network (`node scripts/doc-lint.mjs --bundle`). Run `node scripts/test-bundle-tools.mjs` for the genome tools and `node --test scripts/test-deployment.mjs` for deployment behavior. A clean updater report is useful evidence but does not replace checking routing and project-owned templates.
 
 For changes to deployment behavior, use temporary project fixtures to check additions, updates, retirement, local edits and template handling. Do not use another person's working project as a test fixture. For changes to guidance, read the complete result and verify that its required behavior remains clear and reachable.
 

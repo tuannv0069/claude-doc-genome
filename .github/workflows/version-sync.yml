@@ -19,19 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: node scripts/sync-version.mjs check
-      - run: node scripts/doc-lint.mjs
+      - run: node scripts/doc-lint.mjs --bundle
       - run: node --test scripts/test-deployment.mjs
-      - name: Check portable tool behavior
-        run: |
-          python .agent-workspace/tooling/test_scan_rule_health.py
-          python .agent-workspace/tooling/test_trigger_kinds.py
-          python .agent-workspace/tooling/test_verify_decision_log.py
-          python .agent-workspace/tooling/test_verify_lesson_router.py
-          python .agent-workspace/tooling/test_verify_role_files.py
-          python .agent-workspace/tooling/test_verify_wiki.py
-      - name: Check project data
-        run: |
-          python .agent-workspace/tooling/verify_lesson_router.py
-          python .agent-workspace/tooling/verify_role_files.py
-          python .agent-workspace/tooling/verify_decision_log.py
-          python .agent-workspace/tooling/verify_wiki.py
+      - name: Check bundled tool behavior
+        run: node scripts/test-bundle-tools.mjs

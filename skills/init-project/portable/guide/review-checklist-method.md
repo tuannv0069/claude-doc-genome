@@ -2,25 +2,50 @@
 scope: portable
 ---
 
+<critical>
+scope: a free-form audit, review or defect hunt over any artifact — code, document, configuration — that no skill's own method owns; route it to the fitting instrument (§7) and run the method over the layer no instrument reaches.
+never: keep a standing accusation with no candidate site, or report a `present` finding without an executed or traced evidence span.
+note: pick the instrument before building a checklist; every item is a concrete falsifiable defect hypothesis; the absence sweep runs on fresh attention; findings are reported under `bug-report-format.md`.
+</critical>
+
 # Investigating possible defects
 
 This guide provides a review method for work that is not already governed by an owning skill. Use §7 to select the appropriate review instrument before applying the method.
 
 ## §1 Investigate concrete failure hypotheses
 
-Frame each investigation around a possible defect that can be supported or disproved by evidence. Identify the candidate location or precondition before spending review effort on it.
+A sorting defect can be investigated by comparing the query's order with the required order; a general instruction to confirm that sorting is correct does not identify the condition that could fail. The purpose is to challenge the artifact, not to presume it is wrong.
 
-For example, a sorting defect can be investigated by comparing the query's order with the required order. A general instruction to confirm that sorting is correct does not identify the condition that could fail.
+<rules section="ALWAYS">
+- Frame each investigation around a possible defect that can be supported or disproved by evidence.
+- Identify the candidate location or precondition before spending review effort on it.
+</rules>
 
-The purpose is to challenge the artifact, not to presume it is wrong. Do not keep an accusation in the review when no plausible location or trigger exists.
+<rules section="NEVER">
+- Keep an accusation in the review when no plausible location or trigger exists.
+- Write a positive item that asks to verify that something is correct; whether a creative piece works for its reader is judged by the appeal review in `creative-work.md` §6, not by a checklist item.
+</rules>
+
+<example type="hypothesis_shape">
+input: a review item about list ordering
+❌ verify that the list is sorted correctly
+✅ the query orders by creation date while the specification requires order by priority; compare the order clause with the requirement
+</example>
 
 ## §2 Calibrate conclusions to evidence
 
-Most hypotheses in a competent artifact will be absent. Require enough evidence for a positive finding rather than treating the number of findings as a measure of review quality.
+Most hypotheses in a competent artifact will be absent. A syntactic match alone does not show that the relevant path behaves as expected. The specification can itself be wrong or ambiguous.
 
-Distinguish a result observed through execution, a semantic trace through the artifact, and an inference. If execution is unavailable, state the limit. A syntactic match alone does not show that the relevant path behaves as expected.
+<rules section="ALWAYS">
+- Require enough evidence for a positive finding.
+- Distinguish a result observed through execution, a semantic trace through the artifact, and an inference, and state the limit when execution is unavailable.
+- When code and specification disagree, investigate the discrepancy.
+</rules>
 
-The specification can itself be wrong or ambiguous. When code and specification disagree, investigate the discrepancy rather than automatically assigning blame to the code.
+<rules section="NEVER">
+- Treat the number of findings as a measure of review quality.
+- Assign blame to the code automatically when it disagrees with the specification.
+</rules>
 
 ## §3 Review procedure
 
@@ -31,21 +56,40 @@ The specification can itself be wrong or ambiguous. When code and specification 
 5. Challenge every proposed finding with the strongest evidence-based explanation of why the artifact might already be correct. Withdraw or qualify findings that do not survive that challenge.
 6. Report the surviving conclusions with the information in `bug-report-format.md` §1. Assess severity from demonstrated reachability and consequence, rather than from the alarming form of the original hypothesis.
 
-Save the developing candidate list, verdicts, and evidence in the task workspace so the review can resume after context loss.
+<rules section="ALWAYS">
+- Save the developing candidate list, verdicts, and evidence in the task workspace so the review can resume after context loss.
+- When the user supplies a checklist, investigate its items, and explain any required behavior it does not cover when that omission affects the requested conclusion.
+</rules>
 
-If the user supplies a checklist, investigate its items rather than silently replacing the requested scope. The checklist does not remove the requirements for evidence, precision, or honest uncertainty. Explain any required behavior it does not cover when that omission affects the requested conclusion.
+<rules section="NEVER">
+- Silently replace the requested scope with a different checklist.
+- Let a supplied checklist lower the requirements for evidence, precision, or honest uncertainty.
+- Let an enumerated hunt starve the absence sweep.
+</rules>
 
 ## §4 Information retained for each candidate
 
-Retain the hypothesis, candidate location or precondition, the evidence needed to decide it, and the current conclusion. A confirmed finding also needs the evidence span that supports it. An initial severity estimate is for prioritization and must be reassessed after the trigger and impact are established.
-
 The verdicts `present`, `suspected`, and `absent` distinguish a demonstrated defect, an unresolved possibility, and a hypothesis the inspected evidence does not support. These meanings can be stored in the working format appropriate to the task.
+
+<rules section="ALWAYS">
+- Retain the hypothesis, candidate location or precondition, the evidence needed to decide it, and the current conclusion.
+- Attach the supporting evidence span to a confirmed finding.
+- Reassess an initial severity estimate after the trigger and impact are established.
+</rules>
 
 ## §5 Examples
 
-Do not investigate a race condition as a standing accusation when no shared mutable state or concurrent access has been located. First establish the candidate path that could race.
+<example type="race_condition">
+input: a review item about concurrency
+❌ investigate a race condition as a standing accusation when no shared mutable state or concurrent access has been located
+✅ first establish the candidate path that could race, then investigate that path
+</example>
 
-Finding a null check does not prove that an object is safe to dereference. Trace the object from its source to every relevant use and determine whether a dereference can occur before the check.
+<example type="null_check">
+input: a null check exists before one use of an object
+❌ conclude that the object is safe to dereference because a check was found
+✅ trace the object from its source to every relevant use and determine whether a dereference can occur before the check
+</example>
 
 ## §6 Related guidance
 
@@ -55,8 +99,16 @@ Use `orchestration-policy.md` §4 to preserve task state and §7 when an indepen
 
 ## §7 Select the review instrument
 
-Inspect the capabilities available in the current environment and select the one suited to the question. A code-diff review evaluates changed code. Runtime verification evaluates observed behavior. Security review investigates exposure and access paths. Cleanup changes maintainability and is not a substitute for finding correctness defects.
+A code-diff review evaluates changed code. Runtime verification evaluates observed behavior. Security review investigates exposure and access paths. Cleanup changes maintainability and is not a substitute for finding correctness defects. A code-diff instrument and an absence investigation can both be necessary; a clean diff review cannot establish that an unwritten requirement was implemented.
 
-Use this guide directly for non-code artifacts, for work outside a diff, for a supplied checklist, or for finding required behavior that was never implemented. A code-diff instrument and an absence investigation can both be necessary; a clean diff review cannot establish that an unwritten requirement was implemented.
+<rules section="ALWAYS">
+- Inspect the capabilities available in the current environment and select the one suited to the question before building a checklist.
+- Use this guide directly for non-code artifacts, for work outside a diff, for a supplied checklist, or for finding required behavior that was never implemented.
+- When a named review command is unavailable, use the applicable method and say that the command did not run.
+</rules>
 
-If a named review command is unavailable, use the applicable method without pretending the command ran. Do not submit a non-code artifact to a code-only instrument and describe the result as complete coverage.
+<rules section="NEVER">
+- Submit a non-code artifact to a code-only instrument and describe the result as complete coverage.
+- Let a skill's review checkpoint decide the depth of the review; it decides the timing, and the instrument decides the depth.
+- Treat an instrument's clean verdict on a diff as coverage of the absence layer.
+</rules>
