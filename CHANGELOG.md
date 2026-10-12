@@ -6,10 +6,6 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
-### Repository additions
-
-- Added the independently maintained Codex distribution in `skills/init-codex-genome/`, with its complete sources, deployment tool, templates and version. Development support is organized under `tests/codex/`, `scripts/codex/` and `docs/codex/`; no separate Codex product directory remains at the root. Claude Code and Codex keep independent source distributions while using the same deployed `.agent-workspace/` in a project; see `docs/codex/changelog.md`.
-
 ### Changed
 
 - Rewrote the distributed rules, guides, roles, templates and initialization workflow in complete prose. Shared guidance now owns working procedures and evidence requirements; projects own the style of their deliverables.
@@ -19,7 +15,7 @@ All notable changes to this project are documented here. The format is based on
 
 ### Fixed
 
-- `verify_lesson_router.py` accepts the two store forms that `lesson-capture.md` documents: `<critical>` with `scope:`/`phase:`, or frontmatter `work_scope:`/`phase:`; router file cells and `checks` pointers may be bare or backticked. A project whose shared `.agent-workspace/` was deployed by the Codex adapter is therefore verified without rewriting its lesson stores. The paired test covers both forms.
+- `verify_lesson_router.py` accepts the two store forms that `lesson-capture.md` documents: `<critical>` with `scope:`/`phase:`, or frontmatter `work_scope:`/`phase:`; router file cells and `checks` pointers may be bare or backticked. A project whose shared `.agent-workspace/` was deployed with the other documented form is therefore verified without rewriting its lesson stores. The paired test covers both forms.
 - The updater and manifest share all six deployment groups and seven template mappings. Roles, tooling and the additional indexes are now included.
 - Updates preserve local conflicts and retire only unchanged manifest-owned files. The completed version remains unchanged until conflicts and template review are resolved.
 - Deployment rejects unsafe paths, symbolic links, hard links, conflicting Windows path aliases and missing required project indexes.
